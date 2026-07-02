@@ -164,13 +164,6 @@ Ogni nuova funzionalità dovrà sempre rispettare la missione del progetto:
 StudioPro non vuole essere una semplice raccolta di strumenti.
 
 Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organizzare il proprio studio e migliorare continuamente il proprio metodo di apprendimento.
-## Decision Log
-
-### Version 0.1
-
-- Project Vision created.
-- StudioPro defined as an AI-powered learning platform.
-- Multi-Agent architecture selected.
 
 ---
 
@@ -178,9 +171,22 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 
 🟢 Planning
 
-Current Phase:
+### Current Phase
 
-- Product Vision ✅
-- Roadmap ⏳
-- Architecture ⏳
-- Development ⏳
+- ✅ Product Vision
+- ⏳ Product Roadmap
+- ⏳ System Architecture
+- ⏳ Agent Design
+- ⏳ Development
+- ⏳ Testing
+- ⏳ Release 1.0
+
+---
+
+## Decision Log
+
+### Version 0.1
+
+- Project Vision created.
+- StudioPro defined as an AI-powered learning platform.
+- Multi-Agent architecture selected.
