@@ -1,4 +1,8 @@
 # 🎓 StudioPro
+
+### AI Learning Platform
+
+Project Vision
 > Version: 0.1
 
 > Last updated: July 2026
@@ -152,8 +156,17 @@ Sarà il sistema a decidere quali agenti coinvolgere.
 Nel tempo StudioPro potrà evolversi fino a diventare una piattaforma completa per l'apprendimento assistito dall'intelligenza artificiale.
 
 Ogni nuova funzionalità dovrà sempre rispettare la missione del progetto:
+StudioPro nasce con un obiettivo semplice:
 
-> **Aiutare le persone a comprendere meglio ciò che studiano.**
+**aiutare gli studenti a comprendere meglio ciò che studiano, non semplicemente a trovare risposte.**
+
+Crediamo che imparare significhi comprendere, ragionare e sviluppare autonomia nello studio.
+
+Per questo StudioPro utilizza l'intelligenza artificiale come supporto al processo di apprendimento e non come sostituto dello studente.
+StudioPro non vuole essere una raccolta di strumenti.
+
+Vuole diventare l'ambiente digitale in cui lo studente può svolgere l'intero percorso di studio.
+Multi-Agent Philosophy
 > ## Decision Log
 
 ### Version 0.1
@@ -161,3 +174,15 @@ Ogni nuova funzionalità dovrà sempre rispettare la missione del progetto:
 - Project Vision created.
 - StudioPro defined as an AI-powered learning platform.
 - Multi-Agent architecture selected.
+- ---
+
+## Project Status
+
+🟢 Planning
+
+Current Phase:
+
+- Product Vision ✅
+- Roadmap ⏳
+- Architecture ⏳
+- Development ⏳
