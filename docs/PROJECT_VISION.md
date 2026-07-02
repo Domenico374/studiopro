@@ -165,6 +165,7 @@ StudioPro non vuole essere una semplice raccolta di strumenti.
 
 Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organizzare il proprio studio e migliorare continuamente il proprio metodo di apprendimento.
 
+
 ---
 
 ## Project Status
@@ -180,10 +181,6 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 - ⏳ Development
 - ⏳ Testing
 - ⏳ Release 1.0
-
----
-
-## Decision Log
 
 ### Version 0.1
 
