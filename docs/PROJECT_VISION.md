@@ -187,6 +187,7 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 
 ## Decision Log
 
+
 ### Version 0.1
 
 - Project Vision created.
