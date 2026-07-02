@@ -149,23 +149,21 @@ L'utente parlerà con StudioPro.
 Sarà il sistema a decidere quali agenti coinvolgere.
 
 ---
-
 # Long-Term Vision
+
 > **"Helping people understand, not simply memorize."**
-Nel tempo StudioPro potrà evolversi fino a diventare una piattaforma completa per l'apprendimento assistito dall'intelligenza artificiale.
+
+StudioPro evolverà progressivamente in una piattaforma completa per l'apprendimento assistito dall'intelligenza artificiale.
+
+L'obiettivo è offrire un ambiente di studio intelligente in cui diversi agenti AI collaborano per supportare lo studente durante ogni fase del percorso di apprendimento: dalla comprensione di un argomento alla preparazione di un esame.
 
 Ogni nuova funzionalità dovrà sempre rispettare la missione del progetto:
-StudioPro nasce con un obiettivo semplice:
 
-**aiutare gli studenti a comprendere meglio ciò che studiano, non semplicemente a trovare risposte.**
+> **Aiutare gli studenti a comprendere meglio ciò che studiano, non semplicemente a trovare risposte.**
 
-Crediamo che imparare significhi comprendere, ragionare e sviluppare autonomia nello studio.
+StudioPro non vuole essere una semplice raccolta di strumenti.
 
-Per questo StudioPro utilizza l'intelligenza artificiale come supporto al processo di apprendimento e non come sostituto dello studente.
-StudioPro non vuole essere una raccolta di strumenti.
-
-Vuole diventare l'ambiente digitale in cui lo studente può svolgere l'intero percorso di studio.
-Multi-Agent Philosophy
+Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organizzare il proprio studio e migliorare continuamente il proprio metodo di apprendimento.
 ## Decision Log
 
 ### Version 0.1
