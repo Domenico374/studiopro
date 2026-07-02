@@ -185,6 +185,14 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 - ⏳ Testing
 - ⏳ Release 1.0
 
+---
+
+## Decision Log
+
+### Version 0.1
+
 - Project Vision created.
+- StudioPro defined as an AI-powered learning platform.
+- Multi-Agent architecture selected.
 - StudioPro defined as an AI-powered learning platform.
 - Multi-Agent architecture selected.
