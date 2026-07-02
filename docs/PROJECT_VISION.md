@@ -18,8 +18,8 @@
 - Core Principles
 - Multi-Agent Philosophy
 - Long-Term Vision
+- Project Status
 - Decision Log
----
 
 # Mission
 
@@ -165,8 +165,9 @@ StudioPro non vuole essere una semplice raccolta di strumenti.
 
 Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organizzare il proprio studio e migliorare continuamente il proprio metodo di apprendimento.
 
-
 ---
+
+## Decision Log
 
 ## Project Status
 
@@ -178,11 +179,11 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 - ⏳ Product Roadmap
 - ⏳ System Architecture
 - ⏳ Agent Design
+- ⏳ API Design
+- ⏳ Database Design
 - ⏳ Development
 - ⏳ Testing
 - ⏳ Release 1.0
-
-### Version 0.1
 
 - Project Vision created.
 - StudioPro defined as an AI-powered learning platform.
