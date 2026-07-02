@@ -30,10 +30,10 @@ Visita [studiopro.vercel.app](https://studiopro.vercel.app)
 ### Installazione locale
 ```bash
 # Clona il repository
-git clone https://github.com/Domenico374/mentorestudio.git
+git clone https://github.com/Domenico374/studiopro.git
 
 # Entra nella cartella
-cd mentorestudio
+cd studio pro
 
 # Installa dipendenze
 npm install
@@ -106,7 +106,7 @@ Questo progetto è distribuito sotto licenza MIT. Vedi `LICENSE` per maggiori in
 **Domenico374**
 
 - GitHub: [@Domenico374](https://github.com/Domenico374)
-- Website: [mentorestudio.vercel.app](https://mentorestudio.vercel.app)
+- Website: [studiopro.vercel.app](https://studiopro.vercel.app)
 ## 🙏 Ringraziamenti
 
 - OpenAI per Whisper API
