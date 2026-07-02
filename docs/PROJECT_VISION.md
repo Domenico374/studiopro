@@ -6,7 +6,7 @@
 >
 > **Last updated:** July 2026
 >
-> **Status:** Draft
+> **Status:** Approved
 
 ## Contents
 
