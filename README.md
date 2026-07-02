@@ -62,7 +62,7 @@ npm run dev
 
 ## 📦 Struttura progetto
 ```
-mentorestudio/
+studiopro/
 ├── api/              # Serverless functions
 │   ├── upload.js
 │   ├── extract.js
