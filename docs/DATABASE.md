@@ -53,15 +53,15 @@ Il database seguirà questi principi fondamentali.
 
 # Database Architecture
 
-StudioPro utilizzerà un database relazionale come archivio principale.
+StudioPro utilizzerà PostgreSQL come database relazionale principale.
 
-Accanto ad esso saranno presenti componenti dedicate alla gestione dei documenti, della memoria degli agenti AI e delle informazioni utilizzate durante il processo di apprendimento.
+Accanto al database relazionale saranno presenti sistemi dedicati alla gestione dei file e degli embeddings utilizzati dall'intelligenza artificiale.
 
 ```text
-                        StudioPro
+                         StudioPro
 
-                     PostgreSQL
-                          │
+                      PostgreSQL
+                           │
  ┌──────────────┬──────────────┬──────────────┐
  ▼              ▼              ▼
 Users      Documents     Study Sessions
@@ -71,12 +71,18 @@ Conversations Generated Content AI Memory
  │
  ▼
 Messages
-                          │
-                          ▼
-                  Vector Database
-                          │
-                          ▼
-                  AI Orchestrator
+
+Object Storage
+      │
+      ▼
+PDF • Images • Files
+
+Vector Database
+      │
+      ▼
+Embeddings
+
+AI Orchestrator
 ```
 
 ---
@@ -325,6 +331,7 @@ StudioPro utilizzerà differenti sistemi di archiviazione.
 | Component | Storage |
 |-----------|---------|
 | Structured Data | PostgreSQL |
+| AI Memory | PostgreSQL |
 | Documents | Object Storage |
 | AI Embeddings | Vector Database |
 | Temporary Data | Cache (Future) |
@@ -381,7 +388,7 @@ Possibili evoluzioni future:
 - ✅ Product Roadmap
 - ✅ System Architecture
 - ✅ AI Agents
-- 🟡 Database Design
+- ✅ Database Design
 
 ### Development
 
