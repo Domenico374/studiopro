@@ -11,6 +11,7 @@
 ## Contents
 
 - Product Strategy
+- Development Principles
 - Product Evolution
 - Development Phases
 - MVP Definition
@@ -33,6 +34,19 @@ L'obiettivo è costruire una piattaforma solida, modulare e facilmente estendibi
 Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contribuire a rendere lo studio più semplice, efficace e personalizzato.
 
 La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
+
+---
+
+# Development Principles
+
+Durante lo sviluppo di StudioPro verranno sempre rispettati questi principi:
+
+- Quality over Quantity
+- User First
+- AI as a Learning Companion
+- Modular Architecture
+- Incremental Development
+- Continuous Testing
 
 ---
 
@@ -60,7 +74,7 @@ Public Release
 
 ## 🏗️ Phase 1 — Foundation
 
-**Obiettivo**
+**Objective**
 
 Costruire le fondamenta del progetto.
 
@@ -76,14 +90,14 @@ Costruire le fondamenta del progetto.
 
 ## 📚 Phase 2 — Core Learning Platform
 
-**Obiettivo**
+**Objective**
 
 Realizzare la piattaforma base.
 
 **Focus**
 
 - Dashboard
-- Gestione utenti
+- Autenticazione utenti
 - Workspace di studio
 - Upload documenti
 - Interfaccia principale
@@ -92,9 +106,9 @@ Realizzare la piattaforma base.
 
 ## 🤖 Phase 3 — AI Learning
 
-**Obiettivo**
+**Objective**
 
-Consentire allo studente di studiare con l'AI.
+Consentire allo studente di studiare con l'intelligenza artificiale.
 
 **Focus**
 
@@ -109,7 +123,7 @@ Consentire allo studente di studiare con l'AI.
 
 ## 🧠 Phase 4 — Multi-Agent System
 
-**Obiettivo**
+**Objective**
 
 Realizzare un ecosistema di agenti intelligenti.
 
@@ -121,12 +135,13 @@ Realizzare un ecosistema di agenti intelligenti.
 - Planner Agent
 - Mind Map Agent
 - Collaborazione tra agenti
+- Orchestrazione intelligente
 
 ---
 
 ## 👥 Phase 5 — Beta
 
-**Obiettivo**
+**Objective**
 
 Validare StudioPro con utenti reali.
 
@@ -142,7 +157,7 @@ Validare StudioPro con utenti reali.
 
 ## 🚀 Phase 6 — Public Release
 
-**Obiettivo**
+**Objective**
 
 Pubblicare StudioPro 1.0.
 
@@ -159,13 +174,16 @@ Pubblicare StudioPro 1.0.
 
 La prima versione utilizzabile di StudioPro dovrà consentire allo studente di:
 
-- creare un account
+- autenticarsi
+- creare un workspace di studio
 - caricare documenti
 - studiare con il Tutor Agent
 - ottenere spiegazioni
 - creare riassunti
-- creare quiz
+- generare quiz
 - salvare il proprio lavoro
+
+Il completamento di queste funzionalità rappresenterà il Minimum Viable Product (MVP) del progetto.
 
 ---
 
@@ -174,22 +192,23 @@ La prima versione utilizzabile di StudioPro dovrà consentire allo studente di:
 - ✅ Project Vision
 - 🟡 Product Roadmap
 - ⏳ System Architecture
-- ⏳ Agents Design
+- ⏳ AI Agents Design
 - ⏳ MVP Ready
 - ⏳ Beta Release
-- ⏳ Version 1.0
+- ⏳ Public Release 1.0
 
 ---
 
 # Success Criteria
 
-StudioPro sarà pronto per la versione 1.0 quando:
+StudioPro sarà considerato pronto per la versione 1.0 quando:
 
 - il sistema sarà stabile
 - almeno cinque agenti AI collaboreranno tra loro
 - la piattaforma sarà intuitiva
 - la documentazione sarà completa
 - uno studente potrà completare una sessione di studio dall'inizio alla fine utilizzando StudioPro
+- il sistema potrà essere utilizzato senza necessità di documentazione tecnica
 
 ---
 
@@ -203,6 +222,8 @@ Possibili evoluzioni future:
 - Community
 - Marketplace di contenuti
 - Plugin
+- Integrazione con LMS
+- Supporto multi-lingua
 
 ---
 
@@ -228,5 +249,7 @@ Possibili evoluzioni future:
 
 - Created the official Product Roadmap.
 - Defined the product evolution.
+- Introduced the development principles.
 - Identified the MVP.
 - Established the main development phases.
+- Defined the success criteria for the first public release.
