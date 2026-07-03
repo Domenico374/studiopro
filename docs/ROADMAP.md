@@ -24,11 +24,15 @@
 
 # Product Strategy
 
-StudioPro sarà sviluppato in modo incrementale, attraverso rilasci progressivi che introdurranno funzionalità complete, stabili e realmente utilizzabili.
+StudioPro sarà sviluppato attraverso un processo incrementale, organizzato in fasi ben definite.
 
-Ogni fase avrà un obiettivo preciso e contribuirà alla costruzione di una piattaforma AI per l'apprendimento sempre più intelligente e collaborativa.
+Ogni fase introdurrà funzionalità complete, testate e realmente utilizzabili, evitando di accumulare caratteristiche incomplete o poco integrate.
 
-L'obiettivo non è sviluppare il maggior numero possibile di funzionalità, ma costruire il miglior ambiente di studio assistito dall'intelligenza artificiale.
+L'obiettivo è costruire una piattaforma solida, modulare e facilmente estendibile, mantenendo sempre al centro l'esperienza dello studente.
+
+Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contribuire a rendere lo studio più semplice, efficace e personalizzato.
+
+La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
 
 ---
 
@@ -36,12 +40,10 @@ L'obiettivo non è sviluppare il maggior numero possibile di funzionalità, ma c
 
 StudioPro crescerà attraverso sei grandi fasi evolutive.
 
-Ogni fase rappresenta un passo avanti verso la realizzazione della visione del progetto.
-
-```
+```text
 Foundation
       ↓
-Core Platform
+Core Learning Platform
       ↓
 AI Learning
       ↓
@@ -58,43 +60,43 @@ Public Release
 
 ## 🏗️ Phase 1 — Foundation
 
-Obiettivo
+**Obiettivo**
 
 Costruire le fondamenta del progetto.
 
-Focus
+**Focus**
 
 - Documentazione
 - Architettura
 - Repository
-- Organizzazione
+- Organizzazione del progetto
 - Standard di sviluppo
 
 ---
 
-## 📚 Phase 2 — Core Platform
+## 📚 Phase 2 — Core Learning Platform
 
-Obiettivo
+**Obiettivo**
 
 Realizzare la piattaforma base.
 
-Focus
+**Focus**
 
 - Dashboard
 - Gestione utenti
-- Gestione documenti
-- Upload PDF
 - Workspace di studio
+- Upload documenti
+- Interfaccia principale
 
 ---
 
 ## 🤖 Phase 3 — AI Learning
 
-Obiettivo
+**Obiettivo**
 
 Consentire allo studente di studiare con l'AI.
 
-Focus
+**Focus**
 
 - Tutor AI
 - Chat con i documenti
@@ -107,11 +109,11 @@ Focus
 
 ## 🧠 Phase 4 — Multi-Agent System
 
-Obiettivo
+**Obiettivo**
 
-Creare un ecosistema di agenti intelligenti.
+Realizzare un ecosistema di agenti intelligenti.
 
-Focus
+**Focus**
 
 - Tutor Agent
 - Summary Agent
@@ -124,30 +126,30 @@ Focus
 
 ## 👥 Phase 5 — Beta
 
-Obiettivo
+**Obiettivo**
 
-Validare il prodotto con utenti reali.
+Validare StudioPro con utenti reali.
 
-Focus
+**Focus**
 
 - Test
 - Feedback
-- UX
-- Ottimizzazione
+- Correzione bug
+- Ottimizzazione UX
 - Performance
 
 ---
 
 ## 🚀 Phase 6 — Public Release
 
-Obiettivo
+**Obiettivo**
 
 Pubblicare StudioPro 1.0.
 
-Focus
+**Focus**
 
 - Release stabile
-- Documentazione
+- Documentazione completa
 - Deploy
 - Presentazione del prodotto
 
@@ -155,13 +157,14 @@ Focus
 
 # MVP Definition
 
-La prima versione di StudioPro dovrà consentire allo studente di:
+La prima versione utilizzabile di StudioPro dovrà consentire allo studente di:
 
 - creare un account
 - caricare documenti
 - studiare con il Tutor Agent
 - ottenere spiegazioni
 - creare riassunti
+- creare quiz
 - salvare il proprio lavoro
 
 ---
@@ -183,10 +186,10 @@ La prima versione di StudioPro dovrà consentire allo studente di:
 StudioPro sarà pronto per la versione 1.0 quando:
 
 - il sistema sarà stabile
-- gli agenti collaboreranno correttamente
+- almeno cinque agenti AI collaboreranno tra loro
 - la piattaforma sarà intuitiva
 - la documentazione sarà completa
-- gli utenti riusciranno a studiare in autonomia con StudioPro
+- uno studente potrà completare una sessione di studio dall'inizio alla fine utilizzando StudioPro
 
 ---
 
@@ -197,8 +200,8 @@ Possibili evoluzioni future:
 - Mobile App
 - Voice Tutor
 - Studio collaborativo
-- Marketplace di contenuti
 - Community
+- Marketplace di contenuti
 - Plugin
 
 ---
@@ -223,7 +226,7 @@ Possibili evoluzioni future:
 
 ### Version 1.0
 
-- Created the official product roadmap.
+- Created the official Product Roadmap.
 - Defined the product evolution.
 - Identified the MVP.
 - Established the main development phases.
