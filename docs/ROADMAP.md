@@ -2,192 +2,228 @@
 
 ## Product Roadmap
 
-Version...
-
-Contents
-
---------------------------------
-
-# Product Strategy
-
---------------------------------
-
-# Development Phases
-
---------------------------------
-
-# MVP Definition      ← QUI
-
---------------------------------
-
-# Milestones          ← QUI
-
---------------------------------
-
-# Success Criteria    ← QUI
-
---------------------------------
-
-# Future Ideas        ← QUI
-
---------------------------------
-
-## Project Status
-
---------------------------------
-
-## Decision Log
+> **Version:** 1.0
+>
+> **Last updated:** July 2026
+>
+> **Status:** Draft
 
 ## Contents
 
 - Product Strategy
+- Product Evolution
 - Development Phases
+- MVP Definition
 - Milestones
 - Success Criteria
-- Future Ideas
+- Future Vision
 - Project Status
 - Decision Log
 
+---
+
 # Product Strategy
 
-StudioPro sarà sviluppato attraverso un processo incrementale, organizzato in fasi ben definite.
+StudioPro sarà sviluppato in modo incrementale, attraverso rilasci progressivi che introdurranno funzionalità complete, stabili e realmente utilizzabili.
 
-Ogni fase introdurrà funzionalità complete, testate e realmente utilizzabili, evitando di accumulare caratteristiche incomplete o poco integrate.
+Ogni fase avrà un obiettivo preciso e contribuirà alla costruzione di una piattaforma AI per l'apprendimento sempre più intelligente e collaborativa.
 
-L'obiettivo è costruire una piattaforma solida, modulare e facilmente estendibile, mantenendo sempre al centro l'esperienza dello studente.
+L'obiettivo non è sviluppare il maggior numero possibile di funzionalità, ma costruire il miglior ambiente di studio assistito dall'intelligenza artificiale.
 
-Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contribuire a rendere lo studio più semplice, efficace e personalizzato.
+---
 
-La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
+# Product Evolution
 
-# Milestones
+StudioPro crescerà attraverso sei grandi fasi evolutive.
 
-## Milestone 1
+Ogni fase rappresenta un passo avanti verso la realizzazione della visione del progetto.
 
-✅ Project Vision
+```
+Foundation
+      ↓
+Core Platform
+      ↓
+AI Learning
+      ↓
+Multi-Agent System
+      ↓
+Beta
+      ↓
+Public Release
+```
 
-## Milestone 2
-
-⏳ Product Roadmap
-
-## Milestone 3
-
-⬜ System Architecture
-
-## Milestone 4
-
-⬜ AI Agents Design
-
-## Milestone 5
-
-⬜ MVP Ready
-
-## Milestone 6
-
-⬜ Beta Release
-
-## Milestone 7
-
-⬜ Public Release 1.0
+---
 
 # Development Phases
 
-## 🏗️ Phase 1 – Foundation
+## 🏗️ Phase 1 — Foundation
 
-Obiettivo:
-Creare le fondamenta del progetto.
+Obiettivo
 
-Focus:
+Costruire le fondamenta del progetto.
+
+Focus
 
 - Documentazione
 - Architettura
 - Repository
-- Organizzazione del progetto
-- Prime decisioni tecniche
+- Organizzazione
+- Standard di sviluppo
 
 ---
 
-## 📚 Phase 2 – Core Learning Platform
+## 📚 Phase 2 — Core Platform
 
-Obiettivo:
+Obiettivo
+
 Realizzare la piattaforma base.
 
-Focus:
+Focus
 
 - Dashboard
 - Gestione utenti
 - Gestione documenti
 - Upload PDF
-- Interfaccia principale
+- Workspace di studio
 
 ---
 
-## 🧠 Phase 3 – AI Learning Assistant
+## 🤖 Phase 3 — AI Learning
 
-Obiettivo:
-Permettere allo studente di studiare con StudioPro.
+Obiettivo
 
-Focus:
+Consentire allo studente di studiare con l'AI.
 
+Focus
+
+- Tutor AI
 - Chat con i documenti
 - Riassunti
 - Spiegazioni
-- Ricerca intelligente
-- Organizzazione dello studio
+- Flashcard
+- Quiz
 
 ---
 
-## 🤖 Phase 4 – AI Agents
+## 🧠 Phase 4 — Multi-Agent System
 
-Obiettivo:
-Introdurre i primi agenti AI specializzati.
+Obiettivo
 
-Focus:
+Creare un ecosistema di agenti intelligenti.
+
+Focus
 
 - Tutor Agent
 - Summary Agent
 - Quiz Agent
 - Planner Agent
 - Mind Map Agent
+- Collaborazione tra agenti
 
 ---
 
-## 🔗 Phase 5 – Multi-Agent Platform
+## 👥 Phase 5 — Beta
 
-Obiettivo:
-Far collaborare gli agenti AI.
+Obiettivo
 
-Focus:
+Validare il prodotto con utenti reali.
 
-- Coordinamento tra agenti
-- Memoria condivisa
-- Workflow automatici
-- Esperienza unificata
+Focus
 
----
-
-## 👥 Phase 6 – Beta Testing
-
-Obiettivo:
-Validare StudioPro con utenti reali.
-
-Focus:
-
+- Test
 - Feedback
-- Correzione bug
-- Ottimizzazione UX
-- Miglioramenti delle prestazioni
+- UX
+- Ottimizzazione
+- Performance
 
 ---
 
-## 🚀 Phase 7 – Public Release
+## 🚀 Phase 6 — Public Release
 
-Obiettivo:
-Pubblicazione della prima versione stabile.
+Obiettivo
 
-Focus:
+Pubblicare StudioPro 1.0.
 
-- Versione 1.0
-- Documentazione completa
+Focus
+
+- Release stabile
+- Documentazione
 - Deploy
 - Presentazione del prodotto
+
+---
+
+# MVP Definition
+
+La prima versione di StudioPro dovrà consentire allo studente di:
+
+- creare un account
+- caricare documenti
+- studiare con il Tutor Agent
+- ottenere spiegazioni
+- creare riassunti
+- salvare il proprio lavoro
+
+---
+
+# Milestones
+
+- ✅ Project Vision
+- 🟡 Product Roadmap
+- ⏳ System Architecture
+- ⏳ Agents Design
+- ⏳ MVP Ready
+- ⏳ Beta Release
+- ⏳ Version 1.0
+
+---
+
+# Success Criteria
+
+StudioPro sarà pronto per la versione 1.0 quando:
+
+- il sistema sarà stabile
+- gli agenti collaboreranno correttamente
+- la piattaforma sarà intuitiva
+- la documentazione sarà completa
+- gli utenti riusciranno a studiare in autonomia con StudioPro
+
+---
+
+# Future Vision
+
+Possibili evoluzioni future:
+
+- Mobile App
+- Voice Tutor
+- Studio collaborativo
+- Marketplace di contenuti
+- Community
+- Plugin
+
+---
+
+## Project Status
+
+🟢 Planning
+
+### Current Phase
+
+- ✅ Project Vision
+- 🟡 Product Roadmap
+- ⏳ System Architecture
+- ⏳ Agent Design
+- ⏳ API Design
+- ⏳ Database Design
+- ⏳ Development
+
+---
+
+## Decision Log
+
+### Version 1.0
+
+- Created the official product roadmap.
+- Defined the product evolution.
+- Identified the MVP.
+- Established the main development phases.
