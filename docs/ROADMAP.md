@@ -92,7 +92,7 @@ Focus:
 
 ---
 
-## 🧠 Phase 3 – Learning Experience
+## 🧠 Phase 3 – AI Learning Assistant
 
 Obiettivo:
 Permettere allo studente di studiare con StudioPro.
