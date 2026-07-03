@@ -35,16 +35,16 @@
 
 StudioPro sarà progettato come una piattaforma modulare composta da componenti indipendenti che comunicano attraverso API ben definite.
 
-L'architettura seguirà il principio della separazione delle responsabilità, distinguendo chiaramente:
+L'architettura seguirà il principio della separazione delle responsabilità, distinguendo chiaramente i diversi livelli del sistema:
 
 - Presentazione
 - Logica applicativa
-- Intelligenza Artificiale
+- Intelligenza artificiale
 - Gestione dei dati
 
-Questa organizzazione consentirà al sistema di crescere nel tempo mantenendo elevati livelli di manutenibilità, estensibilità e scalabilità.
+Questa organizzazione consentirà alla piattaforma di evolvere nel tempo mantenendo elevati livelli di manutenibilità, estensibilità e scalabilità.
 
-Il cuore dell'intera piattaforma sarà l'AI Orchestrator, responsabile del coordinamento degli agenti AI e dell'esecuzione dei workflow intelligenti.
+Il cuore dell'intera piattaforma sarà l'**AI Orchestrator**, responsabile del coordinamento degli agenti AI e dell'esecuzione dei workflow intelligenti.
 
 ---
 
@@ -69,34 +69,42 @@ L'architettura di StudioPro sarà guidata dai seguenti principi.
 # High-Level Architecture
 
 ```text
-                             StudioPro
+                              StudioPro
 
-                        ┌────────────────┐
-                        │ Web Interface  │
-                        └───────┬────────┘
-                                │
-                         Frontend (React)
-                                │
-                         REST / GraphQL API
-                                │
+                         ┌─────────────────┐
+                         │  Web Interface  │
+                         └────────┬────────┘
+                                  │
+                           Frontend (React)
+                                  │
+                          REST / GraphQL API
+                                  │
                         API Gateway / Backend
-                                │
- ┌───────────────┬──────────────┼──────────────┬──────────────┐
- ▼               ▼              ▼              ▼              ▼
-Authentication Database   File Storage   Notification   AI Orchestrator
-                                          Service            │
-                                                             │
-                                  ┌──────────────────────────┼──────────────────────────┐
-                                  ▼                          ▼                          ▼
-                           Tutor Agent                Summary Agent              Quiz Agent
-                                  ▼                          ▼                          ▼
-                                  └───────────────┬──────────┴───────────────┐
-                                                  ▼                          ▼
-                                           Planner Agent             Mind Map Agent
-                                                  │
-                                                  ▼
-                                        Shared Memory / Context
+                                  │
+ ┌────────────────┬───────────────┼───────────────┬─────────────────┐
+ ▼                ▼               ▼               ▼                 ▼
+Authentication Database     File Storage   Notification     AI Orchestrator
+                                            Service               │
+                                                                  │
+                        ┌─────────────────────────────────────────┼────────────────────────────────────────┐
+                        ▼                                         ▼                                        ▼
+                  Tutor Agent                             Summary Agent                             Quiz Agent
+                        ▼                                         ▼                                        ▼
+                        └──────────────────────┬──────────────────┴──────────────────────┐
+                                               ▼                                         ▼
+                                        Planner Agent                           Mind Map Agent
+                                               │
+                                               ▼
+                                       Shared Memory / Context
 ```
+
+### Legend
+
+- **Frontend** → User Interface
+- **Backend** → Business Logic
+- **AI Orchestrator** → Coordinates AI Agents
+- **Agents** → Specialized AI services
+- **Shared Memory** → Shared context between agents
 
 ---
 
@@ -122,7 +130,7 @@ Responsabilità:
 
 - Dashboard
 - Workspace
-- Chat
+- Chat Interface
 - Document Viewer
 - Study Tools
 - Authentication UI
@@ -158,14 +166,20 @@ Responsabilità:
 - Model Routing
 - Response Validation
 - Agent Orchestration
+- Agent Selection
+- Workflow Execution
 
 L'AI Layer potrà utilizzare differenti Large Language Models in base al tipo di richiesta.
+
+L'AI Layer sarà completamente indipendente dall'interfaccia utente, permettendo di evolvere il sistema AI senza modificare il resto della piattaforma.
 
 ---
 
 # Multi-Agent System
 
 StudioPro utilizzerà un ecosistema di agenti AI specializzati.
+
+Ogni agente sarà responsabile di uno specifico compito e collaborerà con gli altri attraverso l'AI Orchestrator.
 
 ## Tutor Agent
 
@@ -183,7 +197,7 @@ Responsabilità
 
 - riassunti
 - sintesi automatica
-- estrazione concetti
+- estrazione dei concetti principali
 
 ---
 
@@ -192,8 +206,8 @@ Responsabilità
 Responsabilità
 
 - generazione quiz
-- verifica apprendimento
-- valutazione risposte
+- verifica dell'apprendimento
+- valutazione delle risposte
 
 ---
 
@@ -201,8 +215,8 @@ Responsabilità
 
 Responsabilità
 
-- piano di studio
-- organizzazione attività
+- pianificazione dello studio
+- organizzazione delle attività
 - reminder
 
 ---
@@ -228,7 +242,7 @@ Il Data Layer gestirà:
 - Generated Content
 - AI Memory
 - Embeddings
-- Vector Index
+- Vector Database
 
 ---
 
@@ -236,37 +250,29 @@ Il Data Layer gestirà:
 
 ```text
 User
-
-↓
-
+   │
+   ▼
 Frontend
-
-↓
-
+   │
+   ▼
 Backend API
-
-↓
-
+   │
+   ▼
 AI Orchestrator
-
-↓
-
+   │
+   ▼
 Selected Agent
-
-↓
-
+   │
+   ▼
 Large Language Model
-
-↓
-
+   │
+   ▼
 Validated Response
-
-↓
-
+   │
+   ▼
 Frontend
-
-↓
-
+   │
+   ▼
 User
 ```
 
@@ -309,6 +315,11 @@ User
 - Vercel
 - Cloud Provider (future)
 
+### Monitoring (Future)
+
+- Prometheus
+- Grafana
+
 ---
 
 # Security
@@ -340,21 +351,25 @@ L'architettura dovrà consentire:
 
 # Deployment
 
-Architettura prevista:
+Architettura prevista
 
 ```text
 Frontend
-     │
- Vercel
-     │
+    │
+Vercel
+    │
 Backend API
-     │
- Docker
-     │
- Cloud Server
-     │
-PostgreSQL + Storage
+    │
+Docker
+    │
+Cloud Server
+    │
+PostgreSQL
+    │
+Storage
 ```
+
+Future deployments may support multiple cloud providers and self-hosted installations.
 
 ---
 
@@ -370,6 +385,8 @@ Possibili evoluzioni:
 - Marketplace
 - LMS Integrations
 - Multi-language Support
+- Public API
+- Plugin SDK
 - Enterprise Edition
 
 ---
@@ -386,7 +403,8 @@ Possibili evoluzioni:
 - ⏳ AI Agents
 - ⏳ API Design
 - ⏳ Database Design
-- ⏳ Development
+- ⏳ Frontend Development
+- ⏳ Backend Development
 
 ---
 
@@ -401,3 +419,4 @@ Possibili evoluzioni:
 - Defined the core platform components.
 - Introduced the Data Layer architecture.
 - Defined the infrastructure and deployment model.
+- Added architecture principles and deployment strategy.
