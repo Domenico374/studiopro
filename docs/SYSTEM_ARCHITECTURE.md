@@ -21,6 +21,7 @@
 - Data Layer
 - Data Flow
 - Technology Stack
+- Infrastructure
 - Security
 - Scalability
 - Deployment
@@ -32,78 +33,86 @@
 
 # Architecture Overview
 
-StudioPro sarà progettato come una piattaforma modulare composta da componenti indipendenti che collaborano tra loro attraverso API ben definite.
+StudioPro sarà progettato come una piattaforma modulare composta da componenti indipendenti che comunicano attraverso API ben definite.
 
-L'architettura separerà chiaramente la presentazione, la logica applicativa, il sistema di intelligenza artificiale e la gestione dei dati.
+L'architettura seguirà il principio della separazione delle responsabilità, distinguendo chiaramente:
 
-Questo approccio renderà StudioPro facilmente estendibile, manutenibile e scalabile.
+- Presentazione
+- Logica applicativa
+- Intelligenza Artificiale
+- Gestione dei dati
 
-Il cuore dell'architettura sarà un AI Orchestrator responsabile del coordinamento degli agenti AI.
+Questa organizzazione consentirà al sistema di crescere nel tempo mantenendo elevati livelli di manutenibilità, estensibilità e scalabilità.
+
+Il cuore dell'intera piattaforma sarà l'AI Orchestrator, responsabile del coordinamento degli agenti AI e dell'esecuzione dei workflow intelligenti.
 
 ---
 
 # Architecture Principles
 
-L'architettura seguirà questi principi fondamentali.
+L'architettura di StudioPro sarà guidata dai seguenti principi.
 
 - Modular Architecture
 - Separation of Concerns
 - API-First Design
 - AI-First Architecture
+- Security by Design
 - Scalability
 - Maintainability
-- Security by Design
 - Extensibility
 - Observability
+- Loose Coupling
+- High Cohesion
 
 ---
 
 # High-Level Architecture
 
 ```text
-                           StudioPro
+                             StudioPro
 
-                      ┌──────────────┐
-                      │   Frontend   │
-                      └──────┬───────┘
-                             │
-                      REST / GraphQL
-                             │
-                      ┌──────▼───────┐
-                      │   Backend    │
-                      └──────┬───────┘
-                             │
-        ┌────────────────────┼────────────────────┐
-        ▼                    ▼                    ▼
-   Authentication      File Storage          Database
-                             │
-                      ┌──────▼───────┐
-                      │ AI Orchestrator │
-                      └──────┬───────┘
-                             │
-      ┌──────────────┬──────────────┬──────────────┐
-      ▼              ▼              ▼              ▼
- Tutor Agent   Summary Agent   Quiz Agent   Planner Agent
-      │              │              │              │
-      └──────────────┴──────────────┴──────────────┘
-                             │
-                      Mind Map Agent
+                        ┌────────────────┐
+                        │ Web Interface  │
+                        └───────┬────────┘
+                                │
+                         Frontend (React)
+                                │
+                         REST / GraphQL API
+                                │
+                        API Gateway / Backend
+                                │
+ ┌───────────────┬──────────────┼──────────────┬──────────────┐
+ ▼               ▼              ▼              ▼              ▼
+Authentication Database   File Storage   Notification   AI Orchestrator
+                                          Service            │
+                                                             │
+                                  ┌──────────────────────────┼──────────────────────────┐
+                                  ▼                          ▼                          ▼
+                           Tutor Agent                Summary Agent              Quiz Agent
+                                  ▼                          ▼                          ▼
+                                  └───────────────┬──────────┴───────────────┐
+                                                  ▼                          ▼
+                                           Planner Agent             Mind Map Agent
+                                                  │
+                                                  ▼
+                                        Shared Memory / Context
 ```
 
 ---
 
 # Core Components
 
-StudioPro sarà composto dai seguenti macro-componenti.
+I principali componenti della piattaforma saranno:
 
 - Frontend
-- Backend
+- Backend API
+- API Gateway
+- Authentication Service
 - AI Orchestrator
 - Multi-Agent System
 - Database
 - File Storage
-- Authentication
-- API Layer
+- Notification Service
 
 ---
 
@@ -111,12 +120,13 @@ StudioPro sarà composto dai seguenti macro-componenti.
 
 Responsabilità:
 
-- User Interface
 - Dashboard
 - Workspace
 - Chat
+- Document Viewer
 - Study Tools
 - Authentication UI
+- User Settings
 
 ---
 
@@ -125,11 +135,12 @@ Responsabilità:
 Responsabilità:
 
 - Business Logic
-- API
 - User Management
-- File Management
 - Session Management
-- AI Requests Routing
+- Document Management
+- AI Request Routing
+- Notification Management
+- API Management
 
 ---
 
@@ -137,62 +148,72 @@ Responsabilità:
 
 L'AI Layer rappresenta il cuore intelligente di StudioPro.
 
-Sarà responsabile di:
+Responsabilità:
 
 - Prompt Management
 - Context Management
-- LLM Communication
-- Tool Calling
+- Conversation History
 - Memory Management
+- Tool Calling
+- Model Routing
+- Response Validation
+- Agent Orchestration
+
+L'AI Layer potrà utilizzare differenti Large Language Models in base al tipo di richiesta.
 
 ---
 
 # Multi-Agent System
 
-Il sistema sarà composto da agenti specializzati.
+StudioPro utilizzerà un ecosistema di agenti AI specializzati.
 
 ## Tutor Agent
 
-Responsabilità:
+Responsabilità
 
 - spiegazioni
-- tutoring
+- tutoring personalizzato
+- domande e risposte
 
 ---
 
 ## Summary Agent
 
-Responsabilità:
+Responsabilità
 
 - riassunti
-- sintesi
+- sintesi automatica
+- estrazione concetti
 
 ---
 
 ## Quiz Agent
 
-Responsabilità:
+Responsabilità
 
-- quiz
+- generazione quiz
 - verifica apprendimento
+- valutazione risposte
 
 ---
 
 ## Planner Agent
 
-Responsabilità:
+Responsabilità
 
-- organizzazione studio
-- calendario
+- piano di studio
+- organizzazione attività
+- reminder
 
 ---
 
 ## Mind Map Agent
 
-Responsabilità:
+Responsabilità
 
 - mappe concettuali
-- relazioni tra concetti
+- collegamento tra concetti
+- visualizzazione della conoscenza
 
 ---
 
@@ -203,9 +224,11 @@ Il Data Layer gestirà:
 - User Database
 - Documents
 - Conversations
-- AI Memory
 - Study Sessions
 - Generated Content
+- AI Memory
+- Embeddings
+- Vector Index
 
 ---
 
@@ -220,7 +243,7 @@ Frontend
 
 ↓
 
-Backend
+Backend API
 
 ↓
 
@@ -232,11 +255,11 @@ Selected Agent
 
 ↓
 
-LLM
+Large Language Model
 
 ↓
 
-Response
+Validated Response
 
 ↓
 
@@ -253,8 +276,8 @@ User
 
 ## Frontend
 
-- Next.js
 - React
+- Next.js
 - TypeScript
 
 ## Backend
@@ -278,6 +301,16 @@ User
 
 ---
 
+# Infrastructure
+
+- Docker
+- GitHub
+- GitHub Actions
+- Vercel
+- Cloud Provider (future)
+
+---
+
 # Security
 
 StudioPro dovrà garantire:
@@ -285,20 +318,23 @@ StudioPro dovrà garantire:
 - Authentication
 - Authorization
 - Data Encryption
-- Secure API
+- Secure APIs
 - Privacy by Design
+- Secure File Upload
+- Audit Logging
 
 ---
 
 # Scalability
 
-L'architettura dovrà supportare:
+L'architettura dovrà consentire:
 
-- nuovi agenti
-- nuovi strumenti
-- nuovi provider AI
-- nuovi database
+- aggiunta di nuovi agenti
+- supporto a nuovi modelli AI
 - crescita del numero di utenti
+- distribuzione su più server
+- bilanciamento del carico
+- espansione dei servizi
 
 ---
 
@@ -306,27 +342,19 @@ L'architettura dovrà supportare:
 
 Architettura prevista:
 
+```text
 Frontend
-
-↓
-
-Vercel
-
-↓
-
+     │
+ Vercel
+     │
 Backend API
-
-↓
-
-Docker
-
-↓
-
-Cloud Server
-
-↓
-
+     │
+ Docker
+     │
+ Cloud Server
+     │
 PostgreSQL + Storage
+```
 
 ---
 
@@ -338,9 +366,11 @@ Possibili evoluzioni:
 - Voice Assistant
 - Offline AI
 - Plugin System
-- Community
+- Community Platform
 - Marketplace
-- Third-party Integrations
+- LMS Integrations
+- Multi-language Support
+- Enterprise Edition
 
 ---
 
@@ -367,5 +397,7 @@ Possibili evoluzioni:
 - Created the first System Architecture document.
 - Defined the layered architecture.
 - Introduced the AI Orchestrator.
-- Defined the Multi-Agent architecture.
-- Identified the main system components.
+- Designed the Multi-Agent System.
+- Defined the core platform components.
+- Introduced the Data Layer architecture.
+- Defined the infrastructure and deployment model.
