@@ -13,9 +13,12 @@
 - Agents Overview
 - Agent Design Principles
 - AI Orchestrator
+- Agent Selection Strategy
 - Agent Lifecycle
 - Core Agents
+- Agent Summary
 - Agent Collaboration
+- Agent Communication
 - Example Workflows
 - Future Agents
 - Project Status
@@ -27,9 +30,9 @@
 
 StudioPro utilizzerà un ecosistema di agenti AI specializzati progettati per collaborare durante il processo di apprendimento.
 
-Ogni agente sarà responsabile di un compito specifico e lavorerà in coordinamento con gli altri attraverso l'AI Orchestrator.
+Ogni agente sarà responsabile di uno specifico dominio funzionale e lavorerà in coordinamento con gli altri attraverso l'AI Orchestrator.
 
-L'utente interagirà esclusivamente con StudioPro. Sarà il sistema a decidere quali agenti coinvolgere in base alla richiesta, al contesto della conversazione e agli obiettivi dello studente.
+L'utente interagirà esclusivamente con StudioPro. Sarà il sistema a selezionare automaticamente gli agenti più adatti in base alla richiesta, al contesto della conversazione e agli obiettivi di apprendimento.
 
 ---
 
@@ -46,7 +49,7 @@ Tutti gli agenti seguiranno gli stessi principi progettuali.
 - Extensibility
 - Reusability
 
-Ogni agente dovrà svolgere un solo compito specifico, lasciando all'AI Orchestrator il coordinamento dell'intero workflow.
+Ogni agente svolgerà un solo compito specifico, lasciando all'AI Orchestrator il coordinamento dell'intero workflow.
 
 ---
 
@@ -68,9 +71,26 @@ L'Orchestrator costituisce l'unico punto di comunicazione tra l'utente e gli age
 
 ---
 
+# Agent Selection Strategy
+
+L'AI Orchestrator selezionerà dinamicamente gli agenti più adatti in base alla richiesta dello studente.
+
+| Richiesta dello studente | Agenti coinvolti |
+|---------------------------|------------------|
+| Spiegami un argomento | Tutor Agent |
+| Fammi un riassunto | Summary Agent |
+| Interrogami | Quiz Agent |
+| Organizza il mio studio | Planner Agent |
+| Crea una mappa concettuale | Mind Map Agent |
+| Ho un esame domani | Planner + Summary + Tutor + Quiz |
+
+L'Orchestrator potrà coinvolgere uno o più agenti nello stesso workflow.
+
+---
+
 # Agent Lifecycle
 
-Ogni richiesta seguirà lo stesso ciclo di elaborazione.
+Ogni richiesta seguirà il medesimo ciclo di elaborazione.
 
 ```text
 User Request
@@ -231,6 +251,18 @@ Visualizzare la conoscenza.
 
 ---
 
+# Agent Summary
+
+| Agent | Mission | Input | Output |
+|--------|---------|--------|--------|
+| Tutor Agent | Comprendere un argomento | Domande, documenti | Spiegazioni |
+| Summary Agent | Sintetizzare contenuti | Documenti | Riassunti |
+| Quiz Agent | Verificare l'apprendimento | Argomenti | Quiz e feedback |
+| Planner Agent | Organizzare lo studio | Esami e tempo disponibile | Piano di studio |
+| Mind Map Agent | Visualizzare i concetti | Documenti | Mappe concettuali |
+
+---
+
 # Agent Collaboration
 
 Gli agenti non comunicano direttamente con l'utente.
@@ -248,6 +280,22 @@ Ogni collaborazione viene coordinata esclusivamente dall'AI Orchestrator.
                             ▼
                      Mind Map Agent
 ```
+
+---
+
+# Agent Communication
+
+Gli agenti comunicano esclusivamente attraverso l'AI Orchestrator.
+
+Gli agenti:
+
+- non comunicano direttamente tra loro
+- non mantengono stato condiviso
+- ricevono il contesto dall'Orchestrator
+- restituiscono risultati strutturati
+- possono essere sostituiti senza modificare il resto del sistema
+
+Questo approccio garantisce modularità, manutenibilità ed estensibilità dell'intera piattaforma.
 
 ---
 
@@ -317,16 +365,21 @@ Visual Explanation
 
 Il sistema potrà essere esteso con nuovi agenti.
 
-Possibili evoluzioni:
+## Learning Agents
 
 - Flashcard Agent
-- Research Agent
-- Writing Agent
 - Revision Agent
 - Progress Agent
 - Motivation Agent
-- Oral Exam Agent
+
+## Research Agents
+
+- Research Agent
 - Citation Agent
+
+## Productivity Agents
+
+- Writing Agent
 - Translation Agent
 - Coding Agent
 
@@ -341,7 +394,7 @@ Possibili evoluzioni:
 - ✅ Project Vision
 - ✅ Product Roadmap
 - ✅ System Architecture
-- 🟡 AI Agents
+- ✅ AI Agents
 
 ### Development
 
@@ -358,7 +411,8 @@ Possibili evoluzioni:
 
 - Created the AI Agents specification.
 - Defined the AI Orchestrator.
-- Defined the first core agents.
-- Introduced agent lifecycle.
+- Defined the core AI agents.
+- Introduced the agent lifecycle.
+- Defined the agent selection strategy.
 - Introduced collaboration workflows.
-- Designed the multi-agent architecture.
+- Defined the communication model between agents.
