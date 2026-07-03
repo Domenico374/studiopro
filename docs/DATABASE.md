@@ -15,7 +15,7 @@
 - Database Architecture
 - Main Entities
 - Entity Relationships
-- Tables
+- Table Specifications
 - Data Flow
 - Storage Strategy
 - Security
@@ -32,13 +32,13 @@ Il database di StudioPro rappresenta il centro di gestione di tutte le informazi
 
 Conserverà i dati relativi agli utenti, ai documenti, alle sessioni di studio, alle conversazioni con gli agenti AI e ai contenuti generati durante il percorso di apprendimento.
 
-L'obiettivo è costruire una struttura semplice, modulare ed estendibile, capace di supportare l'evoluzione futura della piattaforma senza richiedere modifiche sostanziali al modello dati.
+L'obiettivo è costruire una struttura semplice, modulare, sicura ed estendibile, capace di supportare l'evoluzione futura della piattaforma senza richiedere modifiche sostanziali al modello dati.
 
 ---
 
 # Design Principles
 
-Il database seguirà questi principi.
+Il database seguirà questi principi fondamentali.
 
 - Data Integrity
 - Scalability
@@ -81,15 +81,15 @@ Le principali entità del sistema saranno:
 
 - Users
 - Documents
-- Study Sessions
 - Conversations
 - Messages
-- AI Agents
-- Generated Content
+- Study Sessions
 - Study Plans
 - Quizzes
 - Mind Maps
 - Flashcards
+- Generated Content
+- AI Memory
 
 ---
 
@@ -98,73 +98,147 @@ Le principali entità del sistema saranno:
 ```text
 User
  │
- ├── Documents
+ ├──────────────┐
+ ▼              ▼
+Documents   Study Sessions
+ │              │
+ ▼              ▼
+Conversations  Study Plans
  │
- ├── Study Sessions
- │
- ├── Conversations
- │
- └── Study Plans
-
-Conversation
- │
- └── Messages
+ ▼
+Messages
 
 Study Session
  │
  ├── Quiz
- ├── Summary
  ├── Mind Map
- └── Flashcards
+ ├── Flashcards
+ └── Generated Content
 ```
 
 ---
 
-# Tables
+# Table Specifications
 
 ## Users
 
-Contiene le informazioni degli utenti registrati.
+### Purpose
+
+Memorizza le informazioni degli utenti registrati.
+
+| Field | Type | Description |
+|--------|------|-------------|
+| id | UUID | Primary Key |
+| email | VARCHAR | User email |
+| password_hash | VARCHAR | Password cifrata |
+| full_name | VARCHAR | Nome completo |
+| role | VARCHAR | Student / Teacher / Admin |
+| created_at | TIMESTAMP | Data creazione |
+| updated_at | TIMESTAMP | Ultima modifica |
+
+### Relationships
+
+- One User → Many Documents
+- One User → Many Conversations
+- One User → Many Study Sessions
+
+---
 
 ## Documents
 
-Documenti caricati.
+### Purpose
+
+Memorizza i documenti caricati dagli utenti.
+
+| Field | Type | Description |
+|--------|------|-------------|
+| id | UUID | Primary Key |
+| user_id | UUID | Proprietario |
+| filename | VARCHAR | Nome file |
+| storage_url | TEXT | Percorso Storage |
+| file_type | VARCHAR | PDF, DOCX... |
+| created_at | TIMESTAMP | Upload |
+
+### Relationships
+
+- Many Documents → One User
+- One Document → Many Conversations
+
+---
 
 ## Conversations
 
-Conversazioni con StudioPro.
+### Purpose
+
+Memorizza le conversazioni tra lo studente e StudioPro.
+
+Relationships
+
+- One Conversation → Many Messages
+
+---
 
 ## Messages
 
-Messaggi delle conversazioni.
+### Purpose
+
+Memorizza ogni messaggio della conversazione.
+
+---
 
 ## Study Sessions
 
-Sessioni di studio.
+### Purpose
+
+Memorizza le sessioni di studio.
+
+---
 
 ## Study Plans
 
-Piani di studio.
+### Purpose
+
+Memorizza i piani di studio creati dal Planner Agent.
+
+---
 
 ## Quizzes
 
-Quiz generati.
+### Purpose
+
+Memorizza quiz e risultati.
+
+---
 
 ## Mind Maps
 
-Mappe concettuali.
+### Purpose
+
+Memorizza le mappe concettuali generate.
+
+---
 
 ## Flashcards
 
-Flashcard generate.
+### Purpose
+
+Memorizza le flashcard generate.
+
+---
 
 ## Generated Content
 
-Contenuti creati dagli agenti AI.
+### Purpose
+
+Memorizza tutti i contenuti creati dagli agenti AI.
+
+---
 
 ## AI Memory
 
-Memoria condivisa utilizzata dagli agenti.
+### Purpose
+
+Memorizza il contesto condiviso utilizzato dagli agenti AI.
 
 ---
 
@@ -172,33 +246,29 @@ Memoria condivisa utilizzata dagli agenti.
 
 ```text
 User
-
-↓
-
-Upload Document
-
-↓
-
+    │
+    ▼
+Frontend
+    │
+    ▼
+Backend API
+    │
+    ▼
 Database
-
-↓
-
+    │
+    ▼
 AI Orchestrator
-
-↓
-
+    │
+    ▼
 AI Agents
-
-↓
-
+    │
+    ▼
 Generated Content
-
-↓
-
+    │
+    ▼
 Database
-
-↓
-
+    │
+    ▼
 Frontend
 ```
 
@@ -206,12 +276,14 @@ Frontend
 
 # Storage Strategy
 
-Il sistema utilizzerà differenti modalità di archiviazione.
+StudioPro utilizzerà differenti sistemi di archiviazione.
 
-- PostgreSQL → dati strutturati
-- Object Storage → PDF, immagini e file
-- Vector Database → embeddings
-- Cache → dati temporanei (futuro)
+| Component | Storage |
+|-----------|---------|
+| Structured Data | PostgreSQL |
+| Documents | Object Storage |
+| AI Embeddings | Vector Database |
+| Temporary Data | Cache (Future) |
 
 ---
 
@@ -219,36 +291,38 @@ Il sistema utilizzerà differenti modalità di archiviazione.
 
 Il database dovrà garantire:
 
-- autenticazione
-- autorizzazione
-- cifratura dei dati
-- backup
-- audit log
-- protezione dei documenti
+- Authentication
+- Authorization
+- Encryption at Rest
+- Encryption in Transit
+- Secure File Access
+- Audit Logging
+- Automatic Backup
 
 ---
 
 # Scalability
 
-La struttura dovrà supportare:
+L'architettura dovrà supportare:
 
+- milioni di utenti
 - milioni di documenti
 - milioni di conversazioni
 - nuovi agenti AI
 - nuovi tipi di contenuto
-- nuovi modelli AI
+- nuovi provider AI
 
 ---
 
 # Future Database
 
-Possibili evoluzioni:
+Possibili evoluzioni future:
 
-- Multi-tenant
-- Database Sharding
+- Multi-tenant Architecture
 - Distributed Storage
-- Event Store
+- Database Sharding
 - Analytics Database
+- Event Store
 - Data Warehouse
 
 ---
@@ -280,5 +354,7 @@ Possibili evoluzioni:
 - Created the Database Design document.
 - Defined the database architecture.
 - Identified the main entities.
-- Designed the relationships between entities.
+- Defined the entity relationships.
+- Introduced the first table specifications.
 - Defined the storage strategy.
+- Designed the database scalability model.
