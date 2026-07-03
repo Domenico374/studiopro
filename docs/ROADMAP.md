@@ -77,7 +77,7 @@ Focus:
 
 ---
 
-## 📚 Phase 2 – Core Platform
+## 📚 Phase 2 – Core Learning Platform
 
 Obiettivo:
 Realizzare la piattaforma base.
