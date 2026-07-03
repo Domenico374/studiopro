@@ -12,7 +12,9 @@
 
 - API Overview
 - Design Principles
+- API Versioning
 - API Architecture
+- Standard Response Format
 - Authentication
 - Core Endpoints
 - User APIs
@@ -56,6 +58,20 @@ Le API di StudioPro seguiranno questi principi:
 
 ---
 
+# API Versioning
+
+Le API seguiranno una struttura versionata.
+
+```http
+/api/v1/...
+```
+
+La prima versione stabile utilizzerà `/api/v1`.
+
+Le future versioni potranno introdurre nuovi endpoint senza rompere la compatibilità con le versioni precedenti.
+
+---
+
 # API Architecture
 
 ```text
@@ -73,6 +89,34 @@ Backend API
    ├── AI Orchestrator
    ├── Study Service
    └── Generated Content Service
+```
+
+---
+
+# Standard Response Format
+
+Le risposte API seguiranno un formato coerente.
+
+```json
+{
+  "success": true,
+  "data": {},
+  "error": null
+}
+```
+
+In caso di errore:
+
+```json
+{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "DOCUMENT_NOT_FOUND",
+    "message": "Document not found",
+    "status": 404
+  }
+}
 ```
 
 ---
@@ -101,15 +145,19 @@ Possibili provider futuri:
 ## Health Check
 
 ```http
-GET /api/health
+GET /api/v1/health
 ```
 
 Risposta:
 
 ```json
 {
-  "status": "ok",
-  "service": "StudioPro API"
+  "success": true,
+  "data": {
+    "status": "ok",
+    "service": "StudioPro API"
+  },
+  "error": null
 }
 ```
 
@@ -120,7 +168,7 @@ Risposta:
 ## Get Current User
 
 ```http
-GET /api/users/me
+GET /api/v1/users/me
 ```
 
 Descrizione:
@@ -132,7 +180,7 @@ Restituisce le informazioni dell'utente autenticato.
 ## Update User Profile
 
 ```http
-PUT /api/users/me
+PUT /api/v1/users/me
 ```
 
 Body:
@@ -150,7 +198,7 @@ Body:
 ## Upload Document
 
 ```http
-POST /api/documents
+POST /api/v1/documents
 ```
 
 Descrizione:
@@ -159,10 +207,22 @@ Carica un documento nello storage e registra i metadati nel database.
 
 ---
 
+## Process Document
+
+```http
+POST /api/v1/documents/{document_id}/process
+```
+
+Descrizione:
+
+Estrae testo, genera embeddings e prepara il documento per l'utilizzo con gli agenti AI.
+
+---
+
 ## Get User Documents
 
 ```http
-GET /api/documents
+GET /api/v1/documents
 ```
 
 Descrizione:
@@ -174,7 +234,7 @@ Restituisce i documenti caricati dall'utente.
 ## Get Document Detail
 
 ```http
-GET /api/documents/{document_id}
+GET /api/v1/documents/{document_id}
 ```
 
 Descrizione:
@@ -186,7 +246,7 @@ Restituisce i dettagli di un documento.
 ## Delete Document
 
 ```http
-DELETE /api/documents/{document_id}
+DELETE /api/v1/documents/{document_id}
 ```
 
 Descrizione:
@@ -200,7 +260,7 @@ Elimina o archivia un documento.
 ## Create Conversation
 
 ```http
-POST /api/conversations
+POST /api/v1/conversations
 ```
 
 Body:
@@ -217,7 +277,7 @@ Body:
 ## Get Conversations
 
 ```http
-GET /api/conversations
+GET /api/v1/conversations
 ```
 
 ---
@@ -225,7 +285,7 @@ GET /api/conversations
 ## Get Conversation Messages
 
 ```http
-GET /api/conversations/{conversation_id}/messages
+GET /api/v1/conversations/{conversation_id}/messages
 ```
 
 ---
@@ -233,7 +293,7 @@ GET /api/conversations/{conversation_id}/messages
 ## Send Message
 
 ```http
-POST /api/conversations/{conversation_id}/messages
+POST /api/v1/conversations/{conversation_id}/messages
 ```
 
 Body:
@@ -251,7 +311,7 @@ Body:
 ## Ask StudioPro
 
 ```http
-POST /api/ai/ask
+POST /api/v1/ai/ask
 ```
 
 Descrizione:
@@ -274,8 +334,12 @@ Risposta:
 
 ```json
 {
-  "answer": "Ecco un piano rapido di ripasso...",
-  "agents_used": ["Planner Agent", "Summary Agent", "Quiz Agent"]
+  "success": true,
+  "data": {
+    "answer": "Ecco un piano rapido di ripasso...",
+    "agents_used": ["Planner Agent", "Summary Agent", "Quiz Agent"]
+  },
+  "error": null
 }
 ```
 
@@ -284,7 +348,7 @@ Risposta:
 ## Generate Summary
 
 ```http
-POST /api/ai/summary
+POST /api/v1/ai/summary
 ```
 
 Body:
@@ -301,7 +365,7 @@ Body:
 ## Generate Quiz
 
 ```http
-POST /api/ai/quiz
+POST /api/v1/ai/quiz
 ```
 
 Body:
@@ -319,7 +383,7 @@ Body:
 ## Generate Mind Map
 
 ```http
-POST /api/ai/mind-map
+POST /api/v1/ai/mind-map
 ```
 
 Body:
@@ -337,7 +401,7 @@ Body:
 ## Create Study Session
 
 ```http
-POST /api/study-sessions
+POST /api/v1/study-sessions
 ```
 
 Body:
@@ -354,7 +418,7 @@ Body:
 ## Get Study Sessions
 
 ```http
-GET /api/study-sessions
+GET /api/v1/study-sessions
 ```
 
 ---
@@ -362,7 +426,7 @@ GET /api/study-sessions
 ## Get Study Session Detail
 
 ```http
-GET /api/study-sessions/{session_id}
+GET /api/v1/study-sessions/{session_id}
 ```
 
 ---
@@ -372,7 +436,7 @@ GET /api/study-sessions/{session_id}
 ## Get Generated Content
 
 ```http
-GET /api/generated-content
+GET /api/v1/generated-content
 ```
 
 ---
@@ -380,7 +444,7 @@ GET /api/generated-content
 ## Get Generated Content Detail
 
 ```http
-GET /api/generated-content/{content_id}
+GET /api/v1/generated-content/{content_id}
 ```
 
 ---
@@ -388,7 +452,7 @@ GET /api/generated-content/{content_id}
 ## Delete Generated Content
 
 ```http
-DELETE /api/generated-content/{content_id}
+DELETE /api/v1/generated-content/{content_id}
 ```
 
 ---
@@ -401,6 +465,8 @@ Esempio:
 
 ```json
 {
+  "success": false,
+  "data": null,
   "error": {
     "code": "DOCUMENT_NOT_FOUND",
     "message": "Document not found",
@@ -441,9 +507,9 @@ Esempio:
 
 | Endpoint | Limit |
 |----------|-------|
-| /api/ai/ask | 30 requests / hour |
-| /api/ai/summary | 20 requests / hour |
-| /api/ai/quiz | 20 requests / hour |
+| /api/v1/ai/ask | 30 requests / hour |
+| /api/v1/ai/summary | 20 requests / hour |
+| /api/v1/ai/quiz | 20 requests / hour |
 
 ---
 
@@ -472,7 +538,7 @@ Possibili estensioni future:
 - ✅ System Architecture
 - ✅ AI Agents
 - ✅ Database Design
-- 🟡 API Design
+- ✅ API Design
 
 ### Development
 
@@ -487,7 +553,10 @@ Possibili estensioni future:
 
 - Created the API Design document.
 - Defined the main API structure.
+- Introduced API versioning.
+- Defined the standard response format.
 - Introduced authentication model.
 - Defined core API endpoints.
 - Designed AI Agent endpoints.
+- Added document processing endpoint.
 - Added error handling and rate limiting strategy.
