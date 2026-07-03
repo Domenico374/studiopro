@@ -13,6 +13,7 @@
 - Agents Overview
 - Agent Design Principles
 - AI Orchestrator
+- Agent Lifecycle
 - Core Agents
 - Agent Collaboration
 - Example Workflows
@@ -24,204 +25,340 @@
 
 # Agents Overview
 
-StudioPro utilizzerà un sistema di agenti AI specializzati per supportare lo studente durante il percorso di apprendimento.
+StudioPro utilizzerà un ecosistema di agenti AI specializzati progettati per collaborare durante il processo di apprendimento.
 
-Ogni agente avrà un compito specifico e collaborerà con gli altri attraverso l'AI Orchestrator.
+Ogni agente sarà responsabile di un compito specifico e lavorerà in coordinamento con gli altri attraverso l'AI Orchestrator.
 
-L'utente non dovrà scegliere manualmente quale agente usare: parlerà con StudioPro, mentre il sistema deciderà quale agente coinvolgere in base alla richiesta.
+L'utente interagirà esclusivamente con StudioPro. Sarà il sistema a decidere quali agenti coinvolgere in base alla richiesta, al contesto della conversazione e agli obiettivi dello studente.
 
 ---
 
 # Agent Design Principles
 
-Gli agenti di StudioPro seguiranno questi principi:
+Tutti gli agenti seguiranno gli stessi principi progettuali.
 
-- ogni agente ha una responsabilità chiara
-- gli agenti non lavorano in modo isolato
-- l'AI Orchestrator coordina il flusso
-- ogni risposta deve aiutare lo studente a comprendere meglio
-- gli agenti devono produrre output semplici, utili e verificabili
-- il sistema deve poter aggiungere nuovi agenti nel tempo
+- Single Responsibility
+- Collaboration First
+- AI Orchestrator Coordination
+- Explainability
+- Context Awareness
+- Stateless Execution
+- Extensibility
+- Reusability
+
+Ogni agente dovrà svolgere un solo compito specifico, lasciando all'AI Orchestrator il coordinamento dell'intero workflow.
 
 ---
 
 # AI Orchestrator
 
-L'AI Orchestrator è il componente che coordina gli agenti AI.
+L'AI Orchestrator rappresenta il cervello operativo dell'intero sistema.
 
 Responsabilità:
 
 - interpretare la richiesta dello studente
-- selezionare l'agente più adatto
-- coordinare più agenti quando necessario
-- gestire il contesto della conversazione
-- validare la risposta finale
-- restituire all'utente un risultato chiaro e coerente
+- identificare l'obiettivo della conversazione
+- selezionare uno o più agenti
+- coordinare il workflow
+- condividere il contesto tra gli agenti
+- validare le risposte
+- costruire la risposta finale
+
+L'Orchestrator costituisce l'unico punto di comunicazione tra l'utente e gli agenti AI.
+
+---
+
+# Agent Lifecycle
+
+Ogni richiesta seguirà lo stesso ciclo di elaborazione.
+
+```text
+User Request
+      │
+      ▼
+AI Orchestrator
+      │
+      ▼
+Agent Selection
+      │
+      ▼
+Agent Execution
+      │
+      ▼
+Response Validation
+      │
+      ▼
+Final Response
+```
 
 ---
 
 # Core Agents
 
-## Tutor Agent
+## 🎓 Tutor Agent
 
-Missione:
+### Mission
 
 Aiutare lo studente a comprendere un argomento.
 
-Responsabilità:
+### Responsibilities
 
-- spiegare concetti complessi
+- spiegare concetti
 - fornire esempi
-- rispondere a domande
-- adattare il linguaggio al livello dello studente
+- adattare il linguaggio
+- rispondere alle domande
 
-Input:
+### Input
 
-- domanda dello studente
-- materia
-- livello di studio
-- eventuali documenti caricati
+- domanda
+- documento
+- cronologia
+- livello dello studente
 
-Output:
+### Output
 
-- spiegazione chiara
+- spiegazione
 - esempi
-- passaggi logici
-- eventuali suggerimenti di ripasso
+- approfondimenti
+- suggerimenti
 
 ---
 
-## Summary Agent
+## 📄 Summary Agent
 
-Missione:
+### Mission
 
-Trasformare testi e documenti lunghi in contenuti più semplici da studiare.
+Trasformare documenti lunghi in contenuti sintetici.
 
-Responsabilità:
+### Responsibilities
 
 - creare riassunti
-- estrarre concetti chiave
-- organizzare le informazioni
+- estrarre concetti
+- identificare parole chiave
 - produrre versioni brevi o dettagliate
 
-Input:
+### Input
 
 - documento
 - testo
-- richiesta dello studente
+- richiesta
 
-Output:
+### Output
 
 - riassunto
+- schema
 - punti chiave
-- schema sintetico
 
 ---
 
-## Quiz Agent
+## ❓ Quiz Agent
 
-Missione:
+### Mission
 
-Aiutare lo studente a verificare la propria preparazione.
+Verificare la preparazione dello studente.
 
-Responsabilità:
+### Responsibilities
 
 - generare quiz
 - creare domande aperte
-- proporre domande a risposta multipla
-- correggere le risposte
+- correggere risposte
 - spiegare gli errori
 
-Input:
+### Input
 
 - argomento
 - documento
-- livello di difficoltà
+- livello
 
-Output:
+### Output
 
 - quiz
-- soluzioni
-- spiegazioni
+- correzione
 - feedback
 
 ---
 
-## Planner Agent
+## 📅 Planner Agent
 
-Missione:
+### Mission
 
-Aiutare lo studente a organizzare lo studio.
+Organizzare il percorso di studio.
 
-Responsabilità:
+### Responsibilities
 
 - creare piani di studio
-- dividere gli argomenti nel tempo
+- suddividere gli argomenti
+- pianificare il ripasso
 - suggerire priorità
-- proporre sessioni di ripasso
 
-Input:
+### Input
 
-- data dell'esame
+- data esame
 - tempo disponibile
-- argomenti da studiare
-- livello di preparazione
+- argomenti
 
-Output:
+### Output
 
+- calendario
 - piano di studio
-- attività giornaliere
-- priorità
-- suggerimenti di ripasso
+- attività
 
 ---
 
-## Mind Map Agent
+## 🧠 Mind Map Agent
 
-Missione:
+### Mission
 
-Aiutare lo studente a visualizzare collegamenti tra concetti.
+Visualizzare la conoscenza.
 
-Responsabilità:
+### Responsibilities
 
 - creare mappe concettuali
-- collegare argomenti
-- evidenziare relazioni
-- organizzare le informazioni in modo visuale
+- collegare concetti
+- definire gerarchie
+- costruire relazioni
 
-Input:
+### Input
 
-- argomento
 - documento
-- concetti principali
+- argomento
 
-Output:
+### Output
 
 - struttura della mappa
-- nodi principali
+- nodi
 - collegamenti
-- gerarchia dei concetti
 
 ---
 
 # Agent Collaboration
 
-Gli agenti potranno collaborare tra loro attraverso l'AI Orchestrator.
+Gli agenti non comunicano direttamente con l'utente.
 
-Esempio:
+Ogni collaborazione viene coordinata esclusivamente dall'AI Orchestrator.
 
 ```text
-Studente:
-"Ho l'esame domani, aiutami a ripassare."
+                 AI Orchestrator
 
-AI Orchestrator
-      ↓
-Planner Agent
-      ↓
+        ┌────────────┬─────────────┬─────────────┐
+        ▼            ▼             ▼             ▼
+   Tutor Agent  Summary Agent  Quiz Agent  Planner Agent
+        │            │             │             │
+        └────────────┴──────┬──────┴─────────────┘
+                            ▼
+                     Mind Map Agent
+```
+
+---
+
+# Example Workflows
+
+## Workflow 1 — Studio di un documento
+
+```text
+Upload PDF
+      │
+      ▼
 Summary Agent
-      ↓
+      │
+      ▼
 Tutor Agent
-      ↓
+      │
+      ▼
 Quiz Agent
-      ↓
-Risposta finale allo studente
+      │
+      ▼
+Learning Session
+```
+
+---
+
+## Workflow 2 — Preparazione di un esame
+
+```text
+Exam Date
+      │
+      ▼
+Planner Agent
+      │
+      ▼
+Summary Agent
+      │
+      ▼
+Tutor Agent
+      │
+      ▼
+Quiz Agent
+      │
+      ▼
+Study Plan
+```
+
+---
+
+## Workflow 3 — Comprensione di un concetto
+
+```text
+Student Question
+      │
+      ▼
+Tutor Agent
+      │
+      ▼
+Mind Map Agent
+      │
+      ▼
+Visual Explanation
+```
+
+---
+
+# Future Agents
+
+Il sistema potrà essere esteso con nuovi agenti.
+
+Possibili evoluzioni:
+
+- Flashcard Agent
+- Research Agent
+- Writing Agent
+- Revision Agent
+- Progress Agent
+- Motivation Agent
+- Oral Exam Agent
+- Citation Agent
+- Translation Agent
+- Coding Agent
+
+---
+
+## Project Status
+
+🟢 Planning
+
+### Documentation
+
+- ✅ Project Vision
+- ✅ Product Roadmap
+- ✅ System Architecture
+- 🟡 AI Agents
+
+### Development
+
+- ⏳ API Design
+- ⏳ Database Design
+- ⏳ Frontend Development
+- ⏳ Backend Development
+
+---
+
+## Decision Log
+
+### Version 1.0
+
+- Created the AI Agents specification.
+- Defined the AI Orchestrator.
+- Defined the first core agents.
+- Introduced agent lifecycle.
+- Introduced collaboration workflows.
+- Designed the multi-agent architecture.
