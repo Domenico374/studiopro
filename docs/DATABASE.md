@@ -55,22 +55,28 @@ Il database seguirà questi principi fondamentali.
 
 StudioPro utilizzerà un database relazionale come archivio principale.
 
-Accanto ad esso saranno presenti componenti dedicate alla gestione dei documenti e delle informazioni utilizzate dall'intelligenza artificiale.
+Accanto ad esso saranno presenti componenti dedicate alla gestione dei documenti, della memoria degli agenti AI e delle informazioni utilizzate durante il processo di apprendimento.
 
 ```text
-                    StudioPro
+                        StudioPro
 
-                 PostgreSQL
-                       │
+                     PostgreSQL
+                          │
  ┌──────────────┬──────────────┬──────────────┐
  ▼              ▼              ▼
- Users      Documents     Study Sessions
+Users      Documents     Study Sessions
  │              │              │
  ▼              ▼              ▼
- Conversations  AI Memory   Generated Content
-                       │
-                       ▼
-               Vector Database
+Conversations Generated Content AI Memory
+ │
+ ▼
+Messages
+                          │
+                          ▼
+                  Vector Database
+                          │
+                          ▼
+                  AI Orchestrator
 ```
 
 ---
@@ -98,20 +104,19 @@ Le principali entità del sistema saranno:
 ```text
 User
  │
- ├──────────────┐
- ▼              ▼
-Documents   Study Sessions
- │              │
- ▼              ▼
-Conversations  Study Plans
+ ├── Documents
+ ├── Conversations
+ ├── Study Sessions
+ └── Study Plans
+
+Conversation
  │
- ▼
-Messages
+ └── Messages
 
 Study Session
  │
- ├── Quiz
- ├── Mind Map
+ ├── Quizzes
+ ├── Mind Maps
  ├── Flashcards
  └── Generated Content
 ```
@@ -133,7 +138,7 @@ Memorizza le informazioni degli utenti registrati.
 | password_hash | VARCHAR | Password cifrata |
 | full_name | VARCHAR | Nome completo |
 | role | VARCHAR | Student / Teacher / Admin |
-| created_at | TIMESTAMP | Data creazione |
+| created_at | TIMESTAMP | Data di creazione |
 | updated_at | TIMESTAMP | Ultima modifica |
 
 ### Relationships
@@ -154,10 +159,10 @@ Memorizza i documenti caricati dagli utenti.
 |--------|------|-------------|
 | id | UUID | Primary Key |
 | user_id | UUID | Proprietario |
-| filename | VARCHAR | Nome file |
-| storage_url | TEXT | Percorso Storage |
-| file_type | VARCHAR | PDF, DOCX... |
-| created_at | TIMESTAMP | Upload |
+| filename | VARCHAR | Nome originale del file |
+| storage_url | TEXT | Percorso nello storage |
+| file_type | VARCHAR | PDF, DOCX, TXT... |
+| created_at | TIMESTAMP | Data di upload |
 
 ### Relationships
 
@@ -172,7 +177,11 @@ Memorizza i documenti caricati dagli utenti.
 
 Memorizza le conversazioni tra lo studente e StudioPro.
 
-Relationships
+### Future Fields
+
+Will be defined during API Design.
+
+### Relationships
 
 - One Conversation → Many Messages
 
@@ -182,7 +191,11 @@ Relationships
 
 ### Purpose
 
-Memorizza ogni messaggio della conversazione.
+Memorizza ogni messaggio appartenente a una conversazione.
+
+### Future Fields
+
+Will be defined during API Design.
 
 ---
 
@@ -190,7 +203,11 @@ Memorizza ogni messaggio della conversazione.
 
 ### Purpose
 
-Memorizza le sessioni di studio.
+Memorizza ogni sessione di studio effettuata dallo studente.
+
+### Future Fields
+
+Will be defined during API Design.
 
 ---
 
@@ -200,13 +217,21 @@ Memorizza le sessioni di studio.
 
 Memorizza i piani di studio creati dal Planner Agent.
 
+### Future Fields
+
+Will be defined during API Design.
+
 ---
 
 ## Quizzes
 
 ### Purpose
 
-Memorizza quiz e risultati.
+Memorizza quiz, risultati e statistiche.
+
+### Future Fields
+
+Will be defined during API Design.
 
 ---
 
@@ -216,13 +241,21 @@ Memorizza quiz e risultati.
 
 Memorizza le mappe concettuali generate.
 
+### Future Fields
+
+Will be defined during API Design.
+
 ---
 
 ## Flashcards
 
 ### Purpose
 
-Memorizza le flashcard generate.
+Memorizza le flashcard create durante lo studio.
+
+### Future Fields
+
+Will be defined during API Design.
 
 ---
 
@@ -230,7 +263,11 @@ Memorizza le flashcard generate.
 
 ### Purpose
 
-Memorizza tutti i contenuti creati dagli agenti AI.
+Memorizza tutti i contenuti generati dagli agenti AI.
+
+### Future Fields
+
+Will be defined during API Design.
 
 ---
 
@@ -240,36 +277,43 @@ Memorizza tutti i contenuti creati dagli agenti AI.
 
 Memorizza il contesto condiviso utilizzato dagli agenti AI.
 
+### Future Fields
+
+Will be defined during API Design.
+
 ---
 
 # Data Flow
 
 ```text
 User
-    │
-    ▼
+   │
+   ▼
 Frontend
-    │
-    ▼
+   │
+   ▼
 Backend API
-    │
-    ▼
+   │
+   ▼
 Database
-    │
-    ▼
+   │
+   ▼
 AI Orchestrator
-    │
-    ▼
+   │
+   ▼
 AI Agents
-    │
-    ▼
+   │
+   ▼
 Generated Content
-    │
-    ▼
+   │
+   ▼
 Database
-    │
-    ▼
+   │
+   ▼
 Frontend
+   │
+   ▼
+User
 ```
 
 ---
@@ -321,8 +365,8 @@ Possibili evoluzioni future:
 - Multi-tenant Architecture
 - Distributed Storage
 - Database Sharding
-- Analytics Database
 - Event Store
+- Analytics Database
 - Data Warehouse
 
 ---
@@ -358,3 +402,4 @@ Possibili evoluzioni future:
 - Introduced the first table specifications.
 - Defined the storage strategy.
 - Designed the database scalability model.
+- Prepared the database for future API implementation.
