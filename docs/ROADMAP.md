@@ -2,11 +2,41 @@
 
 ## Product Roadmap
 
-> **Version:** 0.1
->
-> **Last updated:** July 2026
->
-> **Status:** Draft
+Version...
+
+Contents
+
+--------------------------------
+
+# Product Strategy
+
+--------------------------------
+
+# Development Phases
+
+--------------------------------
+
+# MVP Definition      ← QUI
+
+--------------------------------
+
+# Milestones          ← QUI
+
+--------------------------------
+
+# Success Criteria    ← QUI
+
+--------------------------------
+
+# Future Ideas        ← QUI
+
+--------------------------------
+
+## Project Status
+
+--------------------------------
+
+## Decision Log
 
 ## Contents
 
