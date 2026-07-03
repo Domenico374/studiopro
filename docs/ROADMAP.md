@@ -20,13 +20,15 @@
 
 # Product Strategy
 
-StudioPro sarà sviluppato in modo incrementale, attraverso fasi di sviluppo ben definite.
+StudioPro sarà sviluppato attraverso un processo incrementale, organizzato in fasi ben definite.
 
-Ogni fase introdurrà nuove funzionalità complete, testate e realmente utilizzabili, evitando di accumulare caratteristiche incomplete o poco integrate.
+Ogni fase introdurrà funzionalità complete, testate e realmente utilizzabili, evitando di accumulare caratteristiche incomplete o poco integrate.
 
 L'obiettivo è costruire una piattaforma solida, modulare e facilmente estendibile, mantenendo sempre al centro l'esperienza dello studente.
 
 Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contribuire a rendere lo studio più semplice, efficace e personalizzato.
+
+La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
 
 
 # Development Phases
