@@ -30,6 +30,35 @@ Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contri
 
 La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
 
+# Milestones
+
+## Milestone 1
+
+✅ Project Vision
+
+## Milestone 2
+
+⏳ Product Roadmap
+
+## Milestone 3
+
+⬜ System Architecture
+
+## Milestone 4
+
+⬜ AI Agents Design
+
+## Milestone 5
+
+⬜ MVP Ready
+
+## Milestone 6
+
+⬜ Beta Release
+
+## Milestone 7
+
+⬜ Public Release 1.0
 
 # Development Phases
 
