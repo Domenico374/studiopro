@@ -50,7 +50,7 @@ The platform is designed to become a complete AI learning ecosystem where every 
 
 # ✨ Features
 
-## Current Features
+## Planned Features
 
 - 📄 Document Upload
 - 💬 AI Chat
@@ -108,15 +108,15 @@ Read the complete specification in [AI Agents](docs/AI_AGENTS.md).
 
 The project documentation is organized into dedicated design documents.
 
-| Document | Status |
-|----------|--------|
-| [📘 Project Vision](docs/PROJECT_VISION.md) | ✅ Complete |
-| [🗺 Product Roadmap](docs/PRODUCT_ROADMAP.md) | ✅ Complete |
-| [🏗 System Architecture](docs/SYSTEM_ARCHITECTURE.md) | ✅ Complete |
-| [🤖 AI Agents](docs/AI_AGENTS.md) | ✅ Complete |
-| [🗄 Database Design](docs/DATABASE_DESIGN.md) | ✅ Complete |
-| [🔌 API Design](docs/API_DESIGN.md) | ✅ Complete |
-| [🎨 Frontend Design](docs/FRONTEND_DESIGN.md) | ✅ Complete |
+| Document | Description | Status |
+|----------|-------------|--------|
+| [📘 Project Vision](docs/PROJECT_VISION.md) | Product mission and vision | ✅ Complete |
+| [🗺 Product Roadmap](docs/PRODUCT_ROADMAP.md) | Development strategy and milestones | ✅ Complete |
+| [🏗 System Architecture](docs/SYSTEM_ARCHITECTURE.md) | Overall software architecture | ✅ Complete |
+| [🤖 AI Agents](docs/AI_AGENTS.md) | Multi-agent system design | ✅ Complete |
+| [🗄 Database Design](docs/DATABASE_DESIGN.md) | Database architecture and schema | ✅ Complete |
+| [🔌 API Design](docs/API_DESIGN.md) | REST API specification | ✅ Complete |
+| [🎨 Frontend Design](docs/FRONTEND_DESIGN.md) | User interface and UX design | ✅ Complete |
 
 ---
 
@@ -133,8 +133,6 @@ The current online prototype uses:
 - OpenAI APIs
 - Anthropic APIs
 - Vercel
-
----
 
 ## Target Architecture (v1.0)
 
@@ -204,7 +202,6 @@ StudioPro/
 docs/
 ├── assets/
 │   └── studiopro-banner.svg
-│
 ├── PROJECT_VISION.md
 ├── PRODUCT_ROADMAP.md
 ├── SYSTEM_ARCHITECTURE.md
@@ -213,10 +210,11 @@ docs/
 ├── API_DESIGN.md
 └── FRONTEND_DESIGN.md
 
-api/          → Vercel serverless functions (current prototype)
+# Current prototype
+api/          → Vercel serverless functions
 public/       → Static assets
 
-# Target structure (v1.0 — Next.js)
+# Future architecture (v1.0 — Next.js)
 app/
 components/
 services/
@@ -274,7 +272,9 @@ npm run dev
 
 Current Phase:
 
-🟢 **Planning completed — Development starting**
+🟢 **Documentation completed**
+
+🚀 **Development starting**
 
 ---
 
@@ -313,5 +313,5 @@ The license will be defined before the first public release.
 ---
 
 <p align="center">
-<b>⭐ Helping people understand, not simply memorize. ⭐</b>
+<b>⭐ Helping students understand, not simply memorize. ⭐</b>
 </p>
