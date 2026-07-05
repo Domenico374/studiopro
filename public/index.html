@@ -6545,12 +6545,6 @@ Contenuto: {content}`
             appState.isChatLoading = true;
             
             try {
-                const summaryShort = (study.data.summary_short || '').substring(0, 300);
-                const highlightsText = (study.data.highlights || []).slice(0, 3).join('. ').substring(0, 200);
-                const contentSnippet = study.fullText ? study.fullText.substring(0, 400) : '';
-                
-                const context = `Materia: ${study.subject}\nLezione: ${study.name}\n\nRiassunto: ${summaryShort}\n\nPunti chiave: ${highlightsText}\n\nEstratto: ${contentSnippet}`;
-                
                 const conversationHistory = appState.chatHistory[study.id]
                     .slice(0, -1)
                     .slice(-5)
@@ -6558,24 +6552,36 @@ Contenuto: {content}`
                         role: msg.role,
                         content: msg.content.substring(0, 500)
                     }));
-                
-                const fullMessage = `[CONTESTO]\n${context}\n\n[DOMANDA]\n${message}`;
-                
-                const response = await fetch('/api/chat', {
+
+                const response = await fetch('/api/v1/ai/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        message: fullMessage,
-                        conversationHistory: conversationHistory
+                        message: message,
+                        // "agent: 'tutor'" forces the orchestrator to always use Tutor Agent
+                        // for this chat panel, bypassing its keyword-based auto-selection
+                        // (orchestrator.js: resolveAgents/AGENT_OVERRIDES). Without this,
+                        // free-form chat messages containing words like "riassumi" or
+                        // "quiz" would get misrouted to Summary/Quiz Agent instead of
+                        // answering the user's actual question.
+                        agent: 'tutor',
+                        context: {
+                            subject: study.subject,
+                            name: study.name,
+                            summary_short: (study.data.summary_short || '').substring(0, 300),
+                            highlights: (study.data.highlights || []).slice(0, 3),
+                            fullText: study.fullText ? study.fullText.substring(0, 400) : '',
+                            conversationHistory: conversationHistory
+                        }
                     })
                 });
-                
+
                 if (!response.ok) {
                     throw new Error(`Errore server: ${response.status}`);
                 }
-                
+
                 const data = await response.json();
-                const aiResponse = data.response;
+                const aiResponse = data.data.answer;
                 
                 document.getElementById('typingIndicator').remove();
                 

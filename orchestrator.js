@@ -68,6 +68,32 @@ function selectAgents(message) {
   return DEFAULT_AGENTS;
 }
 
+// Explicit agent override: the optional "agent" field on the request body
+// (see api/v1/ai/ask.js) bypasses selectAgents()'s keyword matching entirely
+// and forces a specific agent. Used by callers that already know which agent
+// they want regardless of message content — e.g. the chat panel in
+// public/index.html always sends { agent: 'tutor' } so free-form chat
+// messages don't get accidentally misrouted to Summary/Quiz/MindMap Agent
+// based on keywords the user happened to type.
+const AGENT_OVERRIDES = {
+  tutor: ['tutorAgent'],
+  summary: ['summaryAgent'],
+  quiz: ['quizAgent'],
+  mindmap: ['mindMapAgent']
+};
+
+function resolveAgents(message, agentOverride) {
+  if (!agentOverride) {
+    return selectAgents(message);
+  }
+
+  const forced = AGENT_OVERRIDES[agentOverride];
+  if (!forced) {
+    throw new Error(`Orchestrator: valore "agent" sconosciuto "${agentOverride}".`);
+  }
+  return forced;
+}
+
 // Adapts the orchestrator's generic {message, context} contract into the
 // "study" shape agents/tutorAgent.js, quizAgent.js and mindMapAgent.js expect
 // (there is no document/database backend yet, so context is whatever the
@@ -159,8 +185,8 @@ function formatAgentOutput(result) {
 
 // docs/AI_AGENTS.md — Agent Lifecycle (~91-112):
 // User Request -> Agent Selection -> Agent Execution -> Response Validation -> Final Response.
-async function ask({ message, context = {} }, llmClient) {
-  const selected = selectAgents(message);
+async function ask({ message, context = {}, agent }, llmClient) {
+  const selected = resolveAgents(message, agent);
   const sharedContext = { ...context, conversationHistory: context.conversationHistory || [] };
 
   const sections = [];
@@ -184,4 +210,4 @@ async function ask({ message, context = {} }, llmClient) {
   };
 }
 
-export default { ask, selectAgents };
+export default { ask, selectAgents, resolveAgents };
