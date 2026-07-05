@@ -1,1 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" role="img" aria-label="StudioPro — AI-powered learning platform">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0E1630"/>
+      <stop offset="55%" stop-color="#16224C"/>
+      <stop offset="100%" stop-color="#1E2A5E"/>
+    </linearGradient>
+    <linearGradient id="pageL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E8ECF8"/>
+      <stop offset="100%" stop-color="#C9D2EC"/>
+    </linearGradient>
+    <linearGradient id="pageR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C9D2EC"/>
+      <stop offset="100%" stop-color="#E8ECF8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#F5B84A" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#F5B84A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
 
+  <rect x="0" y="0" width="1280" height="360" rx="14" fill="url(#bg)"/>
+
+  <g fill="#8FA3D9" opacity="0.35">
+    <circle cx="120" cy="52" r="1.6"/>
+    <circle cx="310" cy="34" r="1.2"/>
+    <circle cx="520" cy="60" r="1.4"/>
+    <circle cx="700" cy="30" r="1.2"/>
+    <circle cx="240" cy="320" r="1.4"/>
+    <circle cx="60" cy="250" r="1.2"/>
+    <circle cx="620" cy="330" r="1.3"/>
+    <circle cx="1230" cy="60" r="1.4"/>
+    <circle cx="1250" cy="300" r="1.2"/>
+    <circle cx="840" cy="46" r="1.3"/>
+  </g>
+
+  <circle cx="1030" cy="185" r="150" fill="url(#glow)"/>
+
+  <g stroke="#6EE7D8" stroke-width="1.4" opacity="0.55" fill="none" stroke-linecap="round">
+    <line x1="1030" y1="252" x2="985" y2="188"/>
+    <line x1="1030" y1="252" x2="1078" y2="196"/>
+    <line x1="985" y1="188" x2="948" y2="122"/>
+    <line x1="985" y1="188" x2="1030" y2="86"/>
+    <line x1="1078" y1="196" x2="1030" y2="86"/>
+    <line x1="1078" y1="196" x2="1118" y2="132"/>
+    <line x1="948" y1="122" x2="1030" y2="86"/>
+    <line x1="1118" y1="132" x2="1030" y2="86"/>
+  </g>
+
+  <g>
+    <circle cx="948" cy="122" r="6" fill="#6EE7D8"/>
+    <circle cx="1118" cy="132" r="6" fill="#6EE7D8"/>
+    <circle cx="985" cy="188" r="5" fill="#9BB2F0"/>
+    <circle cx="1078" cy="196" r="5" fill="#9BB2F0"/>
+    <circle cx="1030" cy="86" r="9" fill="#F5B84A"/>
+    <circle cx="1030" cy="86" r="15" fill="none" stroke="#F5B84A" stroke-width="1.2" opacity="0.5"/>
+    <circle cx="1030" cy="252" r="5.5" fill="#E8ECF8"/>
+  </g>
+
+  <path d="M1224 96 L1229 110 L1243 115 L1229 120 L1224 134 L1219 120 L1205 115 L1219 110 Z" fill="#F5B84A" opacity="0.9"/>
+  <path d="M886 62 L889 70 L897 73 L889 76 L886 84 L883 76 L875 73 L883 70 Z" fill="#6EE7D8" opacity="0.8"/>
+
+  <g>
+    <path d="M1030 262 C 992 240, 922 236, 878 250 L878 302 C 922 288, 992 292, 1030 314 Z" fill="url(#pageL)"/>
+    <path d="M1030 262 C 1068 240, 1138 236, 1182 250 L1182 302 C 1138 288, 1068 292, 1030 314 Z" fill="url(#pageR)"/>
+    <path d="M1030 262 L1030 314" stroke="#8FA3D9" stroke-width="2" opacity="0.7"/>
+    <path d="M878 302 C 922 288, 992 292, 1030 314 C 1068 292, 1138 288, 1182 302 L1182 312 C 1138 298, 1068 302, 1030 324 C 992 302, 922 298, 878 312 Z" fill="#3A4A85"/>
+    <g stroke="#8FA3D9" stroke-width="1.6" opacity="0.55" fill="none" stroke-linecap="round">
+      <path d="M900 262 C 935 252, 975 253, 1006 262"/>
+      <path d="M900 276 C 935 266, 975 267, 1006 276"/>
+      <path d="M900 290 C 935 280, 975 281, 1006 290"/>
+      <path d="M1054 262 C 1085 253, 1125 252, 1160 262"/>
+      <path d="M1054 276 C 1085 267, 1125 266, 1160 276"/>
+      <path d="M1054 290 C 1085 281, 1125 280, 1160 290"/>
+    </g>
+  </g>
+
+  <text x="92" y="142" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="17" font-weight="600" letter-spacing="6" fill="#6EE7D8">AI-POWERED LEARNING PLATFORM</text>
+
+  <text x="88" y="226" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="88" font-weight="700" fill="#FFFFFF">Studio<tspan fill="#F5B84A">Pro</tspan></text>
+
+  <line x1="92" y1="258" x2="352" y2="258" stroke="#F5B84A" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+
+  <text x="92" y="304" font-family="Georgia, 'Times New Roman', serif" font-size="27" font-style="italic" fill="#C3CEEE">Helping people understand, not simply memorize.</text>
+
+  <g>
+    <rect x="1052" y="30" width="158" height="34" rx="17" fill="#0E1630" fill-opacity="0.45" stroke="#6EE7D8" stroke-width="1.2" stroke-opacity="0.7"/>
+    <path d="M1074 38 L1077 45 L1084 47 L1077 49 L1064 47 L1071 45 Z" fill="#6EE7D8"/>
+    <text x="1092" y="52" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="1" fill="#9BE9DD">Built with AI</text>
+  </g>
+</svg>
