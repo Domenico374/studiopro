@@ -1,131 +1,317 @@
-# StudioPro – Studia intelligente
+<p align="center">
+  <img src="docs/assets/studiopro-banner.svg" alt="StudioPro — AI-powered learning platform" width="100%">
+</p>
 
-**Il tuo mentore personale per lo studio intelligente**
+<p align="center">
+  <a href="https://studiopro.vercel.app"><b>🚀 Live Demo</b></a> •
+  <a href="docs/PROJECT_VISION.md"><b>Vision</b></a> •
+  <a href="docs/PRODUCT_ROADMAP.md"><b>Roadmap</b></a> •
+  <a href="docs/SYSTEM_ARCHITECTURE.md"><b>Architecture</b></a> •
+  <a href="docs/AI_AGENTS.md"><b>AI Agents</b></a>
+</p>
 
-## ✨ Funzionalità principali
+<p align="center">
 
-### 📚 Gestione materiali di studio
-- Caricamento multiplo di file (PDF, DOCX, TXT, MD, immagini)
-- Drag & drop intuitivo
-- Anteprima immediata dei contenuti
-- Estrazione automatica del testo
+![Status](https://img.shields.io/badge/status-active%20development-blue)
+![Version](https://img.shields.io/badge/version-1.0--draft-orange)
+![Architecture](https://img.shields.io/badge/architecture-Multi--Agent-success)
+![License](https://img.shields.io/badge/license-TBD-lightgrey)
 
-### 🎯 Analisi intelligente
-- **Riassunti automatici** - Sintesi dei concetti chiave
-- **Punti salienti** - Identificazione delle informazioni più importanti
-- **To-Do automatici** - Estrazione di compiti e attività
-- **Tag intelligenti** - Categorizzazione automatica dei contenuti
-
-### 📋 Generazione verbali
-- Creazione automatica di verbali strutturati
-- Export in formato Markdown
-- Export PDF
-- Copia rapida negli appunti
-
-## 🚀 Come iniziare
-
-### Utilizzo online
-Visita [studiopro.vercel.app](https://studiopro.vercel.app)
-
-### Installazione locale
-```bash
-# Clona il repository
-git clone https://github.com/Domenico374/studiopro.git
-
-# Entra nella cartella
-cd studio pro
-
-# Installa dipendenze
-npm install
-
-# Avvia il server di sviluppo
-npm run dev
-```
-
-## 📋 Requisiti
-
-- Node.js 18+ 
-- Account Vercel (per deployment)
-- API keys per servizi AI (OpenAI/Anthropic)
-
-## 🛠️ Tecnologie utilizzate
-
-- **Frontend**: HTML5, TailwindCSS, JavaScript vanilla
-- **Backend**: Node.js, Vercel Serverless Functions
-- **AI/ML**: 
-  - OpenAI Whisper (trascrizione audio)
-  - Claude/GPT (analisi testo)
-- **Librerie**:
-  - PDF.js (preview PDF)
-  - Mammoth.js (conversione DOCX)
-  - Font Awesome (icone)
-
-## 📦 Struttura progetto
-```
-studiopro/
-├── api/              # Serverless functions
-│   ├── upload.js
-│   ├── extract.js
-│   ├── transcribe-audio.js
-│   └── ...
-├── public/           # Asset statici
-├── index.html        # Frontend principale
-├── package.json
-└── vercel.json       # Configurazione Vercel
-```
-
-## ⚙️ Configurazione
-
-Crea un file `.env.local` con le seguenti variabili:
-```env
-OPENAI_API_KEY=your_openai_key
-ANTHROPIC_API_KEY=your_anthropic_key
-# Altre configurazioni...
-```
-
-## 🎨 Screenshot
-
-*[Aggiungi screenshot dell'applicazione]*
-
-## 🤝 Contribuire
-
-I contributi sono benvenuti! Per favore:
-
-1. Fai fork del progetto
-2. Crea un branch per la tua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit delle modifiche (`git commit -m 'Add some AmazingFeature'`)
-4. Push al branch (`git push origin feature/AmazingFeature`)
-5. Apri una Pull Request
-
-## 📄 Licenza
-
-Questo progetto è distribuito sotto licenza MIT. Vedi `LICENSE` per maggiori informazioni.
-
-## 👤 Autore
-
-**Domenico374**
-
-- GitHub: [@Domenico374](https://github.com/Domenico374)
-- Website: [studiopro.vercel.app](https://studiopro.vercel.app)
-## 🙏 Ringraziamenti
-
-- OpenAI per Whisper API
-- Anthropic per Claude
-- Vercel per l'hosting
-
-## 📝 Note
-
-### Limiti attuali
-- Dimensione massima file: **4.5 MB** (piano free Vercel)
-- Per file più grandi, considera l'upgrade a Vercel Pro o usa link Google Drive/OneDrive
-
-### Roadmap
-- [ ] Integrazione Google Drive diretta
-- [ ] Supporto file più grandi
-- [ ] Sistema di annotazioni
-- [ ] Modalità collaborativa
-- [ ] App mobile
+</p>
 
 ---
 
-⭐ Se ti piace il progetto, lascia una stella su GitHub!
+# 🎯 Mission
+
+> **Helping people understand, not simply memorize.**
+
+StudioPro is an AI-powered learning platform designed to help students understand concepts rather than simply obtain answers.
+
+Instead of replacing teachers or textbooks, StudioPro combines artificial intelligence with educational principles to create an intelligent learning environment capable of explaining, organizing, testing and personalizing every study session.
+
+---
+
+# 📖 Overview
+
+StudioPro is an AI-powered learning platform built around a **Multi-Agent AI Architecture**.
+
+Specialized AI agents collaborate to guide students throughout the entire learning process:
+
+- understanding new concepts
+- organizing study material
+- generating summaries
+- creating quizzes
+- planning study sessions
+- visualizing knowledge
+
+The platform is designed to become a complete AI learning ecosystem where every component works together to improve comprehension rather than memorization.
+
+---
+
+# ✨ Features
+
+## Current Features
+
+- 📄 Document Upload
+- 💬 AI Chat
+- 🤖 AI Tutor
+- 📝 Automatic Summaries
+- ❓ Quiz Generation
+- 🧠 Mind Maps
+- 📅 Study Planner
+- 📚 Study Sessions
+- 🤝 Multi-Agent Collaboration
+
+---
+
+# 🏗 System Architecture
+
+StudioPro follows a modular layered architecture.
+
+```text
+Frontend
+      │
+Backend API
+      │
+AI Orchestrator
+      │
+Multi-Agent System
+      │
+Database + Storage
+```
+
+The AI Orchestrator coordinates specialized agents while keeping the user experience simple and unified.
+
+Read the complete design in [System Architecture](docs/SYSTEM_ARCHITECTURE.md).
+
+---
+
+# 🤖 AI Agents
+
+The first generation of StudioPro includes five specialized AI agents.
+
+| Agent | Purpose |
+|--------|----------|
+| 🎓 Tutor Agent | Explain concepts |
+| 📄 Summary Agent | Generate summaries |
+| ❓ Quiz Agent | Assess knowledge |
+| 📅 Planner Agent | Organize study plans |
+| 🧠 Mind Map Agent | Visualize relationships |
+
+The architecture has been designed to easily support future agents without modifying the existing system.
+
+Read the complete specification in [AI Agents](docs/AI_AGENTS.md).
+
+---
+
+# 📚 Documentation
+
+The project documentation is organized into dedicated design documents.
+
+| Document | Status |
+|----------|--------|
+| [📘 Project Vision](docs/PROJECT_VISION.md) | ✅ Complete |
+| [🗺 Product Roadmap](docs/PRODUCT_ROADMAP.md) | ✅ Complete |
+| [🏗 System Architecture](docs/SYSTEM_ARCHITECTURE.md) | ✅ Complete |
+| [🤖 AI Agents](docs/AI_AGENTS.md) | ✅ Complete |
+| [🗄 Database Design](docs/DATABASE_DESIGN.md) | ✅ Complete |
+| [🔌 API Design](docs/API_DESIGN.md) | ✅ Complete |
+| [🎨 Frontend Design](docs/FRONTEND_DESIGN.md) | ✅ Complete |
+
+---
+
+# 🛠 Technology Stack
+
+## Current Prototype
+
+The current online prototype uses:
+
+- HTML5
+- Tailwind CSS
+- Vanilla JavaScript
+- Vercel Serverless Functions
+- OpenAI APIs
+- Anthropic APIs
+- Vercel
+
+---
+
+## Target Architecture (v1.0)
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+### Backend
+
+- Node.js
+- Express
+
+### Database
+
+- PostgreSQL
+
+### Storage
+
+- Supabase Storage
+
+### Artificial Intelligence
+
+- OpenAI
+- Anthropic
+- Local Models *(future)*
+
+---
+
+# 🚀 Development Roadmap
+
+```text
+✅ Project Vision
+        │
+✅ Product Roadmap
+        │
+✅ System Architecture
+        │
+✅ AI Agents
+        │
+✅ Database Design
+        │
+✅ API Design
+        │
+✅ Frontend Design
+        │
+⬜ Backend Development
+        │
+⬜ Frontend Development
+        │
+⬜ MVP
+        │
+⬜ Beta
+        │
+⬜ Version 1.0
+```
+
+---
+
+# 📂 Repository Structure
+
+```text
+StudioPro/
+
+docs/
+├── assets/
+│   └── studiopro-banner.svg
+│
+├── PROJECT_VISION.md
+├── PRODUCT_ROADMAP.md
+├── SYSTEM_ARCHITECTURE.md
+├── AI_AGENTS.md
+├── DATABASE_DESIGN.md
+├── API_DESIGN.md
+└── FRONTEND_DESIGN.md
+
+api/          → Vercel serverless functions (current prototype)
+public/       → Static assets
+
+# Target structure (v1.0 — Next.js)
+app/
+components/
+services/
+agents/
+database/
+styles/
+types/
+```
+
+---
+
+# ⚡ Getting Started
+
+StudioPro is currently transitioning from the planning phase to active development.
+
+Current prototype:
+
+```bash
+git clone https://github.com/Domenico374/studiopro.git
+
+cd studiopro
+
+npx vercel dev
+```
+
+Future versions (Next.js):
+
+```bash
+npm install
+
+npm run dev
+```
+
+> The setup instructions will evolve together with the project architecture.
+
+---
+
+# 🎯 Current Status
+
+## Documentation
+
+- ✅ Project Vision
+- ✅ Product Roadmap
+- ✅ System Architecture
+- ✅ AI Agents
+- ✅ Database Design
+- ✅ API Design
+- ✅ Frontend Design
+
+## Development
+
+- ⏳ Backend Development
+- ⏳ Frontend Development
+- ⏳ MVP Development
+
+Current Phase:
+
+🟢 **Planning completed — Development starting**
+
+---
+
+# 🌍 Long-Term Vision
+
+StudioPro aims to become a complete AI-powered learning ecosystem capable of supporting students throughout every stage of their educational journey.
+
+Future evolution includes:
+
+- 📱 Mobile Application
+- 🎙 Voice Tutor
+- 🌐 Multi-language Support
+- 🤝 Collaborative Learning
+- 🔌 Plugin System
+- 🏫 LMS Integrations
+- 🧩 Marketplace
+- 📊 Learning Analytics
+- 🏢 Enterprise Edition
+
+---
+
+# 🤝 Contributing
+
+StudioPro is currently under active development.
+
+Ideas, feedback and contributions will be welcome as the project evolves.
+
+---
+
+# 📄 License
+
+The project is currently under development.
+
+The license will be defined before the first public release.
+
+---
+
+<p align="center">
+<b>⭐ Helping people understand, not simply memorize. ⭐</b>
+</p>
