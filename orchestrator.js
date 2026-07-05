@@ -34,7 +34,10 @@ const SELECTION_RULES = [
   },
   {
     // "Fammi un riassunto" -> Summary Agent.
-    pattern: /riassum|sintetizza|sintesi/i,
+    // "sintesi"/"sintetizza" are matched as whole words (\b) so that words
+    // merely containing that substring (e.g. "fotosintesi") don't false-match
+    // and get incorrectly routed here instead of to Tutor Agent.
+    pattern: /\briassum|\bsintetizza\b|\bsintesi\b/i,
     agents: ['summaryAgent']
   },
   {
