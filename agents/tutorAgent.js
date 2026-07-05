@@ -67,6 +67,11 @@ function buildPrompt(input) {
     }
 
     // index.html ~6054 (generateExample — "Esempio" flashcard action)
+    // TODO: user-reported quality issue — examples sometimes come out off-topic
+    // (e.g. business examples for a pedagogy flashcard). The prompt only knows
+    // study.subject, not the lesson's actual topic/summary, so the model has to
+    // guess the domain. Consider passing study.name/summary_short here too,
+    // like conceptAnalysis and the main chat task already do.
     case 'flashcardExample': {
       const { study, card } = input;
       const prompt = `Fornisci un esempio pratico e concreto per questo concetto:\n\nDomanda: ${card.q}\nRisposta: ${card.a}\n\nDai un esempio reale dalla vita quotidiana o dalla materia ${study.subject}. Max 3 frasi.`;

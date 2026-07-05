@@ -5114,24 +5114,32 @@ body.dark-mode .mindmap-legend {
             `;
             
             try {
-                const context = `Materia: ${study.subject}\nLezione: ${study.name}\n\nRiassunto: ${study.data.summary_short}\n\nPunti chiave: ${(study.data.highlights || []).slice(0, 5).join(', ')}`;
-                
-                const prompt = `Genera 5 domande per saggi/esami scritti su questo argomento:\n\n${context}\n\nLe domande devono:\n- Essere aperte e richiedere ragionamento critico\n- Iniziare con "Analizza...", "Discuti...", "Come...", "In che modo...", "Spiega..."\n- Essere adatte per esami universitari o superiori\n- Coprire aspetti diversi dell'argomento\n- Essere formulate in modo chiaro\n\nFormato: una domanda per riga, numerate da 1 a 5.`;
-                
-                const response = await fetch('/api/chat', {
+                const response = await fetch('/api/v1/ai/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        message: prompt,
-                        conversationHistory: []
+                        message: `Genera domande da saggio su: ${study.name}`,
+                        agent: 'quiz',
+                        task: 'essayQuestions',
+                        context: {
+                            subject: study.subject,
+                            name: study.name,
+                            summary_short: study.data.summary_short,
+                            highlights: (study.data.highlights || []).slice(0, 5)
+                        }
                     })
                 });
-                
+
                 if (!response.ok) throw new Error('Errore nella generazione');
-                
+
                 const data = await response.json();
-                
-                const questions = data.response
+
+                // quizAgent.run() already splits/strips/filters these server-side and
+                // returns an array, but orchestrator.formatAgentOutput() re-serializes
+                // arrays into a numbered string for the "answer" field — so the same
+                // split/strip/filter parsing used to apply to /api/chat's raw text
+                // still applies here unchanged (it's idempotent on the renumbered text).
+                const questions = data.data.answer
                     .split('\n')
                     .filter(line => line.trim().length > 0)
                     .map(line => line.replace(/^\d+\.\s*/, '').trim())
