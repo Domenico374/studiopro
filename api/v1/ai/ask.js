@@ -36,7 +36,10 @@ export default async function handler(req, res) {
   // "agent" (optional): forces a specific agent ('tutor' | 'summary' | 'quiz' | 'mindmap'),
   // bypassing orchestrator.js's keyword-based selectAgents(). See orchestrator.js
   // (AGENT_OVERRIDES/resolveAgents) for the accepted values and the reasoning.
-  const { message, context, agent } = req.body || {};
+  // "task" (optional): selects which task branch of the forced agent to run
+  // (e.g. 'glossaryExample', 'flashcardExplain' for Tutor Agent; 'flashcardEssay'
+  // for Quiz Agent) — see orchestrator.js's runTutorAgent/runQuizAgent.
+  const { message, context, agent, task } = req.body || {};
 
   if (!message || typeof message !== 'string' || message.trim().length === 0) {
     return res.status(400).json({
@@ -47,7 +50,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const data = await orchestrator.ask({ message, context: context || {}, agent }, openai);
+    const data = await orchestrator.ask({ message, context: context || {}, agent, task }, openai);
     return res.status(200).json({ success: true, data, error: null });
   } catch (error) {
     console.error('Errore AI Orchestrator:', error);

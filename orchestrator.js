@@ -111,7 +111,58 @@ function buildStudyLikeContext(context) {
   };
 }
 
-async function runAgent(agentKey, message, context, llmClient) {
+// "task" (optional, forwarded from the request body's "task" field via
+// api/v1/ai/ask.js) selects which of agents/tutorAgent.js's or
+// agents/quizAgent.js's task branches to run, instead of always defaulting to
+// 'chat' / 'essayQuestions'. It only makes sense together with an explicit
+// "agent" override (see resolveAgents) that pins a single agent — with
+// automatic multi-agent selection (the "esame domani" combo) a single task
+// override would be applied to every selected agent and likely fail for the
+// ones that don't recognize it, so callers shouldn't combine the two.
+function runTutorAgent(task, study, message, context, llmClient) {
+  switch (task) {
+    case 'chat':
+      return agents.tutorAgent.run({
+        task,
+        study,
+        message,
+        conversationHistory: context.conversationHistory || []
+      }, llmClient);
+
+    case 'explainHighlight':
+      return agents.tutorAgent.run({ task, study, highlight: context.highlight }, llmClient);
+
+    case 'glossaryExample':
+      return agents.tutorAgent.run({ task, study, glossaryItem: context.glossaryItem }, llmClient);
+
+    case 'flashcardExplain':
+      return agents.tutorAgent.run({ task, card: context.card }, llmClient);
+
+    case 'flashcardExample':
+      return agents.tutorAgent.run({ task, study, card: context.card }, llmClient);
+
+    case 'conceptAnalysis':
+      return agents.tutorAgent.run({ task, study }, llmClient);
+
+    default:
+      throw new Error(`Orchestrator: task sconosciuto "${task}" per Tutor Agent.`);
+  }
+}
+
+function runQuizAgent(task, study, context, llmClient) {
+  switch (task) {
+    case 'essayQuestions':
+      return agents.quizAgent.run({ task, study }, llmClient);
+
+    case 'flashcardEssay':
+      return agents.quizAgent.run({ task, card: context.card }, llmClient);
+
+    default:
+      throw new Error(`Orchestrator: task sconosciuto "${task}" per Quiz Agent.`);
+  }
+}
+
+async function runAgent(agentKey, message, context, llmClient, taskOverride) {
   const study = buildStudyLikeContext(context);
 
   switch (agentKey) {
@@ -124,15 +175,10 @@ async function runAgent(agentKey, message, context, llmClient) {
     }
 
     case 'tutorAgent':
-      return agents.tutorAgent.run({
-        task: 'chat',
-        study,
-        message,
-        conversationHistory: context.conversationHistory || []
-      }, llmClient);
+      return runTutorAgent(taskOverride || 'chat', study, message, context, llmClient);
 
     case 'quizAgent':
-      return agents.quizAgent.run({ task: 'essayQuestions', study }, llmClient);
+      return runQuizAgent(taskOverride || 'essayQuestions', study, context, llmClient);
 
     case 'mindMapAgent':
       return agents.mindMapAgent.run({ study }, llmClient);
@@ -185,7 +231,7 @@ function formatAgentOutput(result) {
 
 // docs/AI_AGENTS.md — Agent Lifecycle (~91-112):
 // User Request -> Agent Selection -> Agent Execution -> Response Validation -> Final Response.
-async function ask({ message, context = {}, agent }, llmClient) {
+async function ask({ message, context = {}, agent, task }, llmClient) {
   const selected = resolveAgents(message, agent);
   const sharedContext = { ...context, conversationHistory: context.conversationHistory || [] };
 
@@ -193,7 +239,7 @@ async function ask({ message, context = {}, agent }, llmClient) {
   const agentsUsed = [];
 
   for (const agentKey of selected) {
-    const rawResult = await runAgent(agentKey, message, sharedContext, llmClient);
+    const rawResult = await runAgent(agentKey, message, sharedContext, llmClient, task);
     const validated = validateAgentResult(agentKey, rawResult);
 
     agentsUsed.push(AGENT_LABELS[agentKey]);
