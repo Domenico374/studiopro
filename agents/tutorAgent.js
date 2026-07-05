@@ -72,6 +72,10 @@ function buildPrompt(input) {
     // study.subject, not the lesson's actual topic/summary, so the model has to
     // guess the domain. Consider passing study.name/summary_short here too,
     // like conceptAnalysis and the main chat task already do.
+    // Confirmed twice in production:
+    //  - "business examples for a pedagogy flashcard"
+    //  - flashcard on the 1907 Casa dei Bambini (Montessori) got an example
+    //    about the founding of Apple in 1976.
     case 'flashcardExample': {
       const { study, card } = input;
       const prompt = `Fornisci un esempio pratico e concreto per questo concetto:\n\nDomanda: ${card.q}\nRisposta: ${card.a}\n\nDai un esempio reale dalla vita quotidiana o dalla materia ${study.subject}. Max 3 frasi.`;

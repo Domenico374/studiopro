@@ -181,7 +181,7 @@ The current online prototype uses:
         │
 ✅ Frontend Design
         │
-⬜ Backend Development
+🔄 Backend Development
         │
 ⬜ Frontend Development
         │
@@ -266,7 +266,7 @@ npm run dev
 
 ## Development
 
-- ⏳ Backend Development
+- 🔄 Backend Development
 - ⏳ Frontend Development
 - ⏳ MVP Development
 

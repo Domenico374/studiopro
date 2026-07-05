@@ -2,15 +2,16 @@
 
 ## System Architecture
 
-> **Version:** 1.0
+> **Version:** 1.1
 >
 > **Last updated:** July 2026
 >
-> **Status:** Draft
+> **Status:** Draft — Partially Implemented
 
 ## Contents
 
 - Architecture Overview
+- Implementation Status
 - Architecture Principles
 - High-Level Architecture
 - Core Components
@@ -45,6 +46,22 @@ L'architettura seguirà il principio della separazione delle responsabilità, di
 Questa organizzazione consentirà alla piattaforma di evolvere nel tempo mantenendo elevati livelli di manutenibilità, estensibilità e scalabilità.
 
 Il cuore dell'intera piattaforma sarà l'**AI Orchestrator**, responsabile del coordinamento degli agenti AI e dell'esecuzione dei workflow intelligenti.
+
+---
+
+# Implementation Status
+
+Lo strato AI descritto in questo documento — AI Orchestrator + Multi-Agent System — ha una prima implementazione funzionante. Gli altri strati (Frontend React/Next.js, Backend Express, Database, Authentication, File Storage, Notification Service) restano allo stadio di prototipo o non implementati.
+
+| Livello | Stato | Note |
+|---|---|---|
+| AI Orchestrator | ✅ Implementato | `orchestrator.js`, esposto via `POST /api/v1/ai/ask` |
+| Multi-Agent System | 🔄 Parziale | 4 dei 5 agenti implementati in `agents/` (manca Planner Agent) — dettagli in `docs/AI_AGENTS.md` |
+| API Gateway / versionamento | 🔄 Parziale | Solo `/api/v1/ai/ask` segue lo schema versionato `/api/v1/...`; gli endpoint legacy (`/api/chat`, `/api/generate`, `/api/generaPptx`) restano non versionati |
+| Backend (Node.js/Express) | ⏳ Non implementato | Le funzioni sono serverless Vercel indipendenti, non un backend Express unificato |
+| Frontend (React/Next.js) | ⏳ Non implementato | Prototipo tuttora in HTML/CSS/JS vanilla (`public/index.html`) |
+| Database / Data Layer | ⏳ Non implementato | Nessun PostgreSQL/Vector DB; stato salvato in `localStorage` del browser |
+| Authentication, File Storage, Notification Service | ⏳ Non implementato | — |
 
 ---
 
@@ -173,6 +190,10 @@ L'AI Layer potrà utilizzare differenti Large Language Models in base al tipo di
 
 L'AI Layer sarà completamente indipendente dall'interfaccia utente, permettendo di evolvere il sistema AI senza modificare il resto della piattaforma.
 
+> **Stato di implementazione** delle responsabilità elencate sopra:
+> ✅ Agent Orchestration, Agent Selection, Response Validation, Context Management (condiviso tra agenti nella stessa richiesta) — implementati in `orchestrator.js`.
+> ⏳ Prompt Management centralizzato, Conversation History persistente, Memory Management, Tool Calling, Model Routing multi-provider — non ancora implementati; oggi ogni agente usa un unico modello OpenAI fisso (nessun Anthropic/routing dinamico).
+
 ---
 
 # Multi-Agent System
@@ -189,6 +210,8 @@ Responsabilità
 - tutoring personalizzato
 - domande e risposte
 
+✅ Implementato — `agents/tutorAgent.js` (dettagli task in `docs/AI_AGENTS.md`)
+
 ---
 
 ## Summary Agent
@@ -198,6 +221,8 @@ Responsabilità
 - riassunti
 - sintesi automatica
 - estrazione dei concetti principali
+
+✅ Implementato — `agents/summaryAgent.js`
 
 ---
 
@@ -209,6 +234,8 @@ Responsabilità
 - verifica dell'apprendimento
 - valutazione delle risposte
 
+🔄 Implementato parzialmente — `agents/quizAgent.js` (manca la valutazione automatica delle risposte, oggi client-side)
+
 ---
 
 ## Planner Agent
@@ -219,6 +246,8 @@ Responsabilità
 - organizzazione delle attività
 - reminder
 
+⏳ Non implementato — nessun modulo in `agents/`
+
 ---
 
 ## Mind Map Agent
@@ -228,6 +257,8 @@ Responsabilità
 - mappe concettuali
 - collegamento tra concetti
 - visualizzazione della conoscenza
+
+✅ Implementato — `agents/mindMapAgent.js`
 
 ---
 
@@ -393,7 +424,7 @@ Possibili evoluzioni:
 
 ## Project Status
 
-🟢 Planning
+🔄 In Development
 
 ### Current Phase
 
@@ -404,7 +435,7 @@ Possibili evoluzioni:
 - ⏳ API Design
 - ⏳ Database Design
 - ⏳ Frontend Development
-- ⏳ Backend Development
+- 🔄 Backend Development — AI Orchestrator e Multi-Agent System implementati; Backend Express, Database e Auth non ancora avviati
 
 ---
 
@@ -420,3 +451,10 @@ Possibili evoluzioni:
 - Introduced the Data Layer architecture.
 - Defined the infrastructure and deployment model.
 - Added architecture principles and deployment strategy.
+
+### Version 1.1
+
+- Implemented the AI Orchestrator and 4 of the 5 Multi-Agent System agents (Tutor, Summary, Quiz, Mind Map).
+- Exposed the Orchestrator through a first versioned endpoint, `POST /api/v1/ai/ask`.
+- Migrated most of the frontend's AI features to call this endpoint instead of the legacy, unversioned `/api/chat`.
+- Planner Agent, the Express backend, the database layer, authentication, file storage and notifications remain unimplemented.
