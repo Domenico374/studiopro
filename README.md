@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://studiopro.vercel.app"><b>🚀 Live Demo</b></a> •
+  <a href="https://mentorestudio.vercel.app"><b>🚀 Live Demo</b></a> •
   <a href="docs/PROJECT_VISION.md"><b>Vision</b></a> •
   <a href="docs/PRODUCT_ROADMAP.md"><b>Roadmap</b></a> •
   <a href="docs/SYSTEM_ARCHITECTURE.md"><b>Architecture</b></a> •
