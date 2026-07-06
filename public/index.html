@@ -7160,13 +7160,17 @@ function showShareModal(studyId) {
     modal.className = 'share-modal show';
     
     // Generate shareable link (base64 encoded study data)
+    // TODO: btoa() lancia InvalidCharacterError su qualunque carattere fuori
+    // Latin-1 (es. emoji in study.name o in summary_short generato dall'AI),
+    // interrompendo showShareModal senza gestione dell'errore. Da rivedere
+    // con un encoding UTF-8-safe (es. encodeURIComponent) se capita in pratica.
     const shareData = btoa(JSON.stringify({
         name: study.name,
         subject: study.subject,
         summary: study.data.summary_short
     }));
     const shareLink = `${window.location.origin}${window.location.pathname}?share=${shareData}`;
-    
+
     modal.innerHTML = `
         <div class="share-modal-content">
             <div class="share-modal-header">
@@ -7174,7 +7178,7 @@ function showShareModal(studyId) {
                 <button class="share-modal-close" onclick="this.closest('.share-modal').remove()">×</button>
             </div>
             <div class="share-link-box">
-                <input type="text" class="share-link-input" value="${shareLink}" readonly>
+                <input type="text" class="share-link-input" value="${escapeAttr(shareLink)}" readonly>
                 <button class="share-copy-btn" onclick="copyShareLink(this)">Copia</button>
             </div>
             <div class="qr-code-container">
