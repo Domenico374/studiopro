@@ -544,6 +544,16 @@
         }
         body.dark-mode .error-message { background: rgba(198, 40, 40, 0.2); color: #ff5252; }
 
+        .rate-limit-notice {
+            background: #fff8e1;
+            color: #8d6e00;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #f9a825;
+        }
+        body.dark-mode .rate-limit-notice { background: rgba(249, 168, 37, 0.15); color: #ffca28; }
+
         /* ========== NUOVE 4 CARDS - INTEGRAZIONE COMPLETA ========== */
         .category-selection {
             display: none;
@@ -4179,6 +4189,44 @@ body.dark-mode .mindmap-legend {
             document.getElementById('mainApp').classList.remove('hidden');
         }
 
+        // Gestione gentile del rate limiting (429) sulle chiamate a /api/v1/ai/ask.
+        // Legge il Retry-After (secondi) per mostrare i minuti stimati invece del
+        // generico box rosso di errore.
+        async function readRateLimitNotice(response) {
+            const retryAfterHeader = response.headers.get('Retry-After');
+            const seconds = retryAfterHeader ? parseInt(retryAfterHeader, 10) : NaN;
+            const minutes = Number.isFinite(seconds) ? Math.max(1, Math.ceil(seconds / 60)) : null;
+            const minutesText = minutes
+                ? `Riprova tra circa ${minutes} minut${minutes === 1 ? 'o' : 'i'}.`
+                : 'Riprova tra qualche minuto.';
+
+            return `Hai raggiunto il limite di richieste. ${minutesText}`;
+        }
+
+        async function buildFetchError(response, fallbackMessage) {
+            if (response.status === 429) {
+                const err = new Error(await readRateLimitNotice(response));
+                err.isRateLimit = true;
+                return err;
+            }
+            return new Error(fallbackMessage);
+        }
+
+        // Costruisce il box di errore per i pannelli che ri-renderizzano contentArea:
+        // box giallo/neutro per il rate limit, box rosso per gli altri errori.
+        function renderFetchErrorBox(error, retryFn) {
+            const cssClass = error.isRateLimit ? 'rate-limit-notice' : 'error-message';
+            const icon = error.isRateLimit ? '⏳' : '❌ Errore nella generazione:';
+            return `
+                <div class="${cssClass}">
+                    ${icon} ${error.message}
+                    <button class="btn" onclick="${retryFn}()" style="margin-top: 15px;">
+                        🔄 Riprova
+                    </button>
+                </div>
+            `;
+        }
+
         async function generateContent(text, subject) {
             const response = await fetch('/api/generate', {
                 method: 'POST',
@@ -4607,7 +4655,7 @@ body.dark-mode .mindmap-legend {
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore nella generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore nella generazione');
 
                 const data = await response.json();
 
@@ -4625,7 +4673,7 @@ body.dark-mode .mindmap-legend {
                 
             } catch (error) {
                 console.error('Errore:', error);
-                alert('❌ Errore nella generazione: ' + error.message);
+                alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore nella generazione: ' + error.message);
                 btn.disabled = false;
                 btn.textContent = '💡 Genera Esempio Pratico';
             }
@@ -4967,25 +5015,18 @@ body.dark-mode .mindmap-legend {
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore nella generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore nella generazione');
 
                 const data = await response.json();
 
                 study.data.mindmapDetailed = data.data.answer;
-                
+
                 saveStudies();
                 renderMindMap();
-                
+
             } catch (error) {
                 console.error('Errore:', error);
-                document.getElementById('contentArea').innerHTML = `
-                    <div class="error-message">
-                        ❌ Errore nella generazione: ${error.message}
-                        <button class="btn" onclick="renderMindMap()" style="margin-top: 15px;">
-                            🔄 Riprova
-                        </button>
-                    </div>
-                `;
+                document.getElementById('contentArea').innerHTML = renderFetchErrorBox(error, 'renderMindMap');
             }
         }
 
@@ -5130,7 +5171,7 @@ body.dark-mode .mindmap-legend {
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore nella generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore nella generazione');
 
                 const data = await response.json();
 
@@ -5160,14 +5201,7 @@ body.dark-mode .mindmap-legend {
                 
             } catch (error) {
                 console.error('Errore:', error);
-                document.getElementById('contentArea').innerHTML = `
-                    <div class="error-message">
-                        ❌ Errore nella generazione: ${error.message}
-                        <button class="btn" onclick="renderStudyGuide()" style="margin-top: 15px;">
-                            🔄 Riprova
-                        </button>
-                    </div>
-                `;
+                document.getElementById('contentArea').innerHTML = renderFetchErrorBox(error, 'renderStudyGuide');
             }
         }
 
@@ -5279,7 +5313,7 @@ body.dark-mode .mindmap-legend {
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore nella generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore nella generazione');
 
                 const data = await response.json();
 
@@ -5304,14 +5338,7 @@ body.dark-mode .mindmap-legend {
                 
             } catch (error) {
                 console.error('Errore:', error);
-                document.getElementById('contentArea').innerHTML = `
-                    <div class="error-message">
-                        ❌ Errore nella generazione: ${error.message}
-                        <button class="btn" onclick="renderConceptAnalysis()" style="margin-top: 15px;">
-                            🔄 Riprova
-                        </button>
-                    </div>
-                `;
+                document.getElementById('contentArea').innerHTML = renderFetchErrorBox(error, 'renderConceptAnalysis');
             }
         }
 
@@ -5993,7 +6020,7 @@ Contenuto: {content}`
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore generazione');
 
                 const data = await response.json();
                 currentCard.explanation = data.data.answer;
@@ -6006,7 +6033,7 @@ Contenuto: {content}`
                 }, 100);
                 
             } catch (error) {
-                alert('❌ Errore: ' + error.message);
+                alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
                 btn.textContent = '💡 Spiega Semplice';
             }
@@ -6036,7 +6063,7 @@ Contenuto: {content}`
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore generazione');
 
                 const data = await response.json();
                 currentCard.example = data.data.answer;
@@ -6049,7 +6076,7 @@ Contenuto: {content}`
                 }, 100);
                 
             } catch (error) {
-                alert('❌ Errore: ' + error.message);
+                alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
                 btn.textContent = '📚 Esempio';
             }
@@ -6078,7 +6105,7 @@ Contenuto: {content}`
                     })
                 });
 
-                if (!response.ok) throw new Error('Errore generazione');
+                if (!response.ok) throw await buildFetchError(response, 'Errore generazione');
 
                 const data = await response.json();
                 currentCard.essay = data.data.answer;
@@ -6091,7 +6118,7 @@ Contenuto: {content}`
                 }, 100);
                 
             } catch (error) {
-                alert('❌ Errore: ' + error.message);
+                alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
                 btn.textContent = '✏️ Domanda Saggio';
             }
@@ -6553,7 +6580,7 @@ Contenuto: {content}`
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Errore server: ${response.status}`);
+                    throw await buildFetchError(response, `Errore server: ${response.status}`);
                 }
 
                 const data = await response.json();
@@ -6577,16 +6604,14 @@ Contenuto: {content}`
                 
             } catch (error) {
                 console.error('Errore chat:', error);
-                
+
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) typingIndicator.remove();
-                
-                messagesContainer.innerHTML += `
-                    <div class="error-message">
-                        ❌ Errore: ${error.message}. Riprova tra poco.
-                    </div>
-                `;
-                
+
+                messagesContainer.innerHTML += error.isRateLimit
+                    ? `<div class="rate-limit-notice">⏳ ${error.message}</div>`
+                    : `<div class="error-message">❌ Errore: ${error.message}. Riprova tra poco.</div>`;
+
                 appState.chatHistory[study.id].pop();
                 
             } finally {
