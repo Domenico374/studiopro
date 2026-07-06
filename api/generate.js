@@ -1,4 +1,5 @@
 import { OpenAI } from 'openai';
+import rateLimiter from '../rateLimiter.js';
 
 
 
@@ -7,6 +8,9 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 
 });
+
+const RATE_LIMIT = Number(process.env.RATE_LIMIT_GENERATE_PER_HOUR) || 15;
+const RATE_WINDOW_MS = 60 * 60 * 1000;
 
 
 
@@ -123,6 +127,20 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'OPENAI_API_KEY non configurata' });
 
   }
+
+
+
+  const blocked = await rateLimiter.applyRateLimit(req, res, {
+
+    name: 'generate',
+
+    limit: RATE_LIMIT,
+
+    windowMs: RATE_WINDOW_MS
+
+  });
+
+  if (blocked) return;
 
 
 

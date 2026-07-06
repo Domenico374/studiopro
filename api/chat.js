@@ -1,13 +1,25 @@
 // Endpoint per la chat AI migliorato
 
+import rateLimiter from '../rateLimiter.js';
+
+const RATE_LIMIT = Number(process.env.RATE_LIMIT_CHAT_PER_HOUR) || 20;
+const RATE_WINDOW_MS = 60 * 60 * 1000;
+
 export default async function handler(req, res) {
   // Accetta solo richieste POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ 
+    return res.status(405).json({
       error: 'Metodo non consentito',
-      message: 'Utilizzare POST per questo endpoint' 
+      message: 'Utilizzare POST per questo endpoint'
     });
   }
+
+  const blocked = await rateLimiter.applyRateLimit(req, res, {
+    name: 'chat',
+    limit: RATE_LIMIT,
+    windowMs: RATE_WINDOW_MS
+  });
+  if (blocked) return;
 
   try {
     const { message, conversationHistory = [] } = req.body;

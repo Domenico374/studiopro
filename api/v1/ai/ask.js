@@ -5,10 +5,14 @@
 
 import { OpenAI } from 'openai';
 import orchestrator from '../../../orchestrator.js';
+import rateLimiter from '../../../rateLimiter.js';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const RATE_LIMIT = Number(process.env.RATE_LIMIT_AI_ASK_PER_HOUR) || 40;
+const RATE_WINDOW_MS = 60 * 60 * 1000;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,6 +36,13 @@ export default async function handler(req, res) {
       error: { code: 'CONFIG_MISSING', message: 'OPENAI_API_KEY non configurata', status: 500 }
     });
   }
+
+  const blocked = await rateLimiter.applyRateLimit(req, res, {
+    name: 'ai-ask',
+    limit: RATE_LIMIT,
+    windowMs: RATE_WINDOW_MS
+  });
+  if (blocked) return;
 
   // "agent" (optional): forces a specific agent ('tutor' | 'summary' | 'quiz' | 'mindmap'),
   // bypassing orchestrator.js's keyword-based selectAgents(). See orchestrator.js
