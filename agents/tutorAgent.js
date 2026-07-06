@@ -7,6 +7,8 @@
 // /api/chat endpoint — grouped here under Tutor Agent because they all serve the
 // "explain a concept to the student" mission described in docs/AI_AGENTS.md.
 
+import chatCompletion from './shared/chatCompletion.js';
+
 const name = 'Tutor Agent';
 
 const systemPrompt = 'Sei un assistente utile e cortese.';
@@ -67,18 +69,17 @@ function buildPrompt(input) {
     }
 
     // index.html ~6054 (generateExample — "Esempio" flashcard action)
-    // TODO: user-reported quality issue — examples sometimes come out off-topic
-    // (e.g. business examples for a pedagogy flashcard). The prompt only knows
-    // study.subject, not the lesson's actual topic/summary, so the model has to
-    // guess the domain. Consider passing study.name/summary_short here too,
-    // like conceptAnalysis and the main chat task already do.
-    // Confirmed twice in production:
-    //  - "business examples for a pedagogy flashcard"
-    //  - flashcard on the 1907 Casa dei Bambini (Montessori) got an example
-    //    about the founding of Apple in 1976.
+    // FIXED (Sprint 3 tech-debt cleanup): examples used to come out off-topic
+    // (e.g. business examples for a pedagogy flashcard; a flashcard about the
+    // 1907 Casa dei Bambini/Montessori got an example about the founding of
+    // Apple in 1976). Root cause: the prompt only knew study.subject (a broad
+    // category like "Storia"), not the lesson's actual topic, so the model
+    // had to guess the domain from the flashcard's Q/A alone. Now passes
+    // study.name/summary_short too, like conceptAnalysis and chat already do.
     case 'flashcardExample': {
       const { study, card } = input;
-      const prompt = `Fornisci un esempio pratico e concreto per questo concetto:\n\nDomanda: ${card.q}\nRisposta: ${card.a}\n\nDai un esempio reale dalla vita quotidiana o dalla materia ${study.subject}. Max 3 frasi.`;
+      const context = `Materia: ${study.subject}\nLezione: ${study.name}\n\nRiassunto: ${study.data.summary_short || ''}`;
+      const prompt = `Fornisci un esempio pratico e concreto per questo concetto, coerente con l'argomento della lezione:\n\n${context}\n\nDomanda: ${card.q}\nRisposta: ${card.a}\n\nDai un esempio reale dalla vita quotidiana, calato nel contesto della lezione sopra. Max 3 frasi.`;
       return buildConversationMessages(prompt, []);
     }
 
@@ -98,18 +99,7 @@ function buildPrompt(input) {
 // Mirrors the OpenAI call parameters from api/chat.js lines 95-103.
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
-
-  const response = await llmClient.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
-    temperature: 0.7,
-    max_tokens: 1000,
-    top_p: 0.9,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.6
-  });
-
-  return response.choices[0].message.content;
+  return chatCompletion.runChatCompletion(messages, llmClient);
 }
 
 export default { name, systemPrompt, buildPrompt, run };

@@ -8,6 +8,8 @@
 // list has no dedicated prompt/logic of its own to extract, since it's just
 // one field of Summary Agent's combined JSON output.
 
+import chatCompletion from './shared/chatCompletion.js';
+
 const name = 'Mind Map Agent';
 
 const systemPrompt = 'Sei un assistente utile e cortese.';
@@ -27,18 +29,7 @@ function buildPrompt(input) {
 // Mirrors the OpenAI call parameters from api/chat.js lines 95-103.
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
-
-  const response = await llmClient.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
-    temperature: 0.7,
-    max_tokens: 1000,
-    top_p: 0.9,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.6
-  });
-
-  return response.choices[0].message.content;
+  return chatCompletion.runChatCompletion(messages, llmClient);
 }
 
 export default { name, systemPrompt, buildPrompt, run };

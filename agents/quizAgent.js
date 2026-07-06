@@ -10,6 +10,8 @@
 // bulk call (see agents/summaryAgent.js). See summary-of-ambiguities in the
 // refactor report for why it wasn't split out into this agent.
 
+import chatCompletion from './shared/chatCompletion.js';
+
 const name = 'Quiz Agent';
 
 const systemPrompt = 'Sei un assistente utile e cortese.';
@@ -47,18 +49,7 @@ function buildPrompt(input) {
 // Mirrors the OpenAI call parameters from api/chat.js lines 95-103.
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
-
-  const response = await llmClient.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
-    temperature: 0.7,
-    max_tokens: 1000,
-    top_p: 0.9,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.6
-  });
-
-  const text = response.choices[0].message.content;
+  const text = await chatCompletion.runChatCompletion(messages, llmClient);
 
   if (input.task === 'essayQuestions') {
     // Mirrors the response parsing in index.html ~5176-5180.

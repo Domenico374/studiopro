@@ -6068,6 +6068,8 @@ Contenuto: {content}`
                         task: 'flashcardExample',
                         context: {
                             subject: study.subject,
+                            name: study.name,
+                            summary_short: study.data.summary_short,
                             card: { q: currentCard.q, a: currentCard.a }
                         }
                     })
@@ -7152,24 +7154,34 @@ function exportAs(studyId, format) {
     }
 }
 
+// FIXED (Sprint 3 tech-debt cleanup): btoa() only accepts Latin-1 (single-byte)
+// characters and throws InvalidCharacterError on anything outside that range
+// (emoji, most non-Latin scripts) — study.name or summary_short can easily
+// contain both. Encode via UTF-8 bytes first so any Unicode string is safe.
+function utf8ToBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+}
+
 function showShareModal(studyId) {
     const study = appState.studies[studyId];
     if (!study) return;
-    
+
     const modal = document.createElement('div');
     modal.className = 'share-modal show';
-    
-    // Generate shareable link (base64 encoded study data)
-    // TODO: btoa() lancia InvalidCharacterError su qualunque carattere fuori
-    // Latin-1 (es. emoji in study.name o in summary_short generato dall'AI),
-    // interrompendo showShareModal senza gestione dell'errore. Da rivedere
-    // con un encoding UTF-8-safe (es. encodeURIComponent) se capita in pratica.
-    const shareData = btoa(JSON.stringify({
+
+    // Generate shareable link (base64 encoded study data, UTF-8-safe)
+    const shareData = utf8ToBase64(JSON.stringify({
         name: study.name,
         subject: study.subject,
         summary: study.data.summary_short
     }));
-    const shareLink = `${window.location.origin}${window.location.pathname}?share=${shareData}`;
+    // encodeURIComponent è necessario perché il base64 può contenere '+', '/' e
+    // '=', tutti caratteri con significato speciale in una query string (es.
+    // '+' verrebbe letto come spazio da URLSearchParams), corrompendo il dato.
+    const shareLink = `${window.location.origin}${window.location.pathname}?share=${encodeURIComponent(shareData)}`;
 
     modal.innerHTML = `
         <div class="share-modal-content">
@@ -7205,45 +7217,6 @@ function copyShareLink(button) {
         button.textContent = 'Copia';
         button.classList.remove('copied');
     }, 2000);
-}
-
-// 8. AI FEATURES ENHANCED
-function showAISuggestions() {
-    const studies = Object.values(appState.studies);
-    if (studies.length === 0) return;
-    
-    // Calculate suggestions
-    const suggestions = [];
-    
-    studies.forEach(study => {
-        const progress = calculateProgress(study);
-        if (progress < 50 && progress > 0) {
-            suggestions.push({
-                type: 'continue',
-                studyId: study.id,
-                text: `Continua a studiare "${study.name}" - Sei al ${progress}%!`,
-                action: 'Riprendi'
-            });
-        }
-    });
-    
-    return suggestions;
-}
-
-function calculateProgress(study) {
-    const total = (study.data.flashcards?.length || 0) + (study.data.quiz?.length || 0);
-    const completed = (study.completedFlashcards || 0) + (study.completedQuiz || 0);
-    return total > 0 ? Math.round((completed / total) * 100) : 0;
-}
-
-function estimateDifficulty(study) {
-    // Simple heuristic based on content length and complexity
-    const textLength = study.data.summary_long?.length || 0;
-    const highlightsCount = study.data.highlights?.length || 0;
-    
-    if (textLength > 5000 || highlightsCount > 10) return 'hard';
-    if (textLength > 2000 || highlightsCount > 5) return 'medium';
-    return 'easy';
 }
 
 // 9. ACCESSIBILITY

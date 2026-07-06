@@ -5,7 +5,8 @@
   "type": "module",
   "main": "api/generate.js",
   "dependencies": {
-    "openai": "^4.52.0"
+    "openai": "^4.52.0",
+    "pptxgenjs": "^3.12.0"
   },
   "devDependencies": {},
   "scripts": {

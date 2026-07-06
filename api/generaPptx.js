@@ -8,8 +8,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await getBody(req);
-    const { titolo, contenuti } = JSON.parse(body);
+    // Come api/chat.js e api/generate.js: il runtime Node di Vercel parsa già
+    // il body JSON in req.body. La lettura manuale dello stream raw (rimossa)
+    // non funzionava più qui per lo stesso motivo: lo stream risultava già
+    // consumato dal parsing automatico della piattaforma.
+    const { titolo, contenuti } = req.body || {};
 
     // Validazione input
     if (!titolo || !Array.isArray(contenuti)) {
@@ -67,13 +70,4 @@ export default async function handler(req, res) {
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: error.message }));
   }
-}
-
-function getBody(req) {
-  return new Promise((resolve, reject) => {
-    let body = "";
-    req.on("data", (chunk) => (body += chunk.toString()));
-    req.on("end", () => resolve(body));
-    req.on("error", (err) => reject(err));
-  });
 }
