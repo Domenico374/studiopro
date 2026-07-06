@@ -5432,7 +5432,7 @@ body.dark-mode .mindmap-legend {
                         <div class="history-item" onclick="showHistoryItem(${history.length - 1 - i})">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
-                                    <strong>${item.icon} ${item.title}</strong>
+                                    <strong>${item.icon} ${escapeHTML(item.title)}</strong>
                                     <div class="history-meta">${timeAgo}</div>
                                 </div>
                                 <div style="display: flex; gap: 10px;">
@@ -5582,7 +5582,7 @@ Contenuto: {content}`
                 <div class="loading">
                     <div class="spinner"></div>
                     <h3>✨ Creazione in Corso</h3>
-                    <p>Sto generando il formato "${formatInfo.title}"...</p>
+                    <p>Sto generando il formato "${escapeHTML(formatInfo.title)}"...</p>
                 </div>
             `;
             
@@ -5633,10 +5633,10 @@ Contenuto: {content}`
             const resultHTML = `
                 <div class="section" style="margin-top: 30px;">
                     <h4 style="color: var(--primary); margin-bottom: 15px;">
-                        ${formatInfo.icon} Risultato: ${formatInfo.title}
+                        ${formatInfo.icon} Risultato: ${escapeHTML(formatInfo.title)}
                     </h4>
-                    
-                    <div class="result-box">${content}</div>
+
+                    <div class="result-box">${escapeHTML(content)}</div>
                     
                     <div class="export-buttons">
                         <button class="btn" onclick="copyFormatResult()">
