@@ -3860,10 +3860,20 @@ body.dark-mode .mindmap-legend {
                     const fileElement = document.createElement('div');
                     fileElement.style.padding = '5px 0';
                     fileElement.style.borderBottom = index < selectedFiles.length - 1 ? '1px solid #e0e0e0' : 'none';
-                    fileElement.innerHTML = `
-                        <span style="font-weight: 500;">${file.name}</span>
-                        <span style="color: #666; font-size: 0.9em;"> (${formatFileSize(file.size)})</span>
-                    `;
+
+                    // file.name è controllato dall'utente (nome scelto sul proprio filesystem):
+                    // textContent invece di innerHTML, nessuna interpolazione HTML.
+                    const nameSpan = document.createElement('span');
+                    nameSpan.style.fontWeight = '500';
+                    nameSpan.textContent = file.name;
+
+                    const sizeSpan = document.createElement('span');
+                    sizeSpan.style.color = '#666';
+                    sizeSpan.style.fontSize = '0.9em';
+                    sizeSpan.textContent = ` (${formatFileSize(file.size)})`;
+
+                    fileElement.appendChild(nameSpan);
+                    fileElement.appendChild(sizeSpan);
                     selectedFilesList.appendChild(fileElement);
                 });
                 
@@ -4319,7 +4329,7 @@ body.dark-mode .mindmap-legend {
                             <span class="study-status ${status}">${statusText}</span>
                             
                             <div class="study-left">
-                                <strong>${study.fileType || 'PDF'} ${study.name}</strong>
+                                <strong>${study.fileType || 'PDF'} ${escapeHTML(study.name)}</strong>
                                 <div class="study-info">
                                     <span>${study.date}</span>
                                     <span>•</span>
@@ -4369,7 +4379,7 @@ body.dark-mode .mindmap-legend {
             element.style.padding = '20px';
             
             element.innerHTML = `
-                <h1>${study.name}</h1>
+                <h1>${escapeHTML(study.name)}</h1>
                 <p><strong>Tipo:</strong> ${study.fileType || '📄 PDF'} | <strong>Materia:</strong> ${study.subject} | <strong>Data:</strong> ${study.date}</p>
                 
                 <h2>📝 Riassunto Breve</h2>
@@ -4479,7 +4489,7 @@ body.dark-mode .mindmap-legend {
                     <div class="study-breadcrumb">
                         <a href="#" onclick="goBack(); return false;">Libreria</a>
                         <span>›</span>
-                        <span>${study.name}</span>
+                        <span>${escapeHTML(study.name)}</span>
                     </div>
                     
                     <h2>Riassunto</h2>
@@ -4507,7 +4517,7 @@ body.dark-mode .mindmap-legend {
                     <div class="study-breadcrumb">
                         <a href="#" onclick="goBack(); return false;">Libreria</a>
                         <span>›</span>
-                        <span>${study.name}</span>
+                        <span>${escapeHTML(study.name)}</span>
                     </div>
                     
                     <h2>Punti Chiave</h2>
@@ -4566,7 +4576,7 @@ body.dark-mode .mindmap-legend {
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>📖 Glossario (${(study.data.glossary || []).length} termini)</h3>
                 <p style="color: #666; margin-bottom: 15px;">Clicca su ogni termine per vedere definizione ed esempi</p>
             `;
@@ -4696,7 +4706,7 @@ body.dark-mode .mindmap-legend {
             if (timeline.length === 0) {
                 document.getElementById('contentArea').innerHTML = `
                     <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                    <h2>${study.name}</h2>
+                    <h2>${escapeHTML(study.name)}</h2>
                     <h3>📅 Timeline Cronologica</h3>
                     <p style="color: #666; margin-bottom: 20px;">Clicca su ogni evento per vedere i dettagli</p>
                     <div class="card" style="text-align: center; padding: 40px;">
@@ -4712,7 +4722,7 @@ body.dark-mode .mindmap-legend {
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>📅 Timeline Cronologica (${timeline.length} eventi)</h3>
                 <p style="color: #666; margin-bottom: 20px;">Clicca su ogni evento per vedere i dettagli</p>
                 <div style="position: relative; padding: 20px 0;">
@@ -4776,7 +4786,7 @@ body.dark-mode .mindmap-legend {
                     <div class="study-breadcrumb">
                         <a href="#" onclick="goBack(); return false;">Libreria</a>
                         <span>›</span>
-                        <span>${study.name}</span>
+                        <span>${escapeHTML(study.name)}</span>
                     </div>
                     
                     <h2>🧠 Mappa Mentale Interattiva</h2>
@@ -5066,7 +5076,7 @@ body.dark-mode .mindmap-legend {
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>📘 Guida di Studio</h3>
                 <p style="color: #666; margin-bottom: 30px;">Domande per saggi, esami orali e scritti</p>
             `;
@@ -5211,7 +5221,7 @@ body.dark-mode .mindmap-legend {
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>🔍 Analisi del Concetto</h3>
                 <p style="color: #666; margin-bottom: 30px;">I tre pilastri fondamentali che sostengono questa lezione</p>
             `;
@@ -5350,7 +5360,7 @@ body.dark-mode .mindmap-legend {
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>✨ Crea il Tuo Formato</h3>
                 <p style="color: #666; margin-bottom: 30px;">Trasforma il contenuto in qualsiasi formato desideri</p>
                 
@@ -5809,7 +5819,7 @@ Contenuto: {content}`
                         <div style="font-size: 4em; margin-bottom: 20px;">📊</div>
                         <h3>PowerPoint Generato con Successo!</h3>
                         <p style="margin: 20px 0; color: #666;">
-                            Il file "${study.name}.pptx" è stato scaricato
+                            Il file "${escapeHTML(study.name)}.pptx" è stato scaricato
                         </p>
                         <button class="btn" onclick="generatePowerPoint()">
                             🔄 Genera Altro PowerPoint
@@ -5840,7 +5850,7 @@ Contenuto: {content}`
             if (filteredFlashcards.length === 0) {
                 document.getElementById('contentArea').innerHTML = `
                     <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                    <h2>${study.name}</h2>
+                    <h2>${escapeHTML(study.name)}</h2>
                     <h3>🎴 Flashcard</h3>
                     <div class="card" style="text-align: center;">
                         <p>Nessuna flashcard trovata per il filtro selezionato.</p>
@@ -5856,7 +5866,7 @@ Contenuto: {content}`
 
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>🎴 Flashcard (${appState.currentFlashcardFiltered + 1}/${filteredFlashcards.length})</h3>
                 
                 <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
@@ -6134,7 +6144,7 @@ Contenuto: {content}`
             if (filteredQuestions.length === 0) {
                 document.getElementById('contentArea').innerHTML = `
                     <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                    <h2>${study.name}</h2>
+                    <h2>${escapeHTML(study.name)}</h2>
                     <h3>❓ Quiz</h3>
                     <div class="card" style="text-align: center;">
                         <p>Nessuna domanda trovata per il filtro selezionato.</p>
@@ -6152,7 +6162,7 @@ Contenuto: {content}`
 
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>❓ Quiz (${appState.currentQuizFiltered + 1}/${filteredQuestions.length})</h3>
 
                 <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
@@ -6349,7 +6359,7 @@ Contenuto: {content}`
 
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>${study.name}</h2>
+                <h2>${escapeHTML(study.name)}</h2>
                 <h3>🎯 Risultati Quiz</h3>
 
                 <div class="card" style="text-align: center; font-size: 1.5em;">
@@ -6403,10 +6413,10 @@ Contenuto: {content}`
             
             let html = `
                 <div class="back-btn" onclick="goBack()">← Torna alla Libreria</div>
-                <h2>💬 Chat AI - ${study.name}</h2>
+                <h2>💬 Chat AI - ${escapeHTML(study.name)}</h2>
                 
                 <div class="chat-context-info">
-                    <strong>ℹ️ Contesto attivo:</strong> ${study.subject} - ${study.name}
+                    <strong>ℹ️ Contesto attivo:</strong> ${escapeHTML(study.subject)} - ${escapeHTML(study.name)}
                     <br>
                     <small>L'AI ha accesso al contenuto della lezione e può rispondere alle tue domande</small>
                 </div>
@@ -6485,6 +6495,11 @@ Contenuto: {content}`
             `;
         }
 
+        // REGOLA: ogni contenuto proveniente dall'AI, da un file caricato dall'utente
+        // (nome file, testo estratto) o da localStorage DEVE passare da escapeHTML()
+        // prima di finire in un template literal destinato a innerHTML. Se il nodo
+        // contiene SOLO quel testo (nessun markup intorno), preferire
+        // element.textContent = valore invece di innerHTML.
         function escapeHTML(text) {
             const div = document.createElement('div');
             div.textContent = text;
