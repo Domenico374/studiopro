@@ -7606,7 +7606,7 @@ class ProfessionalMindMap {
             : 'Nodo finale';
         
         tooltip.innerHTML = `
-            <div class="mindmap-tooltip-title">${node.text}</div>
+            <div class="mindmap-tooltip-title">${escapeHTML(node.text)}</div>
             <div class="mindmap-tooltip-content">${childrenInfo}</div>
         `;
         
