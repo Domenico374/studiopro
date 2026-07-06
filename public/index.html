@@ -4347,6 +4347,7 @@ body.dark-mode .mindmap-legend {
                                     ${ctaText}
                                 </button>
                                 <button class="btn btn-export" onclick="exportStudyPDF('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">📥</button>
+                                <button class="btn btn-export" onclick="showShareModal('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">📤</button>
                                 <button class="btn btn-delete" onclick="deleteStudy('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">🗑️</button>
                             </div>
                         </div>
@@ -7165,7 +7166,13 @@ function utf8ToBase64(str) {
     return btoa(binary);
 }
 
-function showShareModal(studyId) {
+// event è opzionale: l'unico altro chiamante (il menu di showExportMenu, mai
+// raggiungibile dall'interfaccia) non lo passa. Quando presente — come dal
+// nuovo pulsante nella card di Libreria — evita che il click propaghi alla
+// card e apra selectStudy(), come già fanno exportStudyPDF()/deleteStudy().
+function showShareModal(studyId, event) {
+    if (event) event.stopPropagation();
+
     const study = appState.studies[studyId];
     if (!study) return;
 
