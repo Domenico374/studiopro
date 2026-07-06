@@ -4324,7 +4324,7 @@ body.dark-mode .mindmap-legend {
                         <div class="study-item" 
                              onclick="selectStudy('${study.id}')" 
                              style="--progress: ${progress}%"
-                             data-search="${study.name.toLowerCase()} ${(study.data.highlights || []).join(' ').toLowerCase()} ${(study.data.glossary || []).map(g => g.term.toLowerCase()).join(' ')}">
+                             data-search="${escapeAttr(`${study.name.toLowerCase()} ${(study.data.highlights || []).join(' ').toLowerCase()} ${(study.data.glossary || []).map(g => g.term.toLowerCase()).join(' ')}`)}">
                             
                             <span class="study-status ${status}">${statusText}</span>
                             
@@ -4383,36 +4383,36 @@ body.dark-mode .mindmap-legend {
                 <p><strong>Tipo:</strong> ${study.fileType || '📄 PDF'} | <strong>Materia:</strong> ${study.subject} | <strong>Data:</strong> ${study.date}</p>
                 
                 <h2>📝 Riassunto Breve</h2>
-                <p>${study.data.summary_short}</p>
-                
+                <p>${escapeHTML(study.data.summary_short || '')}</p>
+
                 <h2>📖 Riassunto Completo</h2>
-                <p>${study.data.summary_long}</p>
-                
+                <p>${escapeHTML(study.data.summary_long || '')}</p>
+
                 <h2>⭐ Punti Salienti</h2>
                 <ul>
-                    ${(study.data.highlights || []).map(h => `<li>${h}</li>`).join('')}
+                    ${(study.data.highlights || []).map(h => `<li>${escapeHTML(h)}</li>`).join('')}
                 </ul>
-                
+
                 <h2>📖 Glossario</h2>
                 ${(study.data.glossary || []).map(g => `
                     <div style="margin-bottom: 10px;">
-                        <strong>${g.term}:</strong> ${g.definition}
+                        <strong>${escapeHTML(g.term)}:</strong> ${escapeHTML(g.definition)}
                     </div>
                 `).join('')}
-                
+
                 <h2>🎴 Flashcard</h2>
                 ${(study.data.flashcards || []).map((f, i) => `
                     <div style="margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
-                        <strong>Domanda ${i+1}:</strong> ${f.q}<br>
-                        <strong>Risposta:</strong> ${f.a}
+                        <strong>Domanda ${i+1}:</strong> ${escapeHTML(f.q)}<br>
+                        <strong>Risposta:</strong> ${escapeHTML(f.a)}
                     </div>
                 `).join('')}
-                
+
                 <h2>❓ Quiz</h2>
                 ${(study.data.quiz || []).map((q, i) => `
                     <div style="margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
-                        <strong>Quiz ${i+1}:</strong> ${q.q}<br>
-                        ${q.options.map((o, j) => `<div style="margin-left: 20px;">• ${o}${j === q.correct ? ' ✓' : ''}</div>`).join('')}
+                        <strong>Quiz ${i+1}:</strong> ${escapeHTML(q.q)}<br>
+                        ${q.options.map((o, j) => `<div style="margin-left: 20px;">• ${escapeHTML(o)}${j === q.correct ? ' ✓' : ''}</div>`).join('')}
                     </div>
                 `).join('')}
             `;
@@ -4497,12 +4497,12 @@ body.dark-mode .mindmap-legend {
                     
                     <div class="section">
                         <h3>Sintesi Breve</h3>
-                        <div class="card">${study.data.summary_short || 'Contenuto non disponibile'}</div>
+                        <div class="card">${study.data.summary_short ? escapeHTML(study.data.summary_short) : 'Contenuto non disponibile'}</div>
                     </div>
-                    
+
                     <div class="section">
                         <h3>Analisi Completa</h3>
-                        <div class="card">${study.data.summary_long || 'Contenuto non disponibile'}</div>
+                        <div class="card">${study.data.summary_long ? escapeHTML(study.data.summary_long) : 'Contenuto non disponibile'}</div>
                     </div>
                 </div>
             `;
@@ -4542,11 +4542,11 @@ body.dark-mode .mindmap-legend {
                     html += `
                         <div class="highlight-item" onclick="toggleHighlight('${highlightId}')">
                             <div class="highlight-header">
-                                <div class="highlight-title">${h}</div>
+                                <div class="highlight-title">${escapeHTML(h)}</div>
                                 <span class="highlight-icon" style="color: #3b82f6;">${hasExplanation ? '−' : '+'}</span>
                             </div>
                             <div class="highlight-details" id="${highlightId}" style="${hasExplanation ? '' : 'display: none;'}">
-                                ${hasExplanation || '<em style="color: #a1a1aa;">Spiegazione in caricamento...</em>'}
+                                ${hasExplanation ? escapeHTML(hasExplanation) : '<em style="color: #a1a1aa;">Spiegazione in caricamento...</em>'}
                             </div>
                         </div>
                     `;
@@ -4600,21 +4600,21 @@ body.dark-mode .mindmap-legend {
                     const hasExample = study.data.glossaryExamples && study.data.glossaryExamples[i];
                     
                     html += `
-                        <div class="highlight-item" data-term="${item.term.toLowerCase()}" onclick="toggleHighlight('${glossaryId}')">
+                        <div class="highlight-item" data-term="${escapeAttr(item.term.toLowerCase())}" onclick="toggleHighlight('${glossaryId}')">
                             <div class="highlight-header">
                                 <div class="highlight-title">
-                                    <strong style="color: var(--secondary); font-size: 1.1em;">${item.term}</strong>
+                                    <strong style="color: var(--secondary); font-size: 1.1em;">${escapeHTML(item.term)}</strong>
                                 </div>
                                 <span class="highlight-icon" id="${glossaryId}_icon">▼</span>
                             </div>
-                            
+
                             <div class="highlight-details" id="${glossaryId}_details">
-                                <p style="margin-bottom: 15px;"><strong>Definizione:</strong> ${item.definition}</p>
-                                
+                                <p style="margin-bottom: 15px;"><strong>Definizione:</strong> ${escapeHTML(item.definition)}</p>
+
                                 ${hasExample ? `
                                     <div style="background: rgba(102, 126, 234, 0.1); padding: 12px; border-radius: 8px; margin-top: 10px;">
                                         <strong style="color: var(--primary);">💡 Esempio pratico:</strong>
-                                        <p style="margin-top: 8px;">${study.data.glossaryExamples[i]}</p>
+                                        <p style="margin-top: 8px;">${escapeHTML(study.data.glossaryExamples[i])}</p>
                                     </div>
                                 ` : `
                                     <button class="generate-btn" onclick="generateGlossaryExample(${i}, event)">
@@ -4740,17 +4740,17 @@ body.dark-mode .mindmap-legend {
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div style="display: flex; align-items: center; gap: 10px;">
                                             <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;">
-                                                ${item.date || `Evento ${index + 1}`}
+                                                ${item.date ? escapeHTML(item.date) : `Evento ${index + 1}`}
                                             </span>
                                         </div>
                                         <span id="${itemId}_icon" style="font-size: 1.2em; transition: transform 0.3s;">▼</span>
                                     </div>
                                     <p style="margin: 10px 0 0 0; line-height: 1.6; font-weight: 600;">
-                                        ${item.event}
+                                        ${escapeHTML(item.event)}
                                     </p>
                                     <div id="${itemId}_details" class="timeline-details" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
                                         <p style="color: #666; line-height: 1.8;">
-                                            ${item.details || item.event}
+                                            ${escapeHTML(item.details || item.event)}
                                         </p>
                                     </div>
                                 </div>
@@ -5121,7 +5121,7 @@ body.dark-mode .mindmap-legend {
                     html += `
                         <div class="question-card">
                             <span class="question-number">Domanda ${i + 1}</span>
-                            <div class="question-text">${question}</div>
+                            <div class="question-text">${escapeHTML(question)}</div>
                         </div>
                     `;
                 });
@@ -5247,39 +5247,39 @@ body.dark-mode .mindmap-legend {
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">1️⃣</div>
-                            <span>Primo Pilastro: ${analysis.pillar1_title || 'Definizione Base'}</span>
+                            <span>Primo Pilastro: ${analysis.pillar1_title ? escapeHTML(analysis.pillar1_title) : 'Definizione Base'}</span>
                         </div>
                         <div class="pillar-content">
-                            ${analysis.pillar1_content || 'Contenuto non disponibile'}
+                            ${analysis.pillar1_content ? escapeHTML(analysis.pillar1_content) : 'Contenuto non disponibile'}
                         </div>
                     </div>
-                    
+
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">2️⃣</div>
-                            <span>Secondo Pilastro: ${analysis.pillar2_title || 'Applicazioni Pratiche'}</span>
+                            <span>Secondo Pilastro: ${analysis.pillar2_title ? escapeHTML(analysis.pillar2_title) : 'Applicazioni Pratiche'}</span>
                         </div>
                         <div class="pillar-content">
-                            ${analysis.pillar2_content || 'Contenuto non disponibile'}
+                            ${analysis.pillar2_content ? escapeHTML(analysis.pillar2_content) : 'Contenuto non disponibile'}
                         </div>
                     </div>
-                    
+
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">3️⃣</div>
-                            <span>Terzo Pilastro: ${analysis.pillar3_title || 'Collegamenti Concettuali'}</span>
+                            <span>Terzo Pilastro: ${analysis.pillar3_title ? escapeHTML(analysis.pillar3_title) : 'Collegamenti Concettuali'}</span>
                         </div>
                         <div class="pillar-content">
-                            ${analysis.pillar3_content || 'Contenuto non disponibile'}
+                            ${analysis.pillar3_content ? escapeHTML(analysis.pillar3_content) : 'Contenuto non disponibile'}
                         </div>
                     </div>
                 `;
-                
+
                 if (analysis.connections) {
                     html += `
                         <div class="connection-box">
                             <h4 style="margin-bottom: 10px; color: var(--accent);">🔗 Come si Collegano i Tre Pilastri</h4>
-                            <p style="line-height: 1.8;">${analysis.connections}</p>
+                            <p style="line-height: 1.8;">${escapeHTML(analysis.connections)}</p>
                         </div>
                     `;
                 }
@@ -5879,33 +5879,33 @@ Contenuto: {content}`
                 <div class="flashcard ${stats.difficulty}" onclick="flipCard()">
                     <div class="flashcard-inner" id="flashcardInner">
                         <div class="flashcard-front">
-                            <div class="flashcard-question">${currentCard.q}</div>
+                            <div class="flashcard-question">${escapeHTML(currentCard.q)}</div>
                             <div style="font-size: 0.8em; opacity: 0.8; margin-top: 15px;">
                                 👆 Clicca per vedere la risposta
                             </div>
                         </div>
                         <div class="flashcard-back">
-                            <div class="flashcard-answer">${currentCard.a}</div>
-                            
+                            <div class="flashcard-answer">${escapeHTML(currentCard.a)}</div>
+
                             <div id="flashcardExtras" style="width: 100%;">
                                 ${currentCard.explanation ? `
                                     <div class="flashcard-extra">
                                         <div class="flashcard-extra-title">💡 Spiegazione Semplice:</div>
-                                        <div>${currentCard.explanation}</div>
+                                        <div>${escapeHTML(currentCard.explanation)}</div>
                                     </div>
                                 ` : ''}
-                                
+
                                 ${currentCard.example ? `
                                     <div class="flashcard-extra">
                                         <div class="flashcard-extra-title">📚 Esempio Pratico:</div>
-                                        <div>${currentCard.example}</div>
+                                        <div>${escapeHTML(currentCard.example)}</div>
                                     </div>
                                 ` : ''}
-                                
+
                                 ${currentCard.essay ? `
                                     <div class="flashcard-extra">
                                         <div class="flashcard-extra-title">✏️ Domanda per Saggio:</div>
-                                        <div>${currentCard.essay}</div>
+                                        <div>${escapeHTML(currentCard.essay)}</div>
                                     </div>
                                 ` : ''}
                             </div>
@@ -6183,7 +6183,7 @@ Contenuto: {content}`
 
             html += `
                 <div class="card">
-                    <h4>${currentQuestion.q}</h4>
+                    <h4>${escapeHTML(currentQuestion.q)}</h4>
                 </div>
             `;
 
@@ -6199,7 +6199,7 @@ Contenuto: {content}`
                     className += ' selected';
                 }
 
-                html += `<div class="${className}" onclick="${isAnswered ? '' : `selectQuizAnswer(${i})`}">${option}</div>`;
+                html += `<div class="${className}" onclick="${isAnswered ? '' : `selectQuizAnswer(${i})`}">${escapeHTML(option)}</div>`;
             });
 
             if (appState.quizAnswers[appState.currentQuizFiltered] === undefined) {
@@ -6376,9 +6376,9 @@ Contenuto: {content}`
                 const isCorrect = userAnswer === q.correct;
                 html += `
                     <div class="review-item ${isCorrect ? 'correct' : 'wrong'}">
-                        <strong>Domanda ${i + 1}:</strong> ${q.q}<br>
-                        <strong>La tua risposta:</strong> ${userAnswer >= 0 ? q.options[userAnswer] : 'Nessuna risposta'}<br>
-                        <strong>Risposta corretta:</strong> ${q.options[q.correct]}<br>
+                        <strong>Domanda ${i + 1}:</strong> ${escapeHTML(q.q)}<br>
+                        <strong>La tua risposta:</strong> ${userAnswer >= 0 ? escapeHTML(q.options[userAnswer]) : 'Nessuna risposta'}<br>
+                        <strong>Risposta corretta:</strong> ${escapeHTML(q.options[q.correct])}<br>
                         ${isCorrect ? '✅ Corretto!' : '❌ Sbagliato'}
                     </div>
                 `;
@@ -6504,6 +6504,14 @@ Contenuto: {content}`
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        // Come escapeHTML(), ma per l'uso dentro un valore di ATTRIBUTO HTML
+        // (es. data-search="${...}"): escapeHTML() da sola non basta perché non
+        // escapa le virgolette, quindi un valore con `"` potrebbe comunque
+        // chiudere l'attributo e iniettare attributi/handler arbitrari.
+        function escapeAttr(text) {
+            return escapeHTML(text).replace(/"/g, '&quot;');
         }
 
         function handleChatKeyPress(event) {
