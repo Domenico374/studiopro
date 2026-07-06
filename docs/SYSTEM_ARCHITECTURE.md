@@ -2,7 +2,7 @@
 
 ## System Architecture
 
-> **Version:** 1.1
+> **Version:** 1.2
 >
 > **Last updated:** July 2026
 >
@@ -24,6 +24,7 @@
 - Technology Stack
 - Infrastructure
 - Security
+- Known Issues / TODO
 - Scalability
 - Deployment
 - Future Architecture
@@ -365,6 +366,36 @@ StudioPro dovrà garantire:
 - Secure File Upload
 - Audit Logging
 
+> **Stato di implementazione**:
+>
+> ✅ **Rate Limiting** — `rateLimiter.js`, protezione in-memory per IP su `POST /api/v1/ai/ask` (40 richieste/ora), `POST /api/chat` (20/ora) e `POST /api/generate` (15/ora), limiti configurabili via env var (`RATE_LIMIT_AI_ASK_PER_HOUR`, `RATE_LIMIT_CHAT_PER_HOUR`, `RATE_LIMIT_GENERATE_PER_HOUR`). Risposta `429` nel formato standard `{success, data, error}` con header `Retry-After`, gestita anche lato frontend con un messaggio dedicato meno allarmante. Limite noto: essendo in-memory e non condiviso tra istanze serverless concorrenti, non è una garanzia rigida sotto carico — mitiga abusi accidentali e costi fuori controllo, non un attore deliberato (fail-open per scelta esplicita in caso di errore interno del limiter).
+>
+> ✅ **XSS Sanitization** — `escapeHTML()` (contesto testo) ed `escapeAttr()` (contesto attributo HTML) in `public/index.html`, applicati sistematicamente a tutto il contenuto proveniente dagli agenti AI, dai file caricati dall'utente (nome file) e da `localStorage` prima di ogni inserimento via `innerHTML`. Convenzione documentata come commento accanto a `escapeHTML()`. Copertura verificata su ~44 punti d'iniezione (contenuto AI nei pannelli di studio, nomi file/lezione, attributi `data-search`/`data-term`/`data-*`, custom format, tooltip mappa mentale, share modal), confermata sia con analisi statica sia eseguendo le funzioni reali in browser con payload d'attacco (`<img onerror>`, `"><script>`).
+>
+> ⏳ **Non implementato**: Authentication, Authorization, Data Encryption, Audit Logging — dipendono dall'introduzione di un vero backend con gestione utenti (vedi Backend Layer); Secure File Upload è parziale (il nome file è sanificato lato rendering, ma non c'è validazione/scansione del contenuto del file lato server).
+
+---
+
+# Known Issues / TODO
+
+Difetti noti individuati durante lo sviluppo, non ancora risolti. Documentati qui oltre che come commenti nel codice, per non restare visibili solo a chi legge i sorgenti.
+
+## Esempi fuori contesto nel Tutor Agent (`flashcardExample`)
+
+**Dove**: `agents/tutorAgent.js`, task `flashcardExample`.
+
+Il prompt riceve solo `study.subject`, non il nome o il riassunto della lezione, quindi il modello a volte inventa un dominio sbagliato per l'esempio pratico. Confermato due volte in produzione: esempi aziendali generati su una flashcard di pedagogia, e un esempio sulla fondazione di Apple (1976) generato su una flashcard sulla Casa dei Bambini (1907, Montessori).
+
+**Possibile soluzione**: passare anche `study.name`/`summary_short` al prompt, come già fanno il task `conceptAnalysis` e il task `chat`.
+
+## Crash di `showShareModal` con caratteri fuori Latin-1
+
+**Dove**: `public/index.html`, funzione `showShareModal()`.
+
+`btoa()` lancia un'eccezione non gestita se `study.name` o `study.data.summary_short` contengono emoji o altri caratteri fuori Latin-1, interrompendo silenziosamente la generazione del link di condivisione. Riprodotto e confermato eseguendo la funzione reale in browser.
+
+**Possibile soluzione**: sostituire `btoa()` con una codifica UTF-8-safe (es. `encodeURIComponent` combinato con `btoa`, o un encoding alternativo).
+
 ---
 
 # Scalability
@@ -458,3 +489,10 @@ Possibili evoluzioni:
 - Exposed the Orchestrator through a first versioned endpoint, `POST /api/v1/ai/ask`.
 - Migrated most of the frontend's AI features to call this endpoint instead of the legacy, unversioned `/api/chat`.
 - Planner Agent, the Express backend, the database layer, authentication, file storage and notifications remain unimplemented.
+
+### Version 1.2
+
+- Implemented rate limiting (`rateLimiter.js`) on `/api/v1/ai/ask`, `/api/chat` and `/api/generate`, with a standard `429` response and frontend handling.
+- Implemented systematic XSS sanitization (`escapeHTML()`/`escapeAttr()`) across ~44 injection points covering AI-generated content, user file names and localStorage-derived data in `public/index.html`.
+- Added a "Known Issues / TODO" section documenting two defects found during this work: off-topic examples in the Tutor Agent's `flashcardExample` task, and a `showShareModal` crash on non-Latin-1 characters.
+- Authentication, Authorization, Data Encryption and Audit Logging remain unimplemented.
