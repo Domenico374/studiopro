@@ -554,6 +554,39 @@
         }
         body.dark-mode .rate-limit-notice { background: rgba(249, 168, 37, 0.15); color: #ffca28; }
 
+        /* Slice 2 (bug localStorage): avviso non bloccante quando un
+           salvataggio su disco fallisce. Stessa palette di .rate-limit-notice
+           (non è un errore di generazione, è uno stato informativo), ma
+           flottante e chiudibile perché non sostituisce il contentArea. */
+        .storage-warning-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 360px;
+            background: #fff8e1;
+            color: #8d6e00;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #f9a825;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10001;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        .storage-warning-toast button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1em;
+            line-height: 1;
+            padding: 0;
+            margin-left: auto;
+        }
+        body.dark-mode .storage-warning-toast { background: rgba(249, 168, 37, 0.15); color: #ffca28; }
+
         /* ========== NUOVE 4 CARDS - INTEGRAZIONE COMPLETA ========== */
         .category-selection {
             display: none;
@@ -3775,8 +3808,54 @@ body.dark-mode .mindmap-legend {
     </div>
 
     <script>
+        // Slice 2 (bug localStorage): letture/scritture centralizzate e
+        // resilienti. Un JSON corrotto o uno storage pieno non devono mai
+        // lanciare un'eccezione non gestita — nel primo caso romperebbero
+        // l'intero script inline al caricamento, nel secondo interromperebbero
+        // a metà un flusso che ha già speso una chiamata OpenAI reale.
+        function loadFromStorage(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw === null) return fallback;
+                return JSON.parse(raw);
+            } catch (e) {
+                console.error(`localStorage: valore corrotto per "${key}", uso il fallback.`, e);
+                return fallback;
+            }
+        }
+
+        // Avviso non bloccante e deduplicato: al massimo un toast visibile
+        // per volta, anche se più salvataggi falliscono in rapida
+        // successione (es. saveStudies() + saveChatHistory() nello stesso
+        // flusso di upload). Non parla di "errore di generazione" e non
+        // invita a ripetere la richiesta, perché il contenuto è già stato
+        // generato correttamente: è solo il salvataggio locale che è fallito.
+        function showStorageWarning() {
+            if (document.getElementById('storageWarningToast')) return;
+            const toast = document.createElement('div');
+            toast.id = 'storageWarningToast';
+            toast.className = 'storage-warning-toast';
+            toast.innerHTML = `
+                <span>⚠️ Il contenuto è stato generato, ma non è stato possibile salvarlo sul dispositivo. Rimarrà disponibile solo finché questa pagina resterà aperta.</span>
+                <button onclick="this.parentElement.remove()" aria-label="Chiudi avviso">✕</button>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 8000);
+        }
+
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.error(`localStorage: impossibile salvare "${key}" (storage pieno o non disponibile).`, e);
+                showStorageWarning();
+                return false;
+            }
+        }
+
         let appState = {
-            studies: JSON.parse(localStorage.getItem('mentorestudio_studies')) || {},
+            studies: loadFromStorage('mentorestudio_studies', {}),
             currentStudyId: null,
             currentFlashcard: 0,
             currentFlashcardFiltered: 0,
@@ -3789,14 +3868,14 @@ body.dark-mode .mindmap-legend {
             quizTimerEnabled: false,
             quizTimeRemaining: 0,
             quizTimerId: null,
-            notes: JSON.parse(localStorage.getItem('flashcardNotes')) || {},
+            notes: loadFromStorage('flashcardNotes', {}),
             darkMode: localStorage.getItem('darkMode') === 'true',
-            chatHistory: JSON.parse(localStorage.getItem('chatHistory')) || {},
+            chatHistory: loadFromStorage('chatHistory', {}),
             isChatLoading: false
         };
 
-        let flashcardStats = JSON.parse(localStorage.getItem('flashcardStats')) || {};
-        let quizStats = JSON.parse(localStorage.getItem('quizStats')) || {};
+        let flashcardStats = loadFromStorage('flashcardStats', {});
+        let quizStats = loadFromStorage('quizStats', {});
         let selectedFiles = [];
 
         if (appState.darkMode) document.body.classList.add('dark-mode');
@@ -4249,11 +4328,11 @@ body.dark-mode .mindmap-legend {
         }
 
         function saveStudies() {
-            localStorage.setItem('mentorestudio_studies', JSON.stringify(appState.studies));
+            return saveToStorage('mentorestudio_studies', appState.studies);
         }
 
         function saveChatHistory() {
-            localStorage.setItem('chatHistory', JSON.stringify(appState.chatHistory));
+            return saveToStorage('chatHistory', appState.chatHistory);
         }
 
         function switchTab(tab, e) {
@@ -6987,11 +7066,8 @@ let darkModeSettings = {
 
 function initDarkMode() {
     // Load saved settings
-    const saved = localStorage.getItem('darkModeSettings');
-    if (saved) {
-        darkModeSettings = JSON.parse(saved);
-    }
-    
+    darkModeSettings = loadFromStorage('darkModeSettings', darkModeSettings);
+
     // Apply saved mode
     applyDarkMode();
     
@@ -7048,7 +7124,7 @@ function createDarkModeOptions() {
 
 function setDarkMode(mode) {
     darkModeSettings.mode = mode;
-    localStorage.setItem('darkModeSettings', JSON.stringify(darkModeSettings));
+    saveToStorage('darkModeSettings', darkModeSettings);
     applyDarkMode();
     document.querySelector('.dark-mode-options')?.remove();
 }
