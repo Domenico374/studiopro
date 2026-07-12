@@ -2,6 +2,14 @@ import { OpenAI } from 'openai';
 import rateLimiter from '../rateLimiter.js';
 import requestGuards from '../requestGuards.js';
 
+// Timeout Summary Agent (audit 4.1) — spec approvata in conversazione.
+// Nessun vercel.json nel progetto: senza questa config si dipende dal default
+// di dashboard/piattaforma, non verificabile leggendo solo il repo. 300s è il
+// massimo configurabile su piano Hobby con Fluid Compute (verificato sulla
+// documentazione Vercel corrente, luglio 2026) — copre ampiamente una singola
+// chiamata gpt-4o-mini da 3000 token di output.
+export const config = { maxDuration: 300 };
+
 
 
 const openai = new OpenAI({

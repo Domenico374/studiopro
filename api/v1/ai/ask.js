@@ -8,6 +8,12 @@ import orchestrator from '../../../orchestrator.js';
 import rateLimiter from '../../../rateLimiter.js';
 import requestGuards from '../../../requestGuards.js';
 
+// Timeout Summary Agent (audit 4.1) — vedi api/generate.js per il ragionamento
+// completo. Applicato anche qui perché questo endpoint può raggiungere lo
+// stesso Summary Agent (agents/summaryAgent.js, via agent:'summary' o
+// keyword-matching in orchestrator.js) con lo stesso rischio di durata.
+export const config = { maxDuration: 300 };
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });

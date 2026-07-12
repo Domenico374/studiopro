@@ -4304,20 +4304,29 @@ body.dark-mode .mindmap-legend {
             return `Hai raggiunto il limite di richieste. ${minutesText}`;
         }
 
+        // Timeout Summary Agent (audit 4.1): messaggio dedicato per il 504
+        // (FUNCTION_INVOCATION_TIMEOUT di Vercel), distinto da un errore
+        // generico — non deve sembrare un bug, deve spiegare cosa è successo.
         async function buildFetchError(response, fallbackMessage) {
             if (response.status === 429) {
                 const err = new Error(await readRateLimitNotice(response));
                 err.isRateLimit = true;
                 return err;
             }
+            if (response.status === 504) {
+                const err = new Error('La generazione ha impiegato troppo tempo ed è stata interrotta. Riprova; se il problema persiste, prova con un documento più breve.');
+                err.isTimeout = true;
+                return err;
+            }
             return new Error(fallbackMessage);
         }
 
         // Costruisce il box di errore per i pannelli che ri-renderizzano contentArea:
-        // box giallo/neutro per il rate limit, box rosso per gli altri errori.
+        // box giallo/neutro per rate limit e timeout, box rosso per gli altri errori.
         function renderFetchErrorBox(error, retryFn) {
-            const cssClass = error.isRateLimit ? 'rate-limit-notice' : 'error-message';
-            const icon = error.isRateLimit ? '⏳' : '❌ Errore nella generazione:';
+            const isNotice = error.isRateLimit || error.isTimeout;
+            const cssClass = isNotice ? 'rate-limit-notice' : 'error-message';
+            const icon = error.isRateLimit ? '⏳' : error.isTimeout ? '⏱️' : '❌ Errore nella generazione:';
             return `
                 <div class="${cssClass}">
                     ${icon} ${error.message}
@@ -4335,7 +4344,7 @@ body.dark-mode .mindmap-legend {
                 body: JSON.stringify({ text: text.substring(0, 8000), subject: subject })
             });
 
-            if (!response.ok) throw new Error('Errore server: ' + response.status);
+            if (!response.ok) throw await buildFetchError(response, 'Errore server: ' + response.status);
             return await response.json();
         }
 
