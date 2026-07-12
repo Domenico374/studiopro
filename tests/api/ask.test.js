@@ -22,6 +22,39 @@ test('OPTIONS -> 200 (preflight CORS)', async () => {
   assert.equal(res.statusCode, 200);
 });
 
+test('CORS: Access-Control-Allow-Origin ristretto al dominio dell\'app (Slice 1, punto 3)', async () => {
+  const req = createMockReq({ method: 'OPTIONS', ip: 'ask-ip-cors' });
+  const res = createMockRes();
+  await askHandler(req, res);
+  assert.equal(res.headers['Access-Control-Allow-Origin'], 'https://mentorestudio.vercel.app');
+});
+
+test('Slice 1: message oltre 2000 caratteri -> 400 MESSAGE_TOO_LONG (nessuna chiamata OpenAI)', async () => {
+  const req = createMockReq({
+    method: 'POST',
+    body: { message: 'a'.repeat(2001) },
+    ip: 'ask-ip-msg-too-long',
+  });
+  const res = createMockRes();
+  await askHandler(req, res);
+  assert.equal(res.statusCode, 400);
+  assert.equal(res.body.success, false);
+  assert.equal(res.body.error.code, 'MESSAGE_TOO_LONG');
+});
+
+test('Slice 1: body oltre 100KB -> 413 PAYLOAD_TOO_LARGE, rifiutato prima di ogni altro controllo', async () => {
+  const req = createMockReq({
+    method: 'POST',
+    body: { message: 'ciao', context: { fullText: 'x'.repeat(150000) } },
+    ip: 'ask-ip-body-too-large',
+  });
+  const res = createMockRes();
+  await askHandler(req, res);
+  assert.equal(res.statusCode, 413);
+  assert.equal(res.body.success, false);
+  assert.equal(res.body.error.code, 'PAYLOAD_TOO_LARGE');
+});
+
 test('GET -> 405 METHOD_NOT_ALLOWED', async () => {
   const req = createMockReq({ method: 'GET', ip: 'ask-ip-2' });
   const res = createMockRes();

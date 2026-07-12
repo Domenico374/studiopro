@@ -18,6 +18,25 @@ test('GET -> 405', async () => {
   assert.equal(res.body.error, 'Metodo non consentito');
 });
 
+test('CORS: Access-Control-Allow-Origin ristretto al dominio dell\'app (Slice 1, punto 3)', async () => {
+  const req = createMockReq({ method: 'GET', ip: 'chat-ip-cors' });
+  const res = createMockRes();
+  await chatHandler(req, res);
+  assert.equal(res.headers['Access-Control-Allow-Origin'], 'https://mentorestudio.vercel.app');
+});
+
+test('Slice 1: body oltre 100KB -> 413, rifiutato prima di ogni altro controllo', async () => {
+  const req = createMockReq({
+    method: 'POST',
+    body: { message: 'x'.repeat(150000) },
+    ip: 'chat-ip-body-too-large',
+  });
+  const res = createMockRes();
+  await chatHandler(req, res);
+  assert.equal(res.statusCode, 413);
+  assert.equal(res.body.error, 'Richiesta troppo grande');
+});
+
 test('POST senza "message" -> 400', async () => {
   const req = createMockReq({ method: 'POST', body: {}, ip: 'chat-ip-2' });
   const res = createMockRes();

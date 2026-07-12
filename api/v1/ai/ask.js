@@ -6,6 +6,7 @@
 import { OpenAI } from 'openai';
 import orchestrator from '../../../orchestrator.js';
 import rateLimiter from '../../../rateLimiter.js';
+import requestGuards from '../../../requestGuards.js';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,8 +15,21 @@ const openai = new OpenAI({
 const RATE_LIMIT = Number(process.env.RATE_LIMIT_AI_ASK_PER_HOUR) || 40;
 const RATE_WINDOW_MS = 60 * 60 * 1000;
 
+// Slice 1 (protezione costi) — vedi studiopro-slice-1-costi.md, punto 1.
+// Stessa soglia di api/chat.js (2000 char): "message" qui è sempre un testo
+// breve digitato o generato lato client (una domanda, una richiesta di
+// chiarimento), mai il contenuto del documento — quello viaggia in "context".
+const MAX_MESSAGE_LENGTH = 2000;
+
+// Slice 1 — vedi studiopro-slice-1-costi.md, punto 3. Origine ristretta al
+// dominio reale dell'app: le chiamate legittime sono sempre same-origin
+// (public/index.html chiama con URL relativi), quindi restringere non rompe
+// l'uso normale — blocca solo un sito esterno che provi a usare questo
+// endpoint dal browser di un visitatore.
+const ALLOWED_ORIGIN = 'https://mentorestudio.vercel.app';
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -26,6 +40,21 @@ export default async function handler(req, res) {
       success: false,
       data: null,
       error: { code: 'METHOD_NOT_ALLOWED', message: 'Utilizzare POST per questo endpoint', status: 405 }
+    });
+  }
+
+  // Slice 1, punto 4: cap esplicito sulla dimensione del body, prima di
+  // qualunque altra elaborazione (incluso il controllo della API key, per
+  // rifiutare il più presto possibile).
+  if (requestGuards.isBodyTooLarge(req)) {
+    return res.status(413).json({
+      success: false,
+      data: null,
+      error: {
+        code: 'PAYLOAD_TOO_LARGE',
+        message: `Il corpo della richiesta supera il limite di ${Math.floor(requestGuards.MAX_BODY_BYTES / 1024)}KB`,
+        status: 413
+      }
     });
   }
 
@@ -57,6 +86,18 @@ export default async function handler(req, res) {
       success: false,
       data: null,
       error: { code: 'MISSING_MESSAGE', message: 'Il campo "message" è obbligatorio', status: 400 }
+    });
+  }
+
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return res.status(400).json({
+      success: false,
+      data: null,
+      error: {
+        code: 'MESSAGE_TOO_LONG',
+        message: `Il campo "message" non può superare ${MAX_MESSAGE_LENGTH} caratteri`,
+        status: 400
+      }
     });
   }
 

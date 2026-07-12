@@ -25,6 +25,25 @@ test('GET -> 405', async () => {
   assert.equal(res.body.error, 'Metodo non consentito');
 });
 
+test('CORS: Access-Control-Allow-Origin ristretto al dominio dell\'app (Slice 1, punto 3)', async () => {
+  const req = createMockReq({ method: 'OPTIONS', ip: 'generate-ip-cors' });
+  const res = createMockRes();
+  await generateHandler(req, res);
+  assert.equal(res.headers['Access-Control-Allow-Origin'], 'https://mentorestudio.vercel.app');
+});
+
+test('Slice 1: body oltre 100KB -> 413, rifiutato prima del controllo API key', async () => {
+  const req = createMockReq({
+    method: 'POST',
+    body: { text: 'x'.repeat(150000) },
+    ip: 'generate-ip-body-too-large',
+  });
+  const res = createMockRes();
+  await generateHandler(req, res);
+  assert.equal(res.statusCode, 413);
+  assert.equal(res.body.error, 'Richiesta troppo grande');
+});
+
 test('OPENAI_API_KEY assente -> 500 (controllato prima del rate limit)', async () => {
   const original = process.env.OPENAI_API_KEY;
   delete process.env.OPENAI_API_KEY;

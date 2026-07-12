@@ -1,5 +1,6 @@
 import { OpenAI } from 'openai';
 import rateLimiter from '../rateLimiter.js';
+import requestGuards from '../requestGuards.js';
 
 
 
@@ -106,9 +107,14 @@ REQUISITI:
 
 // Endpoint API
 
+// Slice 1 (protezione costi) — vedi studiopro-slice-1-costi.md, punto 3.
+// Origine ristretta al dominio reale dell'app: le chiamate legittime sono
+// sempre same-origin (public/index.html chiama con URL relativi).
+const ALLOWED_ORIGIN = 'https://mentorestudio.vercel.app';
+
 export default async function handler(req, res) {
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 
@@ -121,6 +127,15 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo non consentito' });
 
 
+
+  // Slice 1, punto 4: cap esplicito sulla dimensione del body, prima di
+  // qualunque elaborazione.
+  if (requestGuards.isBodyTooLarge(req)) {
+    return res.status(413).json({
+      error: 'Richiesta troppo grande',
+      message: `Il corpo della richiesta supera il limite di ${Math.floor(requestGuards.MAX_BODY_BYTES / 1024)}KB`
+    });
+  }
 
   if (!process.env.OPENAI_API_KEY) {
 

@@ -59,6 +59,16 @@ async function checkLimit(key, { limit, windowMs }) {
 }
 
 // Vercel imposta x-forwarded-for con l'IP reale del client come primo valore.
+//
+// Slice 1 (protezione costi) — vedi studiopro-slice-1-costi.md, punto 2.
+// VERIFICATO EMPIRICAMENTE (non solo ipotizzato) il 2026-07-12 contro l'app
+// deployata (mentorestudio.vercel.app/api/v1/ai/ask): 6 richieste con header
+// x-forwarded-for contraffatto (valori singoli diversi, poi un valore
+// multiplo ripetuto) hanno decrementato in modo continuo lo stesso contatore
+// X-RateLimit-Remaining, segno che Vercel sovrascrive x-forwarded-for con
+// l'IP reale del client prima che arrivi qui — il valore fornito dal client
+// non ha effetto. Conclusione: il codice sottostante è già sicuro così com'è;
+// nessuna modifica necessaria per questo punto.
 function getClientIp(req) {
   const forwarded = req.headers['x-forwarded-for'];
   if (forwarded) {

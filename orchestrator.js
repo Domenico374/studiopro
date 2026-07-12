@@ -59,6 +59,59 @@ const SELECTION_RULES = [
 
 const DEFAULT_AGENTS = ['tutorAgent'];
 
+// Slice 1 (protezione costi) — vedi studiopro-slice-1-costi.md, punto 1.
+//
+// Il rate limiter conta QUANTE richieste arrivano, non QUANTO sono grandi:
+// senza questi limiti un chiamante entro le 40/ora potrebbe comunque gonfiare
+// il costo di ogni singola richiesta con campi enormi. Il troncamento avviene
+// qui (non nel frontend) perché un chiamante diretto (curl) bypassa
+// completamente il frontend e qualunque limite lì imposto.
+//
+// Soglie generose rispetto all'uso reale (per non rompere casi legittimi) ma
+// finite (per limitare il danno):
+// - fullText: 8000 char, stesso limite già usato da Summary Agent per il
+//   testo del documento intero — congruente con la fonte più "grande" prevista.
+// - summary_short: l'AI genera 2-3 righe (~150-300 char); 1000 dà ampio margine.
+// - summary_long: l'AI genera 5-7 righe (~500-1500 char); 3000 dà ampio margine.
+// - highlights: l'AI ne genera esattamente 5; 20 voci da 500 char ciascuna è
+//   già molto oltre qualunque uso legittimo.
+// - subject/name: stringhe brevi provenienti da un <select> o da un nome file.
+// - card.q/card.a, glossaryItem.term/definition, highlight (singolo punto
+//   saliente): contenuti pensati per essere brevi (una domanda, un termine,
+//   una definizione); 500-1000 char coprono qualunque caso reale.
+const FIELD_LIMITS = {
+  subject: 100,
+  name: 200,
+  fullText: 8000,
+  summary_short: 1000,
+  summary_long: 3000,
+  highlightItem: 500,
+  qOrA: 1000,
+  glossaryField: 500
+};
+const MAX_HIGHLIGHTS = 20;
+
+function truncate(value, maxLen) {
+  if (typeof value !== 'string') return value;
+  return value.length > maxLen ? value.slice(0, maxLen) : value;
+}
+
+function sanitizeCard(card) {
+  if (!card || typeof card !== 'object') return card;
+  return {
+    q: truncate(card.q, FIELD_LIMITS.qOrA),
+    a: truncate(card.a, FIELD_LIMITS.qOrA)
+  };
+}
+
+function sanitizeGlossaryItem(item) {
+  if (!item || typeof item !== 'object') return item;
+  return {
+    term: truncate(item.term, FIELD_LIMITS.glossaryField),
+    definition: truncate(item.definition, FIELD_LIMITS.glossaryField)
+  };
+}
+
 function selectAgents(message) {
   for (const rule of SELECTION_RULES) {
     if (rule.pattern.test(message)) {
@@ -99,14 +152,18 @@ function resolveAgents(message, agentOverride) {
 // (there is no document/database backend yet, so context is whatever the
 // caller supplies, filled in with safe defaults).
 function buildStudyLikeContext(context) {
+  const highlights = Array.isArray(context.highlights) ? context.highlights : [];
+
   return {
-    subject: context.subject || '',
-    name: context.name || context.document_id || 'Documento',
-    fullText: context.fullText || context.text || '',
+    subject: truncate(context.subject || '', FIELD_LIMITS.subject),
+    name: truncate(context.name || context.document_id || 'Documento', FIELD_LIMITS.name),
+    fullText: truncate(context.fullText || context.text || '', FIELD_LIMITS.fullText),
     data: {
-      summary_short: context.summary_short || '',
-      summary_long: context.summary_long || context.summary_short || '',
-      highlights: context.highlights || []
+      summary_short: truncate(context.summary_short || '', FIELD_LIMITS.summary_short),
+      summary_long: truncate(context.summary_long || context.summary_short || '', FIELD_LIMITS.summary_long),
+      highlights: highlights
+        .slice(0, MAX_HIGHLIGHTS)
+        .map(h => truncate(typeof h === 'string' ? h : String(h), FIELD_LIMITS.highlightItem))
     }
   };
 }
@@ -130,16 +187,20 @@ function runTutorAgent(task, study, message, context, llmClient) {
       }, llmClient);
 
     case 'explainHighlight':
-      return agents.tutorAgent.run({ task, study, highlight: context.highlight }, llmClient);
+      return agents.tutorAgent.run({
+        task,
+        study,
+        highlight: truncate(context.highlight || '', FIELD_LIMITS.highlightItem)
+      }, llmClient);
 
     case 'glossaryExample':
-      return agents.tutorAgent.run({ task, study, glossaryItem: context.glossaryItem }, llmClient);
+      return agents.tutorAgent.run({ task, study, glossaryItem: sanitizeGlossaryItem(context.glossaryItem) }, llmClient);
 
     case 'flashcardExplain':
-      return agents.tutorAgent.run({ task, card: context.card }, llmClient);
+      return agents.tutorAgent.run({ task, card: sanitizeCard(context.card) }, llmClient);
 
     case 'flashcardExample':
-      return agents.tutorAgent.run({ task, study, card: context.card }, llmClient);
+      return agents.tutorAgent.run({ task, study, card: sanitizeCard(context.card) }, llmClient);
 
     case 'conceptAnalysis':
       return agents.tutorAgent.run({ task, study }, llmClient);
@@ -155,7 +216,7 @@ function runQuizAgent(task, study, context, llmClient) {
       return agents.quizAgent.run({ task, study }, llmClient);
 
     case 'flashcardEssay':
-      return agents.quizAgent.run({ task, card: context.card }, llmClient);
+      return agents.quizAgent.run({ task, card: sanitizeCard(context.card) }, llmClient);
 
     default:
       throw new Error(`Orchestrator: task sconosciuto "${task}" per Quiz Agent.`);
