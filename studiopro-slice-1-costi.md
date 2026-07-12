@@ -34,6 +34,16 @@ ATTENZIONE: questa è un'IPOTESI, non una certezza — l'audit stesso lo dichiar
 Oggi ci si affida solo al limite di piattaforma Vercel (4.5MB), un payload enorme da accettare prima di qualunque controllo applicativo.
 - Rifiutare esplicitamente body oltre una soglia ragionevole (es. 100KB) con un errore chiaro, PRIMA di processare.
 
+**Implementato (requestGuards.js) — natura esatta della protezione, verificata empiricamente:**
+Il limite di 100KB protegge dall'elaborazione applicativa e dalle chiamate OpenAI (il controllo scatta PRIMA del check OPENAI_API_KEY, del rate limiter e di qualunque chiamata a orchestrator/agenti — cioè prima di tutto ciò che costa credito reale). **NON è un filtro pre-parsing del body**: il controllo legge `req.body`, che Vercel ha già ricevuto per intero dal socket e già fatto `JSON.parse` prima ancora di invocare l'handler. Un payload di 150KB viene quindi comunque ricevuto e parsato per intero (verificato con un test HTTP reale: 150.044 byte letti dal socket prima della risposta 413) — il limite non riduce il consumo di banda o di CPU di parsing lato piattaforma per payload tra 100KB e il tetto Vercel di 4.5MB, riduce solo il rischio di costo OpenAI/elaborazione a valle. Non va quindi interpretato come una difesa contro il consumo di banda o il parsing del payload.
+
+**Possibile evoluzione futura (fuori scope per questa slice):**
+Per ottenere un vero filtro pre-parsing servirebbe:
+- disabilitare il body parser automatico di Vercel (`export const config = { api: { bodyParser: false } }`);
+- leggere manualmente lo stream della richiesta (`req.on('data', ...)`);
+- interrompere la connessione non appena la soglia dei 100KB viene superata, prima di aver ricevuto/parsato il resto del body.
+Non implementato qui: è una riscrittura più rischiosa (gestione manuale dello stream), coerente con "Cosa NON fare" — nessuna riscrittura rischiosa in questa slice.
+
 ## Cosa NON fare
 - Non toccare localStorage, timeout summaryAgent, QR code, Stats/Settings, codice morto (slice successive).
 - NON rifattorizzare public/index.html: il file unico è una scelta di progetto, non un difetto.
