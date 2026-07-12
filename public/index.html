@@ -257,6 +257,18 @@
         .flashcard-inner { position: relative; width: 100%; min-height: 350px; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard-inner.flipped { transform: rotateY(180deg); }
         .flashcard-front, .flashcard-back { position: absolute; width: 100%; min-height: 350px; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; border-radius: 10px; }
+        /* Bug pulsanti flashcard: backface-visibility nasconde la faccia
+           "dietro" solo alla vista, non in modo affidabile agli hit-test dei
+           click durante/subito dopo la transizione. Un click sui pulsanti
+           (sul retro) può quindi essere intercettato dalla faccia anteriore
+           e risalire fino a .flashcard, che rigira la card invece di far
+           partire la generazione. pointer-events toggla in modo istantaneo
+           (non animato) insieme alla classe .flipped, quindi la faccia non
+           attiva non riceve mai click, indipendentemente dal timing della
+           transizione CSS. */
+        .flashcard-back { pointer-events: none; }
+        .flashcard-inner.flipped .flashcard-front { pointer-events: none; }
+        .flashcard-inner.flipped .flashcard-back { pointer-events: auto; }
         .flashcard-front { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
         .flashcard-back { background: linear-gradient(135deg, var(--accent), #f5576c); color: white; transform: rotateY(180deg); }
         .flashcard-question { font-size: 1.3em; font-weight: bold; margin-bottom: 15px; }
@@ -6087,15 +6099,34 @@ Contenuto: {content}`
             alert('✅ Nota salvata!');
         }
 
-        async function generateExplanation(cardId, event) {
+        // Bug pulsanti flashcard: prima di questo fix, se mancava lo studio o
+        // la card corrente (es. filtro cambiato tra un render e l'altro),
+        // generateExplanation/generateExample/generateEssay fallivano PRIMA
+        // del blocco try/catch (nella parte sincrona, fuori da qualunque
+        // gestione errori) con un'eccezione mai gestita: dal punto di vista
+        // dell'utente il pulsante non faceva letteralmente nulla, senza
+        // nessun messaggio. Questa guardia centralizza il controllo e mostra
+        // un avviso chiaro invece di fallire in silenzio.
+        function getCurrentFlashcardOrWarn() {
             const study = getCurrentStudy();
-            const filtered = filterFlashcardsByMode(study.data.flashcards);
+            const filtered = (study && study.data.flashcards) ? filterFlashcardsByMode(study.data.flashcards) : [];
             const currentCard = filtered[appState.currentFlashcardFiltered];
-            
+            if (!study || !currentCard || !currentCard.q) {
+                alert('⚠️ Carica prima un documento: nessuna flashcard disponibile.');
+                return null;
+            }
+            return { study, currentCard };
+        }
+
+        async function generateExplanation(cardId, event) {
+            const ctx = getCurrentFlashcardOrWarn();
+            if (!ctx) return;
+            const { currentCard } = ctx;
+
             const btn = event.target;
             btn.disabled = true;
             btn.textContent = '⏳ Generazione...';
-            
+
             try {
                 const response = await fetch('/api/v1/ai/ask', {
                     method: 'POST',
@@ -6130,14 +6161,14 @@ Contenuto: {content}`
         }
         
         async function generateExample(cardId, event) {
-            const study = getCurrentStudy();
-            const filtered = filterFlashcardsByMode(study.data.flashcards);
-            const currentCard = filtered[appState.currentFlashcardFiltered];
-            
+            const ctx = getCurrentFlashcardOrWarn();
+            if (!ctx) return;
+            const { study, currentCard } = ctx;
+
             const btn = event.target;
             btn.disabled = true;
             btn.textContent = '⏳ Generazione...';
-            
+
             try {
                 const response = await fetch('/api/v1/ai/ask', {
                     method: 'POST',
@@ -6175,14 +6206,14 @@ Contenuto: {content}`
         }
         
         async function generateEssay(cardId, event) {
-            const study = getCurrentStudy();
-            const filtered = filterFlashcardsByMode(study.data.flashcards);
-            const currentCard = filtered[appState.currentFlashcardFiltered];
-            
+            const ctx = getCurrentFlashcardOrWarn();
+            if (!ctx) return;
+            const { currentCard } = ctx;
+
             const btn = event.target;
             btn.disabled = true;
             btn.textContent = '⏳ Generazione...';
-            
+
             try {
                 const response = await fetch('/api/v1/ai/ask', {
                     method: 'POST',
