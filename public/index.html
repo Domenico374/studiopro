@@ -2622,51 +2622,9 @@ body.dark-mode .export-option:hover {
     font-size: 16px;
 }
 
-/* Share Modal */
-.share-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    backdrop-filter: blur(4px);
-}
-
-.share-modal.show {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-.share-modal-content {
-    background: white;
-    border-radius: 16px;
-    padding: 32px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-body.dark-mode .share-modal-content {
-    background: #1a1a1a;
-}
-
-@keyframes scaleIn {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
+/* .share-modal-header/.share-modal-title/.share-modal-close restano: sono
+   condivise con il modal Keyboard Shortcuts (showKeyboardShortcuts()), non
+   sono esclusive del modal Condividi rimosso. */
 .share-modal-header {
     display: flex;
     justify-content: space-between;
@@ -2698,47 +2656,6 @@ body.dark-mode .share-modal-title {
     color: var(--primary);
 }
 
-.share-link-box {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-}
-
-.share-link-input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    font-size: 14px;
-    background: #f8fafc;
-}
-
-body.dark-mode .share-link-input {
-    background: #0f0f0f;
-    border-color: #2a2a2a;
-    color: white;
-}
-
-.share-copy-btn {
-    padding: 12px 20px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s ease;
-}
-
-.share-copy-btn:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
-}
-
-.share-copy-btn.copied {
-    background: #059669;
-}
-
 /* Print-Friendly Styles */
 @media print {
     .header,
@@ -2766,24 +2683,6 @@ body.dark-mode .share-link-input {
         border: 1px solid #ddd !important;
         page-break-inside: avoid;
     }
-}
-
-/* QR Code Display */
-.qr-code-container {
-    text-align: center;
-    padding: 20px;
-    background: #f8fafc;
-    border-radius: 12px;
-    margin-top: 20px;
-}
-
-body.dark-mode .qr-code-container {
-    background: #0f0f0f;
-}
-
-.qr-code-image {
-    max-width: 200px;
-    margin: 0 auto;
 }
 
 /* === ENHANCEMENT 8: AI FEATURES ENHANCED === */
@@ -4447,7 +4346,6 @@ body.dark-mode .mindmap-legend {
                                     ${ctaText}
                                 </button>
                                 <button class="btn btn-export" onclick="exportStudyPDF('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">📥</button>
-                                <button class="btn btn-export" onclick="showShareModal('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">📤</button>
                                 <button class="btn btn-delete" onclick="deleteStudy('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">🗑️</button>
                             </div>
                         </div>
@@ -7051,14 +6949,6 @@ function initMobileNav() {
                     <span class="bottom-nav-icon">📚</span>
                     <span class="bottom-nav-label">Libreria</span>
                 </a>
-                <a href="#" class="bottom-nav-item" onclick="return false;">
-                    <span class="bottom-nav-icon">📊</span>
-                    <span class="bottom-nav-label">Stats</span>
-                </a>
-                <a href="#" class="bottom-nav-item" onclick="return false;">
-                    <span class="bottom-nav-icon">⚙️</span>
-                    <span class="bottom-nav-label">Settings</span>
-                </a>
             </div>
         `;
         document.body.appendChild(nav);
@@ -7216,10 +7106,6 @@ function showExportMenu(studyId, event) {
             <span class="export-option-icon">📋</span>
             <span>Copy for Notion</span>
         </div>
-        <div class="export-option" onclick="showShareModal('${studyId}')">
-            <span class="export-option-icon">🔗</span>
-            <span>Share Link</span>
-        </div>
         <div class="export-option" onclick="window.print()">
             <span class="export-option-icon">🖨️</span>
             <span>Print</span>
@@ -7269,77 +7155,6 @@ function exportAs(studyId, format) {
         navigator.clipboard.writeText(content);
         alert('✅ Copiato negli appunti! Incolla in Notion.');
     }
-}
-
-// FIXED (Sprint 3 tech-debt cleanup): btoa() only accepts Latin-1 (single-byte)
-// characters and throws InvalidCharacterError on anything outside that range
-// (emoji, most non-Latin scripts) — study.name or summary_short can easily
-// contain both. Encode via UTF-8 bytes first so any Unicode string is safe.
-function utf8ToBase64(str) {
-    const bytes = new TextEncoder().encode(str);
-    let binary = '';
-    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    return btoa(binary);
-}
-
-// event è opzionale: l'unico altro chiamante (il menu di showExportMenu, mai
-// raggiungibile dall'interfaccia) non lo passa. Quando presente — come dal
-// nuovo pulsante nella card di Libreria — evita che il click propaghi alla
-// card e apra selectStudy(), come già fanno exportStudyPDF()/deleteStudy().
-function showShareModal(studyId, event) {
-    if (event) event.stopPropagation();
-
-    const study = appState.studies[studyId];
-    if (!study) return;
-
-    const modal = document.createElement('div');
-    modal.className = 'share-modal show';
-
-    // Generate shareable link (base64 encoded study data, UTF-8-safe)
-    const shareData = utf8ToBase64(JSON.stringify({
-        name: study.name,
-        subject: study.subject,
-        summary: study.data.summary_short
-    }));
-    // encodeURIComponent è necessario perché il base64 può contenere '+', '/' e
-    // '=', tutti caratteri con significato speciale in una query string (es.
-    // '+' verrebbe letto come spazio da URLSearchParams), corrompendo il dato.
-    const shareLink = `${window.location.origin}${window.location.pathname}?share=${encodeURIComponent(shareData)}`;
-
-    modal.innerHTML = `
-        <div class="share-modal-content">
-            <div class="share-modal-header">
-                <h3 class="share-modal-title">Condividi Lezione</h3>
-                <button class="share-modal-close" onclick="this.closest('.share-modal').remove()">×</button>
-            </div>
-            <div class="share-link-box">
-                <input type="text" class="share-link-input" value="${escapeAttr(shareLink)}" readonly>
-                <button class="share-copy-btn" onclick="copyShareLink(this)">Copia</button>
-            </div>
-            <div class="qr-code-container">
-                <p style="margin-bottom: 12px; font-size: 13px; color: #71717a;">Scansiona con smartphone</p>
-                <div style="background: white; padding: 16px; display: inline-block; border-radius: 8px;">
-                    <div style="width: 150px; height: 150px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 40px;">📱</div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-}
-
-function copyShareLink(button) {
-    const input = button.previousElementSibling;
-    input.select();
-    document.execCommand('copy');
-    
-    button.textContent = '✅ Copiato!';
-    button.classList.add('copied');
-    
-    setTimeout(() => {
-        button.textContent = 'Copia';
-        button.classList.remove('copied');
-    }, 2000);
 }
 
 // 9. ACCESSIBILITY
@@ -7401,7 +7216,7 @@ function showKeyboardShortcuts() {
 }
 
 function closeAllModals() {
-    document.querySelectorAll('.share-modal, .shortcuts-modal, .dark-mode-options, .export-menu').forEach(el => el.remove());
+    document.querySelectorAll('.shortcuts-modal, .dark-mode-options, .export-menu').forEach(el => el.remove());
 }
 
 // 10. PERFORMANCE OPTIMIZATION
