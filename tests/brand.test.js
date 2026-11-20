@@ -36,7 +36,8 @@ test('titolo, anteprima di condivisione e intestazione usano il nuovo nome', () 
   assert.match(app, new RegExp(`<title>${NAME}`));
   assert.match(app, new RegExp(`og:site_name" content="${NAME}"`));
   assert.match(app, new RegExp(`og:title" content="${NAME}`));
-  assert.match(app, new RegExp(`class="logo-title">${NAME}<`));
+  // il titolo è in due colori (come nel logo): "Mentore" + <span>Studio</span>
+  assert.match(app, /class="logo-title">Mentore<span class="logo-gold">Studio<\/span><\/div>/);
   assert.match(app, /class="logo-initials">M</, 'il monogramma deve essere la M');
   assert.match(read('public/privacy.html'), new RegExp(`<title>Informativa sulla privacy — ${NAME}`));
 });

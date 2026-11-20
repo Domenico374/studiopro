@@ -2096,43 +2096,15 @@ body.dark-mode .bottom-nav-item:active {
     background: #1a1a1a;
 }
 
-.bottom-nav-icon {
-    font-size: 22px;
+.bottom-nav-svg {
+    width: 24px;
+    height: 24px;
+    display: block;
 }
 
 .bottom-nav-label {
     font-size: 11px;
     font-weight: 500;
-}
-
-/* FAB - Floating Action Button */
-.fab {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 24px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
-}
-
-.fab:active {
-    transform: scale(0.9);
-}
-
-.fab:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
 /* Swipe Indicators */
@@ -2166,11 +2138,10 @@ body.dark-mode .bottom-nav-item:active {
 
 /* Touch-Optimized Spacing */
 @media (max-width: 768px) {
-    .bottom-nav,
-    .fab {
+    .bottom-nav {
         display: flex;
     }
-    
+
     body {
         padding-bottom: 80px;
     }
@@ -2265,11 +2236,7 @@ body.dark-mode .bottom-nav-item:active {
     .bottom-nav {
         display: none;
     }
-    
-    .fab {
-        bottom: 20px;
-    }
-    
+
     body {
         padding-bottom: 0;
     }
@@ -2449,7 +2416,6 @@ body.dark-mode .share-modal-title {
     .btn,
     .study-actions,
     .bottom-nav,
-    .fab,
     .pro-badge {
         display: none !important;
     }
@@ -3341,6 +3307,188 @@ body.dark-mode .mindmap-legend {
     }
 }
 
+/* =====================================================================
+   RIFINITURA DEL DESIGN (novembre 2026)
+   Messo IN FONDO di proposito: questo foglio contiene regole duplicate e in
+   conflitto (la scheda della lezione è definita tre volte, il pulsante
+   "indietro" due, con !important a rimbalzo). Invece di riscriverle tutte,
+   le regole qui sotto hanno la precedenza e sono raccolte in un posto solo.
+   Linea visiva: blu notte + oro come unico accento, titoli con le grazie
+   (come nel logo e nell'immagine di anteprima), pulsanti con tre livelli.
+   ===================================================================== */
+:root {
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --gold: #94600a;            /* oro scuro, leggibile su bianco (contrasto > 5:1) */
+    --gold-soft: #f5b84a;       /* oro chiaro, per lo sfondo scuro */
+    --line: #e2e8f0;            /* bordi sottili */
+    --line-dark: #3f3f5a;
+    --text-soft: #475569;       /* testo secondario (contrasto > 7:1 su bianco) */
+}
+
+/* ---- Intestazione e logo ---- */
+.header { gap: 12px; }
+.logo-container, .logo-text { min-width: 0; }
+.logo-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+.logo-title .logo-gold { color: var(--gold); }
+body.dark-mode .logo-title .logo-gold { color: var(--gold-soft); }
+.logo-tagline { font-size: 11px; color: var(--text-soft); letter-spacing: 0.4px; }
+body.dark-mode .logo-tagline { color: #cbd5e1; }
+.header-controls { flex-shrink: 0; align-items: center; }
+/* Badge Beta: discreto, a filetto, non un pulsante colorato */
+.pro-badge {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    box-shadow: none;
+    padding: 5px 10px;
+}
+.pro-badge:hover { transform: none; box-shadow: none; }
+body.dark-mode .pro-badge { background: transparent; color: var(--gold-soft); border-color: var(--gold-soft); box-shadow: none; }
+
+/* ---- Titoli con le grazie ---- */
+.content-area h2,
+.category-main-title,
+#uploadSection h2,
+.study-title { font-family: var(--font-serif) !important; }
+
+/* ---- Pulsanti: tre livelli ----
+   1) principale: pieno blu notte (.btn, .study-cta)
+   2) secondario: a filetto (.back-btn, .icon-btn)
+   3) informativo: nessun aspetto da pulsante (.format-badge) */
+.back-btn {
+    background: transparent !important;
+    color: var(--primary) !important;
+    border: 1px solid var(--line) !important;
+}
+.back-btn:hover { background: #f1f5f9 !important; transform: none !important; }
+/* "← Indietro" ha la classe hidden, ma una regola con !important la annullava: compariva sempre */
+.back-btn.hidden { display: none !important; }
+body.dark-mode .back-btn { color: #e2e8f0 !important; border-color: var(--line-dark) !important; }
+body.dark-mode .back-btn:hover { background: #2a2a3e !important; }
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.icon-btn:hover { background: #f1f5f9; }
+.icon-btn-danger:hover { background: #fee2e2; border-color: #fca5a5; }
+body.dark-mode .icon-btn { border-color: var(--line-dark); }
+body.dark-mode .icon-btn:hover { background: #2a2a3e; }
+body.dark-mode .icon-btn-danger:hover { background: #4a1f24; border-color: #b91c1c; }
+
+/* I formati accettati sono un'informazione, non pulsanti */
+.format-badge {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid var(--line);
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 6px 12px;
+}
+body.dark-mode .format-badge { background: #1a1a2e; color: #cbd5e1; border-color: var(--line-dark); }
+
+/* "Carica File" sembrava attivo anche senza file scelti */
+#uploadBtn:disabled:not(.loading) {
+    background: #cbd5e1 !important;
+    color: #64748b !important;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+body.dark-mode #uploadBtn:disabled:not(.loading) { background: #2f2f48 !important; color: #8b8ba7 !important; }
+
+/* ---- Scheda della lezione in Libreria ---- */
+body.dark-mode .study-item { background: #1a1a2e !important; border-color: #2f2f48 !important; }
+body.dark-mode .study-item:hover { border-color: var(--accent) !important; }
+.study-left { padding-right: 0; min-width: 0; }
+.study-meta-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.study-type {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: var(--text-soft);
+}
+body.dark-mode .study-type { background: #2a2a3e; color: #cbd5e1; }
+/* lo stato (Nuovo / In corso / Completato) ora sta nel flusso, non sopra ai pulsanti */
+.study-status { position: static !important; }
+.study-title {
+    display: block;
+    margin: 8px 0 2px;
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--primary);
+}
+body.dark-mode .study-title { color: #f1f5f9; }
+.study-actions { flex-shrink: 0; }
+
+/* ---- Testi grigi scritti a mano nel codice: in modalità scura restavano
+        #666/#888 su sfondo scuro (contrasto ~2,4:1) ---- */
+body.dark-mode [style*="color: #666"],
+body.dark-mode [style*="color:#666"] { color: #b4b4cc !important; }
+body.dark-mode [style*="color: #888"],
+body.dark-mode [style*="color: #999"],
+body.dark-mode [style*="color: #71717a"],
+body.dark-mode [style*="color: #a1a1aa"] { color: #a8a8c4 !important; }
+body.dark-mode [style*="color: #333"] { color: #e5e5ef !important; }
+
+/* ---- Telefono ---- */
+@media (max-width: 480px) {
+    body { padding: 12px 12px 88px; }
+    .header { padding: 12px 14px; }
+    .logo-container { gap: 10px; }
+    .logo-badge, .logo-hexagon { width: 40px; height: 40px; }
+    .logo-title { font-size: 20px; }
+    .pro-badge { padding: 4px 8px; font-size: 10px; letter-spacing: 0.3px; }
+    .pro-badge-icon { display: none; }
+    .toggle-btn { padding: 9px 12px; }
+    .header-controls { gap: 6px; }
+}
+@media (max-width: 600px) {
+    /* scheda in colonna: titolo a tutta larghezza, azioni in una riga sotto */
+    .study-item { flex-direction: column !important; align-items: stretch !important; gap: 12px; }
+    .study-actions { flex-direction: row !important; width: 100%; }
+    .study-cta { flex: 1; width: auto; white-space: nowrap; }
+}
+
+/* ---- Pulsanti e modalità scura ---- */
+button, input, select, textarea { font-family: inherit; }
+/* Filtri (Tutte/Difficili/..., Corrette/Sbagliate/...): il codice dà la classe
+   "active" a quello scelto, ma nessuna regola la usava e non si distingueva. */
+.btn.active { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.45); }
+/* Il blu notte dei pulsanti si confondeva con lo sfondo scuro: in modalità
+   scura i pulsanti principali diventano blu. */
+body.dark-mode .btn:not(.btn-delete):not(.btn-export):not(:disabled):not(.loading),
+body.dark-mode .study-cta { background: #2f5fc4 !important; }
+body.dark-mode .btn:not(.btn-delete):not(.btn-export):not(:disabled):not(.loading):hover,
+body.dark-mode .study-cta:hover { background: #3b72e0 !important; }
+/* pista della barra di avanzamento sotto la scheda: era sempre chiara */
+body.dark-mode .study-item::before {
+    background: linear-gradient(90deg, #3b82f6 0%, #3b82f6 var(--progress, 0%), #2f2f48 var(--progress, 0%), #2f2f48 100%);
+}
+
+/* ---- Barra in basso (telefono): due voci con etichetta ---- */
+.bottom-nav-item { color: var(--text-soft); }
+body.dark-mode .bottom-nav-item { color: #cbd5e1; }
+.bottom-nav-items { flex: 1; justify-content: center; gap: 28px; }
+
 </style>
 </head>
 <body>
@@ -3353,7 +3501,7 @@ body.dark-mode .mindmap-legend {
                     </div>
                 </div>
                 <div class="logo-text">
-                    <div class="logo-title">MentoreStudio</div>
+                    <div class="logo-title">Mentore<span class="logo-gold">Studio</span></div>
                     <div class="logo-tagline">Il tuo mentore per lo studio</div>
                 </div>
             </div>
@@ -3588,10 +3736,25 @@ body.dark-mode .mindmap-legend {
 
         if (appState.darkMode) document.body.classList.add('dark-mode');
 
+        // Il tasto 🌙 è una scelta ESPLICITA dell'utente e deve vincere sul
+        // sistema automatico (scuro solo dalle 20 alle 8). Prima salvava la
+        // scelta in una chiave separata, ma initDarkMode() e il controllo ogni
+        // 60 secondi la sovrascrivevano in base all'orologio: attivata di
+        // giorno, la modalità scura tornava chiara entro un minuto. Ora la
+        // scelta imposta anche darkModeSettings.mode, che è ciò che il
+        // sistema automatico rispetta.
         function toggleDarkMode() {
-            appState.darkMode = !appState.darkMode;
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', appState.darkMode);
+            const goingDark = !document.body.classList.contains('dark-mode');
+            appState.darkMode = goingDark;
+            darkModeSettings.mode = goingDark ? 'dark' : 'light';
+            applyDarkMode();
+            try {
+                localStorage.setItem('darkMode', goingDark);
+                localStorage.setItem('darkModeSettings', JSON.stringify(darkModeSettings));
+            } catch (e) {
+                // sono solo preferenze: un salvataggio fallito non deve rompere il tasto
+                console.error('localStorage: impossibile salvare la modalità scura.', e);
+            }
         }
 
         // ========== GESTIONE UPLOAD MIGLIORATA ==========
@@ -4171,11 +4334,20 @@ body.dark-mode .mindmap-legend {
             return saveToStorage('chatHistory', appState.chatHistory);
         }
 
+        // Evidenzia nel menu la sezione che si sta guardando davvero. Prima
+        // l'evidenziazione cambiava solo se la funzione riceveva l'evento del
+        // click: aprendo una sezione da una categoria (o tornando alla
+        // libreria) restava acceso il primo tasto, "Libreria Studi".
+        function setActiveTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const btn = tab === 'library'
+                ? document.querySelector('.tab-btn')
+                : document.getElementById(tabIdMap[tab]);
+            if (btn) btn.classList.add('active');
+        }
+
         function switchTab(tab, e) {
-            if (e) {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-            }
+            setActiveTab(tab);
             switch(tab) {
                 case 'library': renderLibrary(); break;
                 case 'summary': renderSummary(); break;
@@ -4241,10 +4413,12 @@ body.dark-mode .mindmap-legend {
                              style="--progress: ${progress}%"
                              data-search="${escapeAttr(`${study.name.toLowerCase()} ${(study.data.highlights || []).join(' ').toLowerCase()} ${(study.data.glossary || []).map(g => g.term.toLowerCase()).join(' ')}`)}">
                             
-                            <span class="study-status ${status}">${statusText}</span>
-                            
                             <div class="study-left">
-                                <strong>${study.fileType || 'PDF'} ${escapeHTML(study.name)}</strong>
+                                <div class="study-meta-row">
+                                    <span class="study-type">${study.fileType || '📄 PDF'}</span>
+                                    <span class="study-status ${status}">${statusText}</span>
+                                </div>
+                                <strong class="study-title">${escapeHTML(study.name)}</strong>
                                 <div class="study-info">
                                     <span>${study.date}</span>
                                     <span>•</span>
@@ -4261,8 +4435,8 @@ body.dark-mode .mindmap-legend {
                                 <button class="study-cta" onclick="event.stopPropagation(); selectStudy('${study.id}')">
                                     ${ctaText}
                                 </button>
-                                <button class="btn btn-export" onclick="exportStudyPDF('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">📥</button>
-                                <button class="btn btn-delete" onclick="deleteStudy('${study.id}', event)" style="padding: 8px 12px; font-size: 13px;">🗑️</button>
+                                <button class="icon-btn" onclick="exportStudyPDF('${study.id}', event)" title="Scarica la lezione in PDF" aria-label="Scarica la lezione in PDF">📥</button>
+                                <button class="icon-btn icon-btn-danger" onclick="deleteStudy('${study.id}', event)" title="Elimina la lezione" aria-label="Elimina la lezione">🗑️</button>
                             </div>
                         </div>
                     `;
@@ -6789,15 +6963,33 @@ function renderStats() {
 }
 
 // 4. MOBILE BOTTOM NAV
+// Due voci chiare e con etichetta: Libreria e Nuovo documento. Sostituisce la
+// vecchia barra con una sola voce più un pulsante "+" fluttuante senza
+// etichetta, che copriva il piè di pagina e ripeteva "Carica altri documenti".
+function goToLibrary() {
+    // Senza lezioni non c'è nulla da mostrare: si torna al caricamento.
+    if (Object.keys(appState.studies).length === 0) {
+        resetApp();
+        return;
+    }
+    showMainApp();
+    showLibrary();
+}
+
 function initMobileNav() {
     if (window.innerWidth <= 768 && !document.querySelector('.bottom-nav')) {
-        const nav = document.createElement('div');
+        const nav = document.createElement('nav');
         nav.className = 'bottom-nav';
+        nav.setAttribute('aria-label', 'Navigazione principale');
         nav.innerHTML = `
             <div class="bottom-nav-items">
-                <a href="#" class="bottom-nav-item active" onclick="switchTab('library'); return false;">
-                    <span class="bottom-nav-icon">📚</span>
+                <a href="#" class="bottom-nav-item" onclick="goToLibrary(); return false;">
+                    <svg class="bottom-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5v-15zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5v-15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
                     <span class="bottom-nav-label">Libreria</span>
+                </a>
+                <a href="#" class="bottom-nav-item" onclick="resetApp(); return false;">
+                    <svg class="bottom-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <span class="bottom-nav-label">Nuovo</span>
                 </a>
             </div>
         `;
@@ -6805,21 +6997,9 @@ function initMobileNav() {
     }
 }
 
-// 5. FAB BUTTON
-function initFAB() {
-    if (window.innerWidth <= 768 && !document.querySelector('.fab')) {
-        const fab = document.createElement('button');
-        fab.className = 'fab';
-        fab.innerHTML = '+';
-        fab.onclick = () => resetApp();
-        document.body.appendChild(fab);
-    }
-}
-
 // Initialize on load
 window.addEventListener('DOMContentLoaded', () => {
     initMobileNav();
-    initFAB();
 });
 
 // Update on resize
@@ -6828,7 +7008,6 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
         initMobileNav();
-        initFAB();
     }, 250);
 });
 
@@ -6847,6 +7026,16 @@ let darkModeSettings = {
 function initDarkMode() {
     // Load saved settings
     darkModeSettings = loadFromStorage('darkModeSettings', darkModeSettings);
+
+    // Chi aveva già scelto con il tasto 🌙 (vecchia chiave "darkMode") ha fatto
+    // una scelta esplicita, anche se non è ancora in darkModeSettings: va
+    // rispettata invece di lasciarla all'orologio.
+    if (darkModeSettings.mode === 'auto') {
+        let legacy = null;
+        try { legacy = localStorage.getItem('darkMode'); } catch (e) { /* storage non disponibile */ }
+        if (legacy === 'true') darkModeSettings.mode = 'dark';
+        else if (legacy === 'false') darkModeSettings.mode = 'light';
+    }
 
     // Apply saved mode
     applyDarkMode();
