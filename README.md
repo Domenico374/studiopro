@@ -42,7 +42,7 @@ StudioPro trasforma i tuoi appunti, le dispense e le slide in materiale di studi
 
 ## Come segnalare un problema
 
-Apri una segnalazione su GitHub: **[Nuova segnalazione](https://github.com/Domenico374/studiopro/issues/new/choose)**. Indica il browser che usi e, se possibile, i passaggi per riprodurre il problema.
+Puoi scrivere a **[domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com?subject=StudioPro%20-%20segnalazione%20o%20parere)** (c'è anche un link in fondo a ogni pagina dell'app) oppure, se hai un account GitHub, aprire una **[nuova segnalazione](https://github.com/Domenico374/studiopro/issues/new/choose)**. Indica il browser che usi e, se possibile, i passaggi per riprodurre il problema.
 
 ---
 
@@ -81,6 +81,8 @@ Apri una segnalazione su GitHub: **[Nuova segnalazione](https://github.com/Domen
 - Le lezioni restano **nel tuo browser**: StudioPro non ha un database né salva i tuoi documenti sui propri server.
 - Per generare i contenuti, **il testo dei documenti e dei messaggi viene inviato a OpenAI**. Non caricare materiale riservato o dati personali altrui.
 - StudioPro registra per ogni richiesta all'AI solo dati tecnici (durata, quantità di token, esito), **mai il contenuto** di documenti o conversazioni.
+
+L'informativa completa è nella pagina **[Privacy](https://mentorestudio.vercel.app/privacy.html)** (sorgente: [`public/privacy.html`](public/privacy.html)). Per domande sulla privacy: [domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com).
 
 ---
 

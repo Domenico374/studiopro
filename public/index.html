@@ -610,6 +610,22 @@
         }
         body.dark-mode .storage-warning-toast { background: rgba(249, 168, 37, 0.15); color: #ffca28; }
 
+        /* Piè di pagina: privacy e canale per segnalazioni (beta). */
+        .site-footer {
+            text-align: center;
+            font-size: 0.85em;
+            color: #888;
+            padding: 24px 16px 32px;
+        }
+        .site-footer a { color: inherit; text-decoration: underline; }
+        .site-footer a:hover { color: var(--accent); }
+        body.dark-mode .site-footer { color: #9ca3af; }
+        /* Su telefono la barra di navigazione in basso è fissa: lascio spazio
+           perché non copra i link del piè di pagina. */
+        @media (max-width: 768px) {
+            .site-footer { padding-bottom: 96px; }
+        }
+
         /* ========== NUOVE 4 CARDS - INTEGRAZIONE COMPLETA ========== */
         .category-selection {
             display: none;
@@ -3489,6 +3505,12 @@ body.dark-mode .mindmap-legend {
             <div class="content-area" id="contentArea"></div>
         </div>
     </div>
+
+    <footer class="site-footer">
+        StudioPro · versione beta ·
+        <a href="/privacy.html">Privacy</a> ·
+        <a href="mailto:domenico.cocco@gmail.com?subject=StudioPro%20-%20segnalazione%20o%20parere">Segnala un problema o lascia un parere</a>
+    </footer>
 
     <script>
         // Slice 2 (bug localStorage): letture/scritture centralizzate e
