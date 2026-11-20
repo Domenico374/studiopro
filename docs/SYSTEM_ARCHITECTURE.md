@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## System Architecture
 
@@ -35,7 +35,7 @@
 
 # Architecture Overview
 
-StudioPro sarà progettato come una piattaforma modulare composta da componenti indipendenti che comunicano attraverso API ben definite.
+MentoreStudio sarà progettato come una piattaforma modulare composta da componenti indipendenti che comunicano attraverso API ben definite.
 
 L'architettura seguirà il principio della separazione delle responsabilità, distinguendo chiaramente i diversi livelli del sistema:
 
@@ -68,7 +68,7 @@ Lo strato AI descritto in questo documento — AI Orchestrator + Multi-Agent Sys
 
 # Architecture Principles
 
-L'architettura di StudioPro sarà guidata dai seguenti principi.
+L'architettura di MentoreStudio sarà guidata dai seguenti principi.
 
 - Modular Architecture
 - Separation of Concerns
@@ -87,7 +87,7 @@ L'architettura di StudioPro sarà guidata dai seguenti principi.
 # High-Level Architecture
 
 ```text
-                              StudioPro
+                              MentoreStudio
 
                          ┌─────────────────┐
                          │  Web Interface  │
@@ -172,7 +172,7 @@ Responsabilità:
 
 # AI Layer
 
-L'AI Layer rappresenta il cuore intelligente di StudioPro.
+L'AI Layer rappresenta il cuore intelligente di MentoreStudio.
 
 Responsabilità:
 
@@ -199,7 +199,7 @@ L'AI Layer sarà completamente indipendente dall'interfaccia utente, permettendo
 
 # Multi-Agent System
 
-StudioPro utilizzerà un ecosistema di agenti AI specializzati.
+MentoreStudio utilizzerà un ecosistema di agenti AI specializzati.
 
 Ogni agente sarà responsabile di uno specifico compito e collaborerà con gli altri attraverso l'AI Orchestrator.
 
@@ -356,7 +356,7 @@ User
 
 # Security
 
-StudioPro dovrà garantire:
+MentoreStudio dovrà garantire:
 
 - Authentication
 - Authorization

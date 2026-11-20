@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## Database Design
 
@@ -28,7 +28,7 @@
 
 # Database Overview
 
-Il database di StudioPro rappresenta il centro di gestione di tutte le informazioni della piattaforma.
+Il database di MentoreStudio rappresenta il centro di gestione di tutte le informazioni della piattaforma.
 
 Conserverà i dati relativi agli utenti, ai documenti, alle sessioni di studio, alle conversazioni con gli agenti AI e ai contenuti generati durante il percorso di apprendimento.
 
@@ -53,12 +53,12 @@ Il database seguirà questi principi fondamentali.
 
 # Database Architecture
 
-StudioPro utilizzerà PostgreSQL come database relazionale principale.
+MentoreStudio utilizzerà PostgreSQL come database relazionale principale.
 
 Accanto al database relazionale saranno presenti sistemi dedicati alla gestione dei file e degli embeddings utilizzati dall'intelligenza artificiale.
 
 ```text
-                         StudioPro
+                         MentoreStudio
 
                       PostgreSQL
                            │
@@ -181,7 +181,7 @@ Memorizza i documenti caricati dagli utenti.
 
 ### Purpose
 
-Memorizza le conversazioni tra lo studente e StudioPro.
+Memorizza le conversazioni tra lo studente e MentoreStudio.
 
 ### Future Fields
 
@@ -326,7 +326,7 @@ User
 
 # Storage Strategy
 
-StudioPro utilizzerà differenti sistemi di archiviazione.
+MentoreStudio utilizzerà differenti sistemi di archiviazione.
 
 | Component | Storage |
 |-----------|---------|

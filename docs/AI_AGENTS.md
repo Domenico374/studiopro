@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## AI Agents
 
@@ -29,11 +29,11 @@
 
 # Agents Overview
 
-StudioPro utilizzerà un ecosistema di agenti AI specializzati progettati per collaborare durante il processo di apprendimento.
+MentoreStudio utilizzerà un ecosistema di agenti AI specializzati progettati per collaborare durante il processo di apprendimento.
 
 Ogni agente sarà responsabile di uno specifico dominio funzionale e lavorerà in coordinamento con gli altri attraverso l'AI Orchestrator.
 
-L'utente interagirà esclusivamente con StudioPro. Sarà il sistema a selezionare automaticamente gli agenti più adatti in base alla richiesta, al contesto della conversazione e agli obiettivi di apprendimento.
+L'utente interagirà esclusivamente con MentoreStudio. Sarà il sistema a selezionare automaticamente gli agenti più adatti in base alla richiesta, al contesto della conversazione e agli obiettivi di apprendimento.
 
 ---
 

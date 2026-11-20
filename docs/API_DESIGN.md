@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## API Design
 
@@ -34,7 +34,7 @@
 
 # API Overview
 
-Le API di StudioPro rappresentano il punto di comunicazione tra frontend, backend, database e sistema AI.
+Le API di MentoreStudio rappresentano il punto di comunicazione tra frontend, backend, database e sistema AI.
 
 Ogni funzionalità principale della piattaforma dovrà essere esposta attraverso endpoint chiari, sicuri e coerenti.
 
@@ -44,7 +44,7 @@ Le API permetteranno allo studente di autenticarsi, caricare documenti, avviare 
 
 # Design Principles
 
-Le API di StudioPro seguiranno questi principi:
+Le API di MentoreStudio seguiranno questi principi:
 
 - REST-first Design
 - Clear Endpoint Naming
@@ -155,7 +155,7 @@ Risposta:
   "success": true,
   "data": {
     "status": "ok",
-    "service": "StudioPro API"
+    "service": "MentoreStudio API"
   },
   "error": null
 }
@@ -308,7 +308,7 @@ Body:
 
 # AI Agent APIs
 
-## Ask StudioPro
+## Ask MentoreStudio
 
 ```http
 POST /api/v1/ai/ask
@@ -316,7 +316,7 @@ POST /api/v1/ai/ask
 
 Descrizione:
 
-Endpoint principale per interagire con StudioPro.
+Endpoint principale per interagire con MentoreStudio.
 
 Body:
 

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/studiopro-banner.svg" alt="StudioPro — studia meglio dai tuoi appunti" width="100%">
+  <img src="docs/assets/studiopro-banner.svg" alt="MentoreStudio — studia meglio dai tuoi appunti" width="100%">
 </p>
 
 <p align="center">
@@ -20,11 +20,11 @@
 
 ---
 
-# StudioPro
+# MentoreStudio
 
 > **Aiutare a capire, non solo a memorizzare.**
 
-StudioPro trasforma i tuoi appunti, le dispense e le slide in materiale di studio: carichi un documento e ottieni **riassunto, punti chiave, glossario, timeline, mappa mentale, flashcard e quiz**, più un tutor AI con cui parlare della lezione.
+MentoreStudio trasforma i tuoi appunti, le dispense e le slide in materiale di studio: carichi un documento e ottieni **riassunto, punti chiave, glossario, timeline, mappa mentale, flashcard e quiz**, più un tutor AI con cui parlare della lezione.
 
 È una **versione beta**: funziona e viene usata, ma ha limiti che trovi elencati più sotto. Le segnalazioni di chi la prova sono la cosa più utile in questa fase.
 
@@ -42,7 +42,7 @@ StudioPro trasforma i tuoi appunti, le dispense e le slide in materiale di studi
 
 ## Come segnalare un problema
 
-Puoi scrivere a **[domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com?subject=StudioPro%20-%20segnalazione%20o%20parere)** (c'è anche un link in fondo a ogni pagina dell'app) oppure, se hai un account GitHub, aprire una **[nuova segnalazione](https://github.com/Domenico374/studiopro/issues/new/choose)**. Indica il browser che usi e, se possibile, i passaggi per riprodurre il problema.
+Puoi scrivere a **[domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com?subject=MentoreStudio%20-%20segnalazione%20o%20parere)** (c'è anche un link in fondo a ogni pagina dell'app) oppure, se hai un account GitHub, aprire una **[nuova segnalazione](https://github.com/Domenico374/studiopro/issues/new/choose)**. Indica il browser che usi e, se possibile, i passaggi per riprodurre il problema.
 
 ---
 
@@ -78,9 +78,9 @@ Puoi scrivere a **[domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com?sub
 
 # 🔒 Privacy
 
-- Le lezioni restano **nel tuo browser**: StudioPro non ha un database né salva i tuoi documenti sui propri server.
+- Le lezioni restano **nel tuo browser**: MentoreStudio non ha un database né salva i tuoi documenti sui propri server.
 - Per generare i contenuti, **il testo dei documenti e dei messaggi viene inviato a OpenAI**. Non caricare materiale riservato o dati personali altrui.
-- StudioPro registra per ogni richiesta all'AI solo dati tecnici (durata, quantità di token, esito), **mai il contenuto** di documenti o conversazioni.
+- MentoreStudio registra per ogni richiesta all'AI solo dati tecnici (durata, quantità di token, esito), **mai il contenuto** di documenti o conversazioni.
 
 L'informativa completa è nella pagina **[Privacy](https://mentorestudio.vercel.app/privacy.html)** (sorgente: [`public/privacy.html`](public/privacy.html)). Per domande sulla privacy: [domenico.cocco@gmail.com](mailto:domenico.cocco@gmail.com).
 

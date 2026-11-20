@@ -1,6 +1,6 @@
 # 🤝 Guida per chi contribuisce
 
-Grazie per l'interesse in **StudioPro**! Segnalazioni, idee e correzioni sono benvenute.
+Grazie per l'interesse in **MentoreStudio**! Segnalazioni, idee e correzioni sono benvenute.
 
 ## Prima di tutto: provarla e segnalare
 

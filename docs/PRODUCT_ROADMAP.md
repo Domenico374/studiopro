@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## Product Roadmap
 
@@ -26,7 +26,7 @@
 
 # Product Strategy
 
-StudioPro sarà sviluppato attraverso un processo incrementale, organizzato in fasi ben definite.
+MentoreStudio sarà sviluppato attraverso un processo incrementale, organizzato in fasi ben definite.
 
 Ogni fase introdurrà funzionalità complete, testate e realmente utilizzabili, evitando di accumulare caratteristiche incomplete o poco integrate.
 
@@ -34,7 +34,7 @@ L'obiettivo è costruire una piattaforma solida, modulare e facilmente estendibi
 
 Ogni decisione di sviluppo dovrà essere coerente con la Project Vision e contribuire a rendere lo studio più semplice, efficace e personalizzato.
 
-La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di StudioPro.
+La roadmap rappresenta la guida strategica del progetto e definisce le priorità di sviluppo di MentoreStudio.
 
 > **Nota sulla revisione 2.0**: questa versione riordina le fasi successive alla Foundation sulla base dello stato reale del codice (agenti implementati, debiti tecnici trovati, rischi di sicurezza chiusi e aperti), non su una sequenza astratta. Il razionale di ogni fase — perché viene prima o dopo le altre — è documentato esplicitamente per ciascuna, proprio perché è la parte con più valore di questo documento.
 
@@ -42,7 +42,7 @@ La roadmap rappresenta la guida strategica del progetto e definisce le priorità
 
 # Development Principles
 
-Durante lo sviluppo di StudioPro verranno sempre rispettati questi principi:
+Durante lo sviluppo di MentoreStudio verranno sempre rispettati questi principi:
 
 - Quality over Quantity
 - User First
@@ -55,7 +55,7 @@ Durante lo sviluppo di StudioPro verranno sempre rispettati questi principi:
 
 # Product Evolution
 
-StudioPro crescerà attraverso nove fasi evolutive.
+MentoreStudio crescerà attraverso nove fasi evolutive.
 
 ```text
 Foundation (✅ completata)
@@ -243,7 +243,7 @@ Migrare da `public/index.html` (HTML/CSS/JS vanilla, ~7600 righe) al frontend de
 
 **Objective**
 
-Validare StudioPro con utenti reali.
+Validare MentoreStudio con utenti reali.
 
 **Focus**
 
@@ -261,7 +261,7 @@ Validare StudioPro con utenti reali.
 
 **Objective**
 
-Pubblicare StudioPro 1.0.
+Pubblicare MentoreStudio 1.0.
 
 **Focus**
 
@@ -274,7 +274,7 @@ Pubblicare StudioPro 1.0.
 
 # MVP Definition
 
-La prima versione utilizzabile di StudioPro dovrà consentire allo studente di:
+La prima versione utilizzabile di MentoreStudio dovrà consentire allo studente di:
 
 - autenticarsi
 - creare un workspace di studio
@@ -304,14 +304,14 @@ Il completamento di queste funzionalità (Fasi 1-5 di questa roadmap) rappresent
 
 # Success Criteria
 
-StudioPro sarà considerato pronto per la versione 1.0 quando:
+MentoreStudio sarà considerato pronto per la versione 1.0 quando:
 
 - il sistema sarà stabile e coperto da test automatici
 - almeno cinque agenti AI collaboreranno tra loro (oggi 4 su 5)
 - i dati degli studenti saranno persistiti in modo affidabile, non solo nel browser
 - la piattaforma sarà intuitiva
 - la documentazione sarà completa
-- uno studente potrà completare una sessione di studio dall'inizio alla fine utilizzando StudioPro
+- uno studente potrà completare una sessione di studio dall'inizio alla fine utilizzando MentoreStudio
 - il sistema potrà essere utilizzato senza necessità di documentazione tecnica
 
 ---

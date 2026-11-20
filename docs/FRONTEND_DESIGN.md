@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## Frontend Design
 
@@ -31,11 +31,11 @@
 
 # Frontend Overview
 
-Il frontend di StudioPro rappresenta il punto di contatto principale tra lo studente e la piattaforma.
+Il frontend di MentoreStudio rappresenta il punto di contatto principale tra lo studente e la piattaforma.
 
 L'interfaccia dovrà essere semplice, chiara e focalizzata sullo studio, evitando elementi inutili o complessità non necessarie.
 
-L'obiettivo è permettere allo studente di caricare documenti, interagire con StudioPro, ricevere spiegazioni, generare contenuti di studio e organizzare il proprio percorso in modo naturale.
+L'obiettivo è permettere allo studente di caricare documenti, interagire con MentoreStudio, ricevere spiegazioni, generare contenuti di studio e organizzare il proprio percorso in modo naturale.
 
 ---
 
@@ -56,7 +56,7 @@ Il frontend seguirà questi principi:
 
 # User Experience Goals
 
-StudioPro dovrà offrire un'esperienza:
+MentoreStudio dovrà offrire un'esperienza:
 
 - semplice da capire
 - veloce da usare
@@ -78,7 +78,7 @@ Le schermate principali saranno:
 - Dashboard
 - Study Workspace
 - Document Library
-- Chat with StudioPro
+- Chat with MentoreStudio
 - Generated Content
 - Study Plan
 - User Settings
@@ -88,7 +88,7 @@ Le schermate principali saranno:
 # Navigation Structure
 
 ```text
-StudioPro
+MentoreStudio
    │
    ├── Dashboard
    │
@@ -159,7 +159,7 @@ Responsabilità:
 
 Responsabilità:
 
-- conversazione con StudioPro
+- conversazione con MentoreStudio
 - input messaggio
 - visualizzazione risposte
 - agenti coinvolti
@@ -197,7 +197,7 @@ Struttura prevista:
 Study Workspace
 
 ┌──────────────────────┬──────────────────────┐
-│ Document Viewer      │ StudioPro Chat        │
+│ Document Viewer      │ MentoreStudio Chat        │
 │                      │                      │
 │                      │ Agent Responses       │
 │                      │                      │
@@ -208,12 +208,12 @@ Study Workspace
 
 # Chat Interface
 
-La chat sarà il canale principale di interazione con StudioPro.
+La chat sarà il canale principale di interazione con MentoreStudio.
 
 La chat dovrà mostrare:
 
 - messaggi dello studente
-- risposte di StudioPro
+- risposte di MentoreStudio
 - agenti utilizzati
 - contenuti generati
 - azioni suggerite
@@ -224,7 +224,7 @@ Esempio:
 Student:
 "Spiegami questo capitolo."
 
-StudioPro:
+MentoreStudio:
 "Ho analizzato il documento. Ti spiego il concetto principale..."
 
 Agents used:
@@ -268,7 +268,7 @@ Stati del documento:
 
 # AI Output Views
 
-StudioPro dovrà visualizzare i contenuti generati in modo chiaro.
+MentoreStudio dovrà visualizzare i contenuti generati in modo chiaro.
 
 ## Summary View
 
@@ -330,7 +330,7 @@ Lo stato dovrà essere mantenuto semplice e prevedibile.
 
 # Accessibility
 
-StudioPro dovrà essere accessibile e leggibile.
+MentoreStudio dovrà essere accessibile e leggibile.
 
 Principi:
 

@@ -1,4 +1,4 @@
-// Misurazione dell'uso dell'AI (primo passo del piano "rendere StudioPro
+// Misurazione dell'uso dell'AI (primo passo del piano "rendere MentoreStudio
 // un progetto professionale": senza dati su costi e tempi ogni decisione è
 // un'ipotesi).
 //

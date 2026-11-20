@@ -1,4 +1,4 @@
-// docs/API_DESIGN.md — "AI Agent APIs / Ask StudioPro" (~309-344).
+// docs/API_DESIGN.md — "AI Agent APIs / Ask MentoreStudio" (~309-344).
 // Thin HTTP layer: shapes the request/response and injects the OpenAI SDK
 // client as the llmClient; all routing/aggregation logic lives in
 // orchestrator.js.

@@ -1,11 +1,11 @@
 # Slice 1 — Protezione Costi
 
-Prima slice di miglioramento StudioPro. Obiettivo: chiudere i buchi che permettono a qualcuno di consumare il credito OpenAI del proprietario. Nient'altro.
+Prima slice di miglioramento MentoreStudio. Obiettivo: chiudere i buchi che permettono a qualcuno di consumare il credito OpenAI del proprietario. Nient'altro.
 
 Questa slice NON tocca: bug del localStorage, timeout di summaryAgent, funzioni finte (QR code, Stats/Settings), codice morto. Sono le slice successive.
 
 ## Contesto
-StudioPro: piattaforma AI di apprendimento su Vercel. Architettura multi-agente (Summary, Tutor, Quiz, MindMap + orchestrator). Frontend in un unico public/index.html (scelta di progetto, NON va rifattorizzato). Endpoint AI: /api/v1/ai/ask (il principale), /api/chat, /api/generate. Rate limiter esistente: 40 richieste/ora, in-memory.
+MentoreStudio: piattaforma AI di apprendimento su Vercel. Architettura multi-agente (Summary, Tutor, Quiz, MindMap + orchestrator). Frontend in un unico public/index.html (scelta di progetto, NON va rifattorizzato). Endpoint AI: /api/v1/ai/ask (il principale), /api/chat, /api/generate. Rate limiter esistente: 40 richieste/ora, in-memory.
 L'app costa denaro reale a ogni utilizzo, e una singola richiesta può attivare più agenti.
 
 ## Interventi richiesti
@@ -58,6 +58,6 @@ Non implementato qui: è una riscrittura più rischiosa (gestione manuale dello 
 - [ ] Un body oltre soglia viene rifiutato con errore chiaro prima di essere processato.
 - [ ] Nessuna regressione: l'app funziona normalmente per l'uso legittimo (caricamento documento, generazione, chat, quiz).
 
-ATTENZIONE AI COSTI: ogni test che raggiunge gli agenti costa denaro reale, e una richiesta StudioPro può attivare più agenti. Usa il minimo indispensabile di chiamate reali — preferisci test che verificano il troncamento/rifiuto PRIMA della chiamata a OpenAI. Dimmi quante chiamate reali hai fatto.
+ATTENZIONE AI COSTI: ogni test che raggiunge gli agenti costa denaro reale, e una richiesta MentoreStudio può attivare più agenti. Usa il minimo indispensabile di chiamate reali — preferisci test che verificano il troncamento/rifiuto PRIMA della chiamata a OpenAI. Dimmi quante chiamate reali hai fatto.
 
 Quando è tutto fatto: fermati, riepiloga cosa hai cambiato, cosa hai verificato e cosa devo verificare io, e proponi il commit.

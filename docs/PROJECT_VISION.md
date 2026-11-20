@@ -1,4 +1,4 @@
-# 🎓 StudioPro
+# 🎓 MentoreStudio
 
 ## Project Vision
 
@@ -23,7 +23,7 @@
 
 # Mission
 
-StudioPro nasce con un obiettivo semplice:
+MentoreStudio nasce con un obiettivo semplice:
 
 **aiutare gli studenti a comprendere meglio ciò che studiano, non semplicemente a trovare risposte.**
 
@@ -35,7 +35,7 @@ L'intelligenza artificiale deve diventare un compagno di studio capace di spiega
 
 Immaginiamo un futuro in cui ogni studente abbia a disposizione una squadra di agenti AI specializzati, capaci di collaborare tra loro per rendere lo studio più semplice, efficace e personalizzato.
 
-StudioPro non vuole sostituire insegnanti o libri.
+MentoreStudio non vuole sostituire insegnanti o libri.
 
 Vuole aiutare ogni persona a studiare meglio.
 
@@ -54,13 +54,13 @@ Studiare oggi significa spesso affrontare diversi problemi:
 
 Molte applicazioni risolvono un solo problema.
 
-StudioPro vuole creare un unico ambiente intelligente.
+MentoreStudio vuole creare un unico ambiente intelligente.
 
 ---
 
 # The Solution
 
-StudioPro sarà una piattaforma AI dedicata allo studio.
+MentoreStudio sarà una piattaforma AI dedicata allo studio.
 
 Lo studente potrà:
 
@@ -78,7 +78,7 @@ Tutto all'interno dello stesso ecosistema.
 
 # Target Users
 
-StudioPro è pensato per:
+MentoreStudio è pensato per:
 
 - studenti delle scuole superiori
 - studenti universitari
@@ -90,7 +90,7 @@ StudioPro è pensato per:
 
 # Core Principles
 
-Ogni funzione di StudioPro dovrà rispettare questi principi.
+Ogni funzione di MentoreStudio dovrà rispettare questi principi.
 
 ## Comprensione
 
@@ -132,7 +132,7 @@ Meglio poche funzioni realizzate bene che molte funzioni incomplete.
 
 # Multi-Agent Philosophy
 
-Il cuore di StudioPro sarà un sistema di agenti AI specializzati.
+Il cuore di MentoreStudio sarà un sistema di agenti AI specializzati.
 
 Ogni agente avrà competenze specifiche.
 
@@ -144,7 +144,7 @@ Ad esempio:
 - Mind Map Agent
 - Planner Agent
 
-L'utente parlerà con StudioPro.
+L'utente parlerà con MentoreStudio.
 
 Sarà il sistema a decidere quali agenti coinvolgere.
 
@@ -153,7 +153,7 @@ Sarà il sistema a decidere quali agenti coinvolgere.
 
 > **"Helping people understand, not simply memorize."**
 
-StudioPro evolverà progressivamente in una piattaforma completa per l'apprendimento assistito dall'intelligenza artificiale.
+MentoreStudio evolverà progressivamente in una piattaforma completa per l'apprendimento assistito dall'intelligenza artificiale.
 
 L'obiettivo è offrire un ambiente di studio intelligente in cui diversi agenti AI collaborano per supportare lo studente durante ogni fase del percorso di apprendimento: dalla comprensione di un argomento alla preparazione di un esame.
 
@@ -161,7 +161,7 @@ Ogni nuova funzionalità dovrà sempre rispettare la missione del progetto:
 
 > **Aiutare gli studenti a comprendere meglio ciò che studiano, non semplicemente a trovare risposte.**
 
-StudioPro non vuole essere una semplice raccolta di strumenti.
+MentoreStudio non vuole essere una semplice raccolta di strumenti.
 
 Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organizzare il proprio studio e migliorare continuamente il proprio metodo di apprendimento.
 
@@ -191,5 +191,5 @@ Vuole diventare l'ambiente digitale in cui ogni studente possa imparare, organiz
 ### Version 0.1
 
 - Project Vision created.
-- StudioPro defined as an AI-powered learning platform.
+- MentoreStudio defined as an AI-powered learning platform.
 - Multi-Agent architecture selected.
