@@ -49,6 +49,16 @@ export default async function handler(req, res) {
     });
   }
 
+  // Interruttore di emergenza (AI_DISABLED): prima di tutto il resto, così
+  // non consuma nemmeno le quote del rate limiter.
+  if (requestGuards.isAiDisabled()) {
+    return res.status(503).json({
+      success: false,
+      data: null,
+      error: { code: 'AI_DISABLED', message: requestGuards.AI_DISABLED_MESSAGE, status: 503 }
+    });
+  }
+
   // Slice 1, punto 4: cap esplicito sulla dimensione del body, prima di
   // qualunque altra elaborazione (incluso il controllo della API key, per
   // rifiutare il più presto possibile).

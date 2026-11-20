@@ -140,6 +140,11 @@ export default async function handler(req, res) {
 
 
 
+  // Interruttore di emergenza (AI_DISABLED): vedi requestGuards.js.
+  if (requestGuards.isAiDisabled()) {
+    return res.status(503).json({ error: 'Servizio sospeso', message: requestGuards.AI_DISABLED_MESSAGE });
+  }
+
   // Slice 1, punto 4: cap esplicito sulla dimensione del body, prima di
   // qualunque elaborazione.
   if (requestGuards.isBodyTooLarge(req)) {

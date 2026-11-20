@@ -27,4 +27,16 @@ function isBodyTooLarge(req, maxBytes = MAX_BODY_BYTES) {
   return getBodySizeBytes(req) > maxBytes;
 }
 
-export default { isBodyTooLarge, getBodySizeBytes, MAX_BODY_BYTES };
+// Interruttore di emergenza: con AI_DISABLED=true (variabile d'ambiente su
+// Vercel, si cambia dalla dashboard senza modificare il codice) tutti gli
+// endpoint che chiamano OpenAI rispondono 503 prima di fare qualunque cosa.
+// Serve a fermare subito la spesa in caso di abuso o di costi inattesi. Si
+// legge a ogni richiesta (non all'import) così il cambio ha effetto al
+// successivo deploy senza altre modifiche.
+const AI_DISABLED_MESSAGE = 'Il servizio AI è temporaneamente sospeso. Riprova più tardi.';
+
+function isAiDisabled() {
+  return process.env.AI_DISABLED === 'true';
+}
+
+export default { isBodyTooLarge, getBodySizeBytes, MAX_BODY_BYTES, isAiDisabled, AI_DISABLED_MESSAGE };
