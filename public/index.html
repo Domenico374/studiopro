@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MentoreStudio - Il tuo mentore personale per lo studio intelligente">
-    <title>StudioPro - AI Learning Platform</title>
+    <meta name="description" content="StudioPro trasforma i tuoi appunti in riassunti, flashcard, quiz e mappe mentali con l'aiuto dell'AI. Versione beta.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <!-- Anteprima quando il link viene condiviso (WhatsApp, Telegram, social) -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:site_name" content="StudioPro">
+    <meta property="og:title" content="StudioPro — Studia meglio dai tuoi appunti">
+    <meta property="og:description" content="Carica dispense e slide: riassunto, glossario, flashcard, quiz e mappa mentale generati con l'AI. Versione beta.">
+    <meta property="og:url" content="https://mentorestudio.vercel.app/">
+    <meta property="og:image" content="https://mentorestudio.vercel.app/images/studiopro-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>StudioPro — Studia meglio dai tuoi appunti</title>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
@@ -3328,15 +3339,28 @@ body.dark-mode .mindmap-legend {
                 </div>
             </div>
             <div class="header-controls">
-                <span class="pro-badge">
-                    <span class="pro-badge-icon">✨</span>
-                    Pro
+                <span class="pro-badge" title="Versione di prova: stiamo ancora migliorando StudioPro">
+                    <span class="pro-badge-icon">🧪</span>
+                    Beta
                 </span>
                 <button class="toggle-btn" onclick="toggleDarkMode()">🌙</button>
             </div>
         </div>
 
         <div class="upload-section" id="uploadSection">
+            <div style="max-width: 600px; margin: 0 auto 28px; text-align: center;">
+                <h2 style="margin-bottom: 10px;">Studia meglio dai tuoi appunti</h2>
+                <p style="color: #666; line-height: 1.6; margin-bottom: 16px;">
+                    Carica dispense, appunti o slide: StudioPro prepara per te riassunto, glossario,
+                    flashcard, quiz e mappa mentale. È una <strong>versione beta</strong>: se qualcosa
+                    non funziona, la tua segnalazione è preziosa.
+                </p>
+                <button class="btn" onclick="loadSampleStudy()" style="background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                    ✨ Prova con una lezione di esempio
+                </button>
+                <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Già pronta: esplora l'app senza caricare nulla.</p>
+            </div>
+
             <div class="supported-formats">
                 <div class="format-badge">📄 PDF</div>
                 <div class="format-badge">📝 TXT</div>
@@ -3392,7 +3416,7 @@ body.dark-mode .mindmap-legend {
                 </div>
             </div>
             
-            <p style="font-size: 0.9em; margin-top: 20px; color: #666;">Tutto salvato offline • Nessuna chiave API visibile</p>
+            <p style="font-size: 0.9em; margin-top: 20px; color: #666;">🔒 Le lezioni restano su questo dispositivo, nel browser. Per generarle, il testo dei documenti viene inviato a OpenAI; StudioPro non lo conserva sui propri server.</p>
         </div>
 
         <div id="mainApp" class="hidden">
@@ -3638,6 +3662,118 @@ body.dark-mode .mindmap-legend {
             progressBar.style.width = percent + '%';
             progressPercent.textContent = percent + '%';
             progressText.textContent = message;
+        }
+
+        // Lezione di esempio: permette a un nuovo utente di provare flashcard,
+        // quiz, glossario, timeline e mappa mentale senza caricare nulla e senza
+        // alcuna chiamata AI. Contenuto scritto a mano (non generato), con la
+        // stessa forma dei dati prodotti da /api/generate — vedi
+        // tests/sampleStudy.test.js, che ne verifica forma e coerenza.
+        // id numerico e piccolo: la Libreria ordina con b.id - a.id, quindi
+        // l'esempio finisce dopo le lezioni vere (id = Date.now()).
+        function buildSampleStudy() {
+            const summaryLong = 'La fotosintesi avviene nei cloroplasti, organelli ricchi di clorofilla, il pigmento che assorbe soprattutto la luce rossa e blu e riflette quella verde. Si svolge in due fasi. Nella fase luminosa, nelle membrane dei tilacoidi, l\'energia della luce scinde le molecole d\'acqua e produce ossigeno, ATP e NADPH. Nella fase oscura, o ciclo di Calvin, che avviene nello stroma, ATP e NADPH servono a fissare l\'anidride carbonica e a costruire zuccheri come il glucosio. L\'equazione complessiva è 6CO₂ + 6H₂O + luce → C₆H₁₂O₆ + 6O₂. La fotosintesi è alla base delle catene alimentari e produce l\'ossigeno che respiriamo.';
+
+            return {
+                id: 1,
+                name: 'La fotosintesi clorofilliana',
+                subject: 'Biologia',
+                date: new Date().toLocaleDateString('it-IT'),
+                type: 'esempio',
+                fileType: '✨ Esempio',
+                fullText: summaryLong,
+                isSample: true,
+                data: {
+                    summary_short: 'La fotosintesi clorofilliana è il processo con cui piante, alghe e alcuni batteri trasformano luce, acqua e anidride carbonica in glucosio e ossigeno, immagazzinando energia luminosa in energia chimica.',
+                    summary_long: summaryLong,
+                    highlights: [
+                        'La fotosintesi trasforma energia luminosa in energia chimica, immagazzinata nel glucosio.',
+                        'Avviene nei cloroplasti, grazie alla clorofilla che assorbe la luce.',
+                        'Si divide in fase luminosa (tilacoidi) e ciclo di Calvin (stroma).',
+                        'L\'ossigeno rilasciato deriva dalla scissione delle molecole d\'acqua.',
+                        'È alla base delle catene alimentari e della presenza di ossigeno nell\'atmosfera.'
+                    ],
+                    glossary: [
+                        { term: 'Clorofilla', definition: 'Pigmento verde che assorbe la luce, soprattutto rossa e blu, e avvia la fotosintesi.' },
+                        { term: 'Cloroplasto', definition: 'Organello delle cellule vegetali in cui avviene la fotosintesi.' },
+                        { term: 'Tilacoide', definition: 'Sacco appiattito nel cloroplasto, sulla cui membrana si svolge la fase luminosa.' },
+                        { term: 'Stroma', definition: 'Matrice fluida del cloroplasto in cui avviene il ciclo di Calvin.' },
+                        { term: 'ATP', definition: 'Molecola che trasporta energia chimica utilizzabile dalla cellula.' },
+                        { term: 'NADPH', definition: 'Molecola che trasporta elettroni e idrogeno, usata per costruire zuccheri nel ciclo di Calvin.' },
+                        { term: 'Ciclo di Calvin', definition: 'Serie di reazioni che fissa l\'anidride carbonica e produce zuccheri, detta anche fase oscura.' },
+                        { term: 'Stomi', definition: 'Piccole aperture delle foglie che regolano gli scambi di gas con l\'ambiente.' }
+                    ],
+                    mind_map: ['Luce', 'Clorofilla', 'Acqua', 'Anidride carbonica', 'Fase luminosa', 'Ciclo di Calvin', 'Glucosio', 'Ossigeno'],
+                    mindmapDetailed: [
+                        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+                        '   LA FOTOSINTESI',
+                        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+                        '',
+                        '├─ Reagenti',
+                        '│  ├─ Luce',
+                        '│  ├─ Acqua',
+                        '│  └─ Anidride carbonica',
+                        '│',
+                        '├─ Fase luminosa',
+                        '│  ├─ Nei tilacoidi',
+                        '│  ├─ Scinde l\'acqua',
+                        '│  └─ Produce ATP, NADPH e ossigeno',
+                        '│',
+                        '├─ Ciclo di Calvin',
+                        '│  ├─ Nello stroma',
+                        '│  └─ Fissa la CO₂ in zuccheri',
+                        '│',
+                        '├─ Prodotti',
+                        '│  ├─ Glucosio',
+                        '│  └─ Ossigeno',
+                        '│',
+                        '└─ Collegamenti:',
+                        '   • Collega Luce con Fase luminosa',
+                        '   • Collega Ciclo di Calvin con Glucosio'
+                    ].join('\n'),
+                    timeline: [
+                        { date: '1648', event: 'Esperimento di van Helmont', details: 'Fa crescere un salice in un vaso di terra pesata e conclude che la pianta cresce soprattutto grazie all\'acqua.' },
+                        { date: '1771', event: 'Gli esperimenti di Priestley', details: 'Scopre che una pianta può "rigenerare" l\'aria resa irrespirabile da una candela accesa.' },
+                        { date: '1779', event: 'Ingenhousz e il ruolo della luce', details: 'Dimostra che le piante producono ossigeno solo alla luce e con le parti verdi.' },
+                        { date: '1817', event: 'Nasce il nome "clorofilla"', details: 'Pelletier e Caventou isolano il pigmento verde delle foglie e lo chiamano clorofilla.' },
+                        { date: '1961', event: 'Nobel a Melvin Calvin', details: 'Riceve il Nobel per la chimica per aver descritto il ciclo che fissa l\'anidride carbonica nelle piante.' }
+                    ],
+                    flashcards: [
+                        { q: 'Dove avviene la fotosintesi nelle cellule vegetali?', a: 'Nei cloroplasti.' },
+                        { q: 'Quale pigmento assorbe la luce nella fotosintesi?', a: 'La clorofilla.' },
+                        { q: 'Quali sono i reagenti della fotosintesi?', a: 'Anidride carbonica, acqua e luce.' },
+                        { q: 'Quali sono i prodotti della fotosintesi?', a: 'Glucosio e ossigeno.' },
+                        { q: 'Da quale molecola deriva l\'ossigeno rilasciato?', a: 'Dall\'acqua, scissa nella fase luminosa.' },
+                        { q: 'Dove si svolge la fase luminosa?', a: 'Nelle membrane dei tilacoidi.' },
+                        { q: 'Che cosa avviene nel ciclo di Calvin?', a: 'L\'anidride carbonica viene fissata e trasformata in zuccheri, usando ATP e NADPH.' },
+                        { q: 'Perché le foglie sono verdi?', a: 'La clorofilla riflette la luce verde e assorbe soprattutto quella rossa e blu.' }
+                    ],
+                    quiz: [
+                        { q: 'Quale organello compie la fotosintesi?', options: ['Mitocondrio', 'Cloroplasto', 'Nucleo', 'Ribosoma'], correct: 1 },
+                        { q: 'Da quale molecola proviene l\'ossigeno prodotto?', options: ['Anidride carbonica', 'Glucosio', 'Acqua', 'ATP'], correct: 2 },
+                        { q: 'Dove avviene il ciclo di Calvin?', options: ['Nello stroma', 'Nei tilacoidi', 'Nel nucleo', 'Nel citoplasma'], correct: 0 },
+                        { q: 'Quale colore della luce è poco assorbito dalla clorofilla?', options: ['Rosso', 'Blu', 'Verde', 'Violetto'], correct: 2 },
+                        { q: 'Quale zucchero si forma al termine della fotosintesi?', options: ['Glucosio', 'Lattosio', 'Maltosio', 'Ribosio'], correct: 0 },
+                        { q: 'Che funzione hanno gli stomi?', options: ['Assorbire la luce', 'Regolare gli scambi di gas', 'Produrre clorofilla', 'Trasportare il glucosio'], correct: 1 }
+                    ]
+                }
+            };
+        }
+
+        function loadSampleStudy() {
+            const sample = buildSampleStudy();
+            // Se l'esempio è già in libreria non lo duplico né lo sovrascrivo
+            // (potrebbe contenere spiegazioni generate dall'utente).
+            if (!appState.studies[sample.id]) {
+                appState.studies[sample.id] = sample;
+                appState.chatHistory[sample.id] = [];
+                saveStudies();
+                saveChatHistory();
+            }
+
+            showMainApp();
+            renderLibrary();
+            switchTab('library');
         }
 
         async function loadMultiplePDFs() {
@@ -3962,6 +4098,13 @@ body.dark-mode .mindmap-legend {
             }
             if (response.status === 504) {
                 const err = new Error('La generazione ha impiegato troppo tempo ed è stata interrotta. Riprova; se il problema persiste, prova con un documento più breve.');
+                err.isTimeout = true;
+                return err;
+            }
+            // 503 = interruttore di emergenza AI_DISABLED (vedi requestGuards.js):
+            // sospensione voluta, non un guasto. Stesso box neutro del timeout.
+            if (response.status === 503) {
+                const err = new Error('Il servizio AI è temporaneamente sospeso. Riprova più tardi: le lezioni già salvate restano consultabili.');
                 err.isTimeout = true;
                 return err;
             }
@@ -5957,13 +6100,10 @@ Contenuto: {content}`
                 html += `<div class="${className}" onclick="${isAnswered ? '' : `selectQuizAnswer(${i})`}">${escapeHTML(option)}</div>`;
             });
 
-            if (appState.quizAnswers[appState.currentQuizFiltered] === undefined) {
-                html += `
-                    <div class="controls">
-                        <button class="btn" onclick="submitQuizAnswer()">✅ Conferma</button>
-                    </div>
-                `;
-            } else {
+            // La risposta si conferma già cliccando l'opzione (feedback
+            // immediato): il vecchio pulsante "Conferma" qui sotto poteva solo
+            // mostrare "Seleziona una risposta!", quindi è stato tolto.
+            if (appState.quizAnswers[appState.currentQuizFiltered] !== undefined) {
                 html += `
                     <div class="controls">
                         <button class="btn" onclick="nextQuizQuestion()">Prossima ➡️</button>
@@ -6033,42 +6173,54 @@ Contenuto: {content}`
                 if (appState.quizTimeRemaining <= 0) {
                     clearInterval(appState.quizTimerId);
                     appState.quizTimerId = null;
+                    // Tempo scaduto = nessuna risposta, contata come sbagliata
+                    // (altrimenti la domanda resterebbe "non vista" per sempre).
+                    const study = getCurrentStudy();
+                    const question = study && filterQuizByMode(study.data.quiz)[appState.currentQuizFiltered];
                     appState.quizAnswers[appState.currentQuizFiltered] = -1;
+                    if (question) recordQuizResult(question, -1);
                     nextQuizQuestion();
                 }
             }, 1000);
         }
 
-        function selectQuizAnswer(index) {
-            const currentAnswerIndex = appState.quizAnswers[appState.currentQuizFiltered];
-            if (currentAnswerIndex === undefined) {
-                appState.quizAnswers[appState.currentQuizFiltered] = index;
-                renderQuizAdvanced();
+        // Registra l'esito di una domanda del quiz: alimenta i filtri
+        // "Sbagliate / Corrette / Non viste". Prima questo codice stava in
+        // submitQuizAnswer(), raggiungibile solo dal pulsante "Conferma", che
+        // spariva non appena si sceglieva un'opzione: l'esito non veniva mai
+        // registrato e i filtri risultavano sempre vuoti. Un errore di
+        // salvataggio non deve mai interrompere il quiz (sono solo statistiche).
+        function recordQuizResult(question, answerIndex) {
+            const study = getCurrentStudy();
+            if (!study || !question) return;
+
+            const isCorrect = answerIndex === question.correct;
+            if (isCorrect) appState.quizScore++;
+
+            quizStats[`${study.id}_${question.q}`] = { correct: isCorrect, timestamp: Date.now() };
+            try {
+                localStorage.setItem('quizStats', JSON.stringify(quizStats));
+            } catch (e) {
+                console.error('localStorage: impossibile salvare le statistiche del quiz.', e);
             }
         }
 
-        function submitQuizAnswer() {
+        function selectQuizAnswer(index) {
+            const currentAnswerIndex = appState.quizAnswers[appState.currentQuizFiltered];
+            if (currentAnswerIndex !== undefined) return;
+
+            appState.quizAnswers[appState.currentQuizFiltered] = index;
+
+            // Risposta data: il conto alla rovescia non deve più poter
+            // sovrascriverla quando scade.
             if (appState.quizTimerId) {
                 clearInterval(appState.quizTimerId);
                 appState.quizTimerId = null;
             }
 
             const study = getCurrentStudy();
-            const filtered = filterQuizByMode(study.data.quiz);
-            const currentQuestion = filtered[appState.currentQuizFiltered];
-            const userAnswer = appState.quizAnswers[appState.currentQuizFiltered];
-
-            if (userAnswer === undefined) {
-                alert('Seleziona una risposta!');
-                return;
-            }
-
-            const isCorrect = userAnswer === currentQuestion.correct;
-            if (isCorrect) appState.quizScore++;
-
-            const qId = `${study.id}_${currentQuestion.q}`;
-            quizStats[qId] = { correct: isCorrect, timestamp: Date.now() };
-            localStorage.setItem('quizStats', JSON.stringify(quizStats));
+            const question = study && filterQuizByMode(study.data.quiz)[appState.currentQuizFiltered];
+            recordQuizResult(question, index);
 
             renderQuizAdvanced();
         }
