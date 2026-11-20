@@ -378,23 +378,60 @@ StudioPro dovrà garantire:
 
 # Known Issues / TODO
 
-Difetti noti individuati durante lo sviluppo, non ancora risolti. Documentati qui oltre che come commenti nel codice, per non restare visibili solo a chi legge i sorgenti.
+Difetti e rischi noti, documentati qui oltre che come commenti nel codice, per non restare visibili solo a chi legge i sorgenti. Ultimo aggiornamento: novembre 2026, verificato sul codice di `main`.
 
-## Esempi fuori contesto nel Tutor Agent (`flashcardExample`)
+## Aperti
 
-**Dove**: `agents/tutorAgent.js`, task `flashcardExample`.
+### Nessuna persistenza né account
 
-Il prompt riceve solo `study.subject`, non il nome o il riassunto della lezione, quindi il modello a volte inventa un dominio sbagliato per l'esempio pratico. Confermato due volte in produzione: esempi aziendali generati su una flashcard di pedagogia, e un esempio sulla fondazione di Apple (1976) generato su una flashcard sulla Casa dei Bambini (1907, Montessori).
+I dati delle lezioni vivono solo nel `localStorage` del browser: cambiando dispositivo o svuotando la cache si perdono. Non esistono database né autenticazione (vedi fasi 4-5 di `PRODUCT_ROADMAP.md`).
 
-**Possibile soluzione**: passare anche `study.name`/`summary_short` al prompt, come già fanno il task `conceptAnalysis` e il task `chat`.
+### Il progresso di studio non viene mai salvato
 
-## Crash di `showShareModal` con caratteri fuori Latin-1
+**Dove**: `public/index.html`, card della Libreria e `calculateStats()`.
 
-**Dove**: `public/index.html`, funzione `showShareModal()`.
+`study.completedFlashcards` e `study.completedQuiz` vengono letti ma non scritti da nessuna parte, quindi ogni lezione risulta sempre "Nuovo" allo 0%. `submitQuizAnswer()` aggiorna solo un contatore di sessione. `renderStats()` esiste ma non è collegata a nessuna schermata.
 
-`btoa()` lancia un'eccezione non gestita se `study.name` o `study.data.summary_short` contengono emoji o altri caratteri fuori Latin-1, interrompendo silenziosamente la generazione del link di condivisione. Riprodotto e confermato eseguendo la funzione reale in browser.
+### Rate limiter solo per istanza
 
-**Possibile soluzione**: sostituire `btoa()` con una codifica UTF-8-safe (es. `encodeURIComponent` combinato con `btoa`, o un encoding alternativo).
+**Dove**: `rateLimiter.js`.
+
+Il contatore è in memoria e ogni istanza serverless ha il suo: protegge da abusi accidentali, non da uno deliberato. Per un uso pubblico con account servirà uno store condiviso (es. Upstash) e limiti per utente invece che per IP.
+
+### Logica di generazione duplicata
+
+**Dove**: `api/generate.js` e `agents/summaryAgent.js`.
+
+Contengono la stessa chiamata e lo stesso prompt. L'upload usa `api/generate.js`; `summaryAgent.js` è raggiungibile solo via `/api/v1/ai/ask` con `agent:'summary'`, che la UI non usa. Un fix su uno dei due non arriva all'altro.
+
+### Picker dark mode senza pulsante di accesso
+
+**Dove**: `public/index.html`, `toggleDarkModeAdvanced()` → `createDarkModeOptions()` → `setDarkMode()`.
+
+Nessun elemento della UI apre il selettore light/dark/true-black/auto. La parte di inizializzazione e schedulazione automatica (`initDarkMode`, `applyDarkMode`) invece è attiva a ogni caricamento: per questo la rimozione va valutata con cautela.
+
+### Mind Map Agent non strutturato
+
+`agents/mindMapAgent.js` produce ancora testo ASCII e non il JSON `{title, nodes, links}` previsto.
+
+## Rischio accettato
+
+### `image-size` (advisory GHSA-5p2g-fcmc-qvqq e GHSA-w3rx-r6r6-pgpr, severità alta)
+
+`npm audit` segnala una vulnerabilità di denial of service (loop infinito nel parsing di immagini JXL/HEIF/ICNS) in `image-size`, dipendenza transitiva di `pptxgenjs`. La correzione esiste solo da `image-size` 2.0.3, ma `pptxgenjs` accetta soltanto la 1.x (anche la 4.0.1), quindi `npm audit fix` non può applicarla.
+
+**Perché non è raggiungibile**: `api/generaPptx.js` non aggiunge mai immagini ai PowerPoint, quindi `image-size` non analizza mai contenuti forniti dall'utente. Forzare la versione 2.x con `overrides` rischierebbe di rompere la generazione PPTX per un rischio che non ci riguarda.
+
+**Da riesaminare se**: l'app inizia a inserire immagini nei PowerPoint, oppure esce una versione di `pptxgenjs` che accetta `image-size` 2.x.
+
+## Risolti
+
+- **`flashcardExample` fuori contesto** (Tutor Agent): il prompt ora riceve anche nome e riassunto della lezione. Sistemato nella Sprint 3.
+- **Crash di `showShareModal` con emoji** (`btoa()` fuori Latin-1): la condivisione è stata rimossa del tutto, perché nessun codice leggeva il link generato.
+- **Pulsanti AI delle flashcard che non rispondevano**: il clic veniva intercettato dalla faccia anteriore durante il flip.
+- **localStorage corrotto o pieno**: ora gestito senza bloccare l'app né perdere in silenzio il contenuto.
+- **Timeout del Summary Agent**: `maxDuration` esplicito a 300 s e messaggio comprensibile in caso di 504.
+- **Costi non protetti**: limiti sulla dimensione degli input, CORS ristretto al dominio dell'app e cap di 100 KB sul body (vedi `studiopro-slice-1-costi.md`).
 
 ---
 
