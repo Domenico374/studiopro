@@ -271,53 +271,10 @@
         .flashcard-inner { position: relative; width: 100%; min-height: 350px; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard-inner.flipped { transform: rotateY(180deg); }
         .flashcard-front, .flashcard-back { position: absolute; width: 100%; min-height: 350px; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; border-radius: 10px; }
-        /* Bug pulsanti flashcard: backface-visibility nasconde la faccia
-           "dietro" solo alla vista, non in modo affidabile agli hit-test dei
-           click durante/subito dopo la transizione. Un click sui pulsanti
-           (sul retro) può quindi essere intercettato dalla faccia anteriore
-           e risalire fino a .flashcard, che rigira la card invece di far
-           partire la generazione. pointer-events toggla in modo istantaneo
-           (non animato) insieme alla classe .flipped, quindi la faccia non
-           attiva non riceve mai click, indipendentemente dal timing della
-           transizione CSS. */
-        .flashcard-back { pointer-events: none; }
-        .flashcard-inner.flipped .flashcard-front { pointer-events: none; }
-        .flashcard-inner.flipped .flashcard-back { pointer-events: auto; }
         .flashcard-front { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
         .flashcard-back { background: linear-gradient(135deg, var(--accent), #f5576c); color: white; transform: rotateY(180deg); }
         .flashcard-question { font-size: 1.3em; font-weight: bold; margin-bottom: 15px; }
         .flashcard-answer { font-size: 1.1em; font-weight: bold; margin-bottom: 15px; }
-        .flashcard-extra { 
-            font-size: 0.9em; 
-            margin-top: 15px; 
-            padding-top: 15px; 
-            border-top: 2px solid rgba(255,255,255,0.3);
-            text-align: left;
-            width: 100%;
-            line-height: 1.6;
-        }
-        .flashcard-extra-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .expand-btn {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85em;
-            margin: 5px;
-            transition: all 0.3s;
-        }
-        .expand-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
-        }
         .controls { display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
         .quiz-option { 
             background: #f5f7ff; 
@@ -3468,6 +3425,48 @@ body.dark-mode [style*="color: #333"] { color: #e5e5ef !important; }
     .study-cta { flex: 1; width: auto; white-space: nowrap; }
 }
 
+/* ---- Flashcard: pannello AI sotto la carta ---- */
+.ai-panel {
+    margin-top: 24px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.ai-panel-title { font-weight: 700; margin-bottom: 12px; color: var(--primary); }
+.ai-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.ai-btn {
+    padding: 10px 16px;
+    min-height: 44px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary);
+    background: transparent;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.ai-btn:hover:not(:disabled) { background: #f1f5f9; }
+.ai-btn:disabled { opacity: 0.6; cursor: wait; }
+.ai-hint { margin-top: 10px; font-size: 13px; color: var(--text-soft); }
+.ai-result {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+}
+.ai-result-title { font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+.ai-result-text { white-space: pre-wrap; line-height: 1.6; color: #1e293b; }
+body.dark-mode .ai-panel { background: #1a1a2e; border-color: var(--line-dark); }
+body.dark-mode .ai-panel-title, body.dark-mode .ai-result-title { color: #f1f5f9; }
+body.dark-mode .ai-btn { color: #e2e8f0; border-color: #5b6b9a; }
+body.dark-mode .ai-btn:hover:not(:disabled) { background: #2a2a3e; }
+body.dark-mode .ai-hint { color: #cbd5e1; }
+body.dark-mode .ai-result { background: #23233a; }
+body.dark-mode .ai-result-text { color: #e5e5ef; }
+
 /* ---- Mappa mentale non leggibile: testo generato mostrato così com'è ---- */
 .mindmap-raw {
     margin-top: 16px;
@@ -6017,35 +6016,6 @@ Contenuto: {content}`
                         </div>
                         <div class="flashcard-back">
                             <div class="flashcard-answer">${escapeHTML(currentCard.a)}</div>
-
-                            <div id="flashcardExtras" style="width: 100%;">
-                                ${currentCard.explanation ? `
-                                    <div class="flashcard-extra">
-                                        <div class="flashcard-extra-title">💡 Spiegazione Semplice:</div>
-                                        <div>${escapeHTML(currentCard.explanation)}</div>
-                                    </div>
-                                ` : ''}
-
-                                ${currentCard.example ? `
-                                    <div class="flashcard-extra">
-                                        <div class="flashcard-extra-title">📚 Esempio Pratico:</div>
-                                        <div>${escapeHTML(currentCard.example)}</div>
-                                    </div>
-                                ` : ''}
-
-                                ${currentCard.essay ? `
-                                    <div class="flashcard-extra">
-                                        <div class="flashcard-extra-title">✏️ Domanda per Saggio:</div>
-                                        <div>${escapeHTML(currentCard.essay)}</div>
-                                    </div>
-                                ` : ''}
-                            </div>
-                            
-                            <div style="margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;" onclick="event.stopPropagation()">
-                                ${!currentCard.explanation ? `<button class="expand-btn" onclick="generateExplanation('${currentCardId}', event)">💡 Spiega Semplice</button>` : ''}
-                                ${!currentCard.example ? `<button class="expand-btn" onclick="generateExample('${currentCardId}', event)">📚 Esempio</button>` : ''}
-                                ${!currentCard.essay ? `<button class="expand-btn" onclick="generateEssay('${currentCardId}', event)">✏️ Domanda Saggio</button>` : ''}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -6056,6 +6026,40 @@ Contenuto: {content}`
                     <button class="btn" onclick="nextFlashcard()">Successiva ➡️</button>
                 </div>
 
+                <!-- Pannello AI: prima i tre pulsanti stavano sul RETRO della carta,
+                     visibili solo dopo averla girata (e quindi introvabili per chi non
+                     lo sapeva). Ora sono sempre visibili sotto la carta, e i risultati
+                     si leggono qui senza girare nulla. Nessun testo della carta finisce
+                     negli attributi onclick: il vecchio codice ci scriveva la domanda,
+                     e un apostrofo ("l'ossigeno") rompeva tutti i pulsanti. -->
+                <div class="ai-panel">
+                    <div class="ai-panel-title">✨ Approfondisci questa carta con l'AI</div>
+                    <div class="ai-actions">
+                        ${!currentCard.explanation ? `<button class="ai-btn" onclick="generateExplanation(event)">💡 Spiega semplice</button>` : ''}
+                        ${!currentCard.example ? `<button class="ai-btn" onclick="generateExample(event)">📚 Esempio</button>` : ''}
+                        ${!currentCard.essay ? `<button class="ai-btn" onclick="generateEssay(event)">✏️ Domanda da saggio</button>` : ''}
+                    </div>
+                    ${(!currentCard.explanation || !currentCard.example || !currentCard.essay)
+                        ? `<p class="ai-hint">Ogni richiesta usa l'AI e può richiedere qualche secondo.</p>` : ''}
+                    <div id="aiResults">
+                        ${currentCard.explanation ? `
+                            <div class="ai-result">
+                                <div class="ai-result-title">💡 Spiegazione semplice</div>
+                                <div class="ai-result-text">${escapeHTML(currentCard.explanation)}</div>
+                            </div>` : ''}
+                        ${currentCard.example ? `
+                            <div class="ai-result">
+                                <div class="ai-result-title">📚 Esempio pratico</div>
+                                <div class="ai-result-text">${escapeHTML(currentCard.example)}</div>
+                            </div>` : ''}
+                        ${currentCard.essay ? `
+                            <div class="ai-result">
+                                <div class="ai-result-title">✏️ Domanda da saggio</div>
+                                <div class="ai-result-text">${escapeHTML(currentCard.essay)}</div>
+                            </div>` : ''}
+                    </div>
+                </div>
+
                 <div class="controls" style="margin-top: 20px;">
                     <button class="btn" style="background: #4caf50;" onclick="markDifficulty('easy')">🟢 Facile</button>
                     <button class="btn" style="background: #ffa726;" onclick="markDifficulty('medium')">🟠 Medio</button>
@@ -6064,8 +6068,8 @@ Contenuto: {content}`
 
                 <div class="note-section">
                     <strong>📝 Note Personali:</strong>
-                    <textarea class="note-input" id="flashcardNote" rows="3" placeholder="Aggiungi note per questa flashcard...">${appState.notes[currentCardId] || ''}</textarea>
-                    <button class="btn" onclick="saveFlashcardNote('${currentCardId}')" style="margin-top: 10px;">💾 Salva Nota</button>
+                    <textarea class="note-input" id="flashcardNote" rows="3" placeholder="Aggiungi note per questa flashcard...">${escapeHTML(appState.notes[currentCardId] || '')}</textarea>
+                    <button class="btn" onclick="saveFlashcardNote()" style="margin-top: 10px;">💾 Salva Nota</button>
                 </div>
 
                 <div class="card" style="margin-top: 20px;">
@@ -6131,7 +6135,20 @@ Contenuto: {content}`
             localStorage.setItem('flashcardStats', JSON.stringify(flashcardStats));
         }
 
-        function saveFlashcardNote(cardId) {
+        // Identificativo della carta mostrata, ricavato dallo stato: non passa più
+        // dall'HTML (il testo della domanda negli attributi onclick rompeva i
+        // pulsanti con gli apostrofi e permetteva di iniettare codice con le
+        // virgolette).
+        function getCurrentFlashcardId() {
+            const study = getCurrentStudy();
+            if (!study || !study.data.flashcards) return null;
+            const card = filterFlashcardsByMode(study.data.flashcards)[appState.currentFlashcardFiltered];
+            return card ? `${study.id}_${card.q}` : null;
+        }
+
+        function saveFlashcardNote() {
+            const cardId = getCurrentFlashcardId();
+            if (!cardId) return;
             const note = document.getElementById('flashcardNote').value;
             appState.notes[cardId] = note;
             localStorage.setItem('flashcardNotes', JSON.stringify(appState.notes));
@@ -6157,7 +6174,16 @@ Contenuto: {content}`
             return { study, currentCard };
         }
 
-        async function generateExplanation(cardId, event) {
+        // Dopo una generazione si porta in vista il risultato (che ora sta nel
+        // pannello sotto la carta), invece di girare la carta come prima.
+        function scrollToAiResults() {
+            setTimeout(() => {
+                const box = document.getElementById('aiResults');
+                if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+        }
+
+        async function generateExplanation(event) {
             const ctx = getCurrentFlashcardOrWarn();
             if (!ctx) return;
             const { currentCard } = ctx;
@@ -6184,22 +6210,19 @@ Contenuto: {content}`
 
                 const data = await response.json();
                 currentCard.explanation = data.data.answer;
-                
+
                 saveStudies();
                 renderFlashcardsAdvanced();
-                
-                setTimeout(() => {
-                    document.getElementById('flashcardInner').classList.add('flipped');
-                }, 100);
-                
+                scrollToAiResults();
+
             } catch (error) {
                 alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
-                btn.textContent = '💡 Spiega Semplice';
+                btn.textContent = '💡 Spiega semplice';
             }
         }
         
-        async function generateExample(cardId, event) {
+        async function generateExample(event) {
             const ctx = getCurrentFlashcardOrWarn();
             if (!ctx) return;
             const { study, currentCard } = ctx;
@@ -6229,14 +6252,11 @@ Contenuto: {content}`
 
                 const data = await response.json();
                 currentCard.example = data.data.answer;
-                
+
                 saveStudies();
                 renderFlashcardsAdvanced();
-                
-                setTimeout(() => {
-                    document.getElementById('flashcardInner').classList.add('flipped');
-                }, 100);
-                
+                scrollToAiResults();
+
             } catch (error) {
                 alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
@@ -6244,7 +6264,7 @@ Contenuto: {content}`
             }
         }
         
-        async function generateEssay(cardId, event) {
+        async function generateEssay(event) {
             const ctx = getCurrentFlashcardOrWarn();
             if (!ctx) return;
             const { currentCard } = ctx;
@@ -6271,18 +6291,15 @@ Contenuto: {content}`
 
                 const data = await response.json();
                 currentCard.essay = data.data.answer;
-                
+
                 saveStudies();
                 renderFlashcardsAdvanced();
-                
-                setTimeout(() => {
-                    document.getElementById('flashcardInner').classList.add('flipped');
-                }, 100);
-                
+                scrollToAiResults();
+
             } catch (error) {
                 alert(error.isRateLimit ? '⏳ ' + error.message : '❌ Errore: ' + error.message);
                 btn.disabled = false;
-                btn.textContent = '✏️ Domanda Saggio';
+                btn.textContent = '✏️ Domanda da saggio';
             }
         }
 
