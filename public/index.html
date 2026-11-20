@@ -3468,6 +3468,23 @@ body.dark-mode [style*="color: #333"] { color: #e5e5ef !important; }
     .study-cta { flex: 1; width: auto; white-space: nowrap; }
 }
 
+/* ---- Mappa mentale non leggibile: testo generato mostrato così com'è ---- */
+.mindmap-raw {
+    margin-top: 16px;
+    padding: 16px;
+    max-height: 420px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1e293b;
+    background: #f1f5f9;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+}
+body.dark-mode .mindmap-raw { color: #e2e8f0; background: #1a1a2e; border-color: var(--line-dark); }
+
 /* ---- Pulsanti e modalità scura ---- */
 button, input, select, textarea { font-family: inherit; }
 /* Filtri (Tutte/Difficili/..., Corrette/Sbagliate/...): il codice dà la classe
@@ -3905,7 +3922,7 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                         '├─ Fase luminosa',
                         '│  ├─ Nei tilacoidi',
                         '│  ├─ Scinde l\'acqua',
-                        '│  └─ Produce ATP, NADPH e ossigeno',
+                        '│  └─ Produce ATP, NADPH, O₂',
                         '│',
                         '├─ Ciclo di Calvin',
                         '│  ├─ Nello stroma',
@@ -4883,7 +4900,10 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
             `;
             
             const mindmap = study.data.mindmapDetailed;
-            
+            // Si legge il testo PRIMA di disegnare: se non ne esce una mappa
+            // vera (null) lo si dice, invece di disegnarne una finta.
+            const mindmapData = mindmap ? parseMindmapText(mindmap, study.name) : null;
+
             if (!mindmap) {
                 html += `
                     <div class="empty-state">
@@ -4897,6 +4917,26 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                             🤖 Genera Mappa Mentale Completa
                         </button>
                     </div>
+                `;
+            } else if (!mindmapData) {
+                html += `
+                    <div class="error-message" role="alert">
+                        <strong>Non siamo riusciti a ricavare la mappa dal testo generato.</strong>
+                        Succede quando l'AI non rispetta il formato richiesto. Puoi rigenerarla:
+                        qui sotto c'è il testo così com'è stato generato, che puoi comunque leggere e copiare.
+                    </div>
+
+                    <pre class="mindmap-raw">${escapeHTML(mindmap)}</pre>
+
+                    <div class="export-buttons" style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn" onclick="copyMindmapText()">
+                            📋 Copia come Testo
+                        </button>
+                        <button class="btn" onclick="generateDetailedMindmap()">
+                            🔄 Rigenera Mappa
+                        </button>
+                    </div>
+                </div>
                 `;
             } else {
                 html += `
@@ -4927,11 +4967,11 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
 
             document.getElementById('contentArea').innerHTML = html;
 
-            // Se c'è la mappa, inizializzala
-            if (mindmap) {
+            // Se c'è una mappa leggibile, inizializzala
+            if (mindmap && mindmapData) {
                 console.log('Initializing mindmap...');
                 console.log('Mindmap text length:', mindmap.length);
-                
+
                 setTimeout(() => {
                     try {
                         const container = document.getElementById('mindmapCanvas');
@@ -4939,28 +4979,37 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                             console.error('Container mindmapCanvas not found!');
                             return;
                         }
-                        
-                        console.log('Container found, parsing mindmap...');
-                        const mindmapData = parseMindmapText(mindmap);
-                        console.log('Parsed data:', mindmapData);
-                        
+
                         console.log('Creating ProfessionalMindMap instance...');
                         window.currentMindmap = new ProfessionalMindMap('mindmapCanvas', mindmapData);
                         console.log('Mindmap initialized successfully!');
                     } catch (error) {
                         console.error('Error initializing mindmap:', error);
-                        alert('Errore nel caricamento della mappa: ' + error.message);
+                        // Errore vero nel disegno: lo si mostra nel riquadro della
+                        // mappa (non in un alert bloccante) con le vie d'uscita.
+                        const container = document.getElementById('mindmapCanvas');
+                        if (container) {
+                            container.innerHTML = `<div class="error-message" role="alert">Non è stato possibile disegnare la mappa: ${escapeHTML(error.message)}. Usa «Copia come Testo» o «Rigenera Mappa».</div>`;
+                        }
                     }
                 }, 200);
             }
         }
 
-        function parseMindmapText(text) {
+        // Legge il testo ad albero generato dall'AI e ne ricava {title, children}.
+        // Se NON riesce a ricavare una mappa vera restituisce null: prima, in quel
+        // caso, inventava un titolo fisso e quattro rami fissi (rimasugli di un
+        // test su un argomento specifico) e li disegnava come se fossero la
+        // mappa della lezione, qualunque fosse l'argomento. Un
+        // errore onesto è meglio di una mappa sbagliata presentata come giusta.
+        // "fallbackTitle" (il nome vero della lezione) serve solo se nel testo
+        // non si trova un titolo.
+        function parseMindmapText(text, fallbackTitle) {
             // Pulisci il testo da backticks e caratteri extra
             text = text.replace(/```/g, '').trim();
-            
+
             const lines = text.split('\n').filter(line => line.trim());
-            let title = 'Integrazione Scolastica';
+            let title = null;
             const children = [];
             
             console.log('Parsing mindmap, lines:', lines.length);
@@ -5058,20 +5107,16 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                 }
             }
             
-            // Ultimo fallback - crea struttura da parole chiave nel titolo
-            if (children.length === 0) {
-                console.log('Creating fallback structure...');
-                const keywords = [
-                    'Evoluzione Storica',
-                    'Normativa',
-                    'Principi Educativi', 
-                    'Applicazioni Pratiche'
-                ];
-                children.push(...keywords.map(k => ({ text: k, children: [] })));
+            if (!title) title = fallbackTitle || null;
+
+            // Nessun ramo (o nessun titolo) = nessuna mappa: non si inventa nulla.
+            if (!title || children.length === 0) {
+                console.warn('Mappa mentale non leggibile: nessuna struttura ad albero trovata.');
+                return null;
             }
-            
+
             console.log('Final structure:', { title, childrenCount: children.length });
-            
+
             return { title, children };
         }
 
@@ -5323,7 +5368,7 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">1️⃣</div>
-                            <span>Primo Pilastro: ${analysis.pillar1_title ? escapeHTML(analysis.pillar1_title) : 'Definizione Base'}</span>
+                            <span>Primo Pilastro${analysis.pillar1_title ? ': ' + escapeHTML(analysis.pillar1_title) : ''}</span>
                         </div>
                         <div class="pillar-content">
                             ${analysis.pillar1_content ? escapeHTML(analysis.pillar1_content) : 'Contenuto non disponibile'}
@@ -5333,7 +5378,7 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">2️⃣</div>
-                            <span>Secondo Pilastro: ${analysis.pillar2_title ? escapeHTML(analysis.pillar2_title) : 'Applicazioni Pratiche'}</span>
+                            <span>Secondo Pilastro${analysis.pillar2_title ? ': ' + escapeHTML(analysis.pillar2_title) : ''}</span>
                         </div>
                         <div class="pillar-content">
                             ${analysis.pillar2_content ? escapeHTML(analysis.pillar2_content) : 'Contenuto non disponibile'}
@@ -5343,7 +5388,7 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                     <div class="pillar-card">
                         <div class="pillar-title">
                             <div class="pillar-icon">3️⃣</div>
-                            <span>Terzo Pilastro: ${analysis.pillar3_title ? escapeHTML(analysis.pillar3_title) : 'Collegamenti Concettuali'}</span>
+                            <span>Terzo Pilastro${analysis.pillar3_title ? ': ' + escapeHTML(analysis.pillar3_title) : ''}</span>
                         </div>
                         <div class="pillar-content">
                             ${analysis.pillar3_content ? escapeHTML(analysis.pillar3_content) : 'Contenuto non disponibile'}
@@ -5409,12 +5454,22 @@ body.dark-mode .bottom-nav-item { color: #cbd5e1; }
                 const pillar3Match = text.match(/PILASTRO 3:\s*([^\n]+)\n([\s\S]*?)(?=COLLEGAMENTI:|$)/i);
                 const connectionsMatch = text.match(/COLLEGAMENTI:\s*([\s\S]*?)$/i);
                 
+                // Se la risposta non ha nessuno dei tre pilastri non si salva
+                // nulla e si mostra un errore: prima si salvava comunque
+                // un'analisi "riuscita" con titoli generici inventati e contenuti
+                // vuoti.
+                if (!pillar1Match && !pillar2Match && !pillar3Match) {
+                    throw new Error('La risposta dell\'AI non ha il formato previsto (mancano i tre pilastri). Riprova a generare l\'analisi.');
+                }
+
+                // Se ne manca solo qualcuno, si lascia vuoto ciò che manca
+                // (la pagina scrive "Contenuto non disponibile") senza inventare titoli.
                 study.data.conceptAnalysis = {
-                    pillar1_title: pillar1Match ? pillar1Match[1].trim() : 'Definizione Base',
+                    pillar1_title: pillar1Match ? pillar1Match[1].trim() : '',
                     pillar1_content: pillar1Match ? pillar1Match[2].trim() : '',
-                    pillar2_title: pillar2Match ? pillar2Match[1].trim() : 'Applicazioni Pratiche',
+                    pillar2_title: pillar2Match ? pillar2Match[1].trim() : '',
                     pillar2_content: pillar2Match ? pillar2Match[2].trim() : '',
-                    pillar3_title: pillar3Match ? pillar3Match[1].trim() : 'Collegamenti Concettuali',
+                    pillar3_title: pillar3Match ? pillar3Match[1].trim() : '',
                     pillar3_content: pillar3Match ? pillar3Match[2].trim() : '',
                     connections: connectionsMatch ? connectionsMatch[1].trim() : ''
                 };
