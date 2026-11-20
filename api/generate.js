@@ -1,6 +1,7 @@
 import { OpenAI } from 'openai';
 import rateLimiter from '../rateLimiter.js';
 import requestGuards from '../requestGuards.js';
+import usageLogger from '../usageLogger.js';
 
 // Timeout Summary Agent (audit 4.1) — spec approvata in conversazione.
 // Nessun vercel.json nel progetto: senza questa config si dipende dal default
@@ -75,25 +76,28 @@ REQUISITI:
 
   try {
 
-    const response = await openai.chat.completions.create({
+    const response = await usageLogger.trackAiCall(
+      { source: 'generate', model: 'gpt-4o-mini' },
+      () => openai.chat.completions.create({
 
-      model: 'gpt-4o-mini',
+        model: 'gpt-4o-mini',
 
-      response_format: { type: 'json_object' },
+        response_format: { type: 'json_object' },
 
-      messages: [
+        messages: [
 
-        { role: 'system', content: system_prompt },
+          { role: 'system', content: system_prompt },
 
-        { role: 'user', content: `Analizza il testo qui sotto:\n\n${text}` }
+          { role: 'user', content: `Analizza il testo qui sotto:\n\n${text}` }
 
-      ],
+        ],
 
-      temperature: 0.7,
+        temperature: 0.7,
 
-      max_tokens: 3000,
+        max_tokens: 3000,
 
-    });
+      })
+    );
 
 
 

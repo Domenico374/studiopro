@@ -1,5 +1,7 @@
 // Extracted from api/generate.js (generateContent, lines 15-99) — no prompt/behavior changes.
 
+import usageLogger from '../usageLogger.js';
+
 const name = 'Summary Agent';
 
 const systemPrompt = `
@@ -38,13 +40,16 @@ function buildPrompt(input) {
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
 
-  const response = await llmClient.chat.completions.create({
-    model: 'gpt-4o-mini',
-    response_format: { type: 'json_object' },
-    messages,
-    temperature: 0.7,
-    max_tokens: 3000
-  });
+  const response = await usageLogger.trackAiCall(
+    { source: 'agent:summary', model: 'gpt-4o-mini' },
+    () => llmClient.chat.completions.create({
+      model: 'gpt-4o-mini',
+      response_format: { type: 'json_object' },
+      messages,
+      temperature: 0.7,
+      max_tokens: 3000
+    })
+  );
 
   const jsonString = response.choices[0].message.content;
   return JSON.parse(jsonString);

@@ -49,7 +49,7 @@ function buildPrompt(input) {
 // Mirrors the OpenAI call parameters from api/chat.js lines 95-103.
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
-  const text = await chatCompletion.runChatCompletion(messages, llmClient);
+  const text = await chatCompletion.runChatCompletion(messages, llmClient, { agent: 'quiz' });
 
   if (input.task === 'essayQuestions') {
     // Mirrors the response parsing in index.html ~5176-5180.

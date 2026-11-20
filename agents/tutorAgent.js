@@ -99,7 +99,7 @@ function buildPrompt(input) {
 // Mirrors the OpenAI call parameters from api/chat.js lines 95-103.
 async function run(input, llmClient) {
   const messages = buildPrompt(input);
-  return chatCompletion.runChatCompletion(messages, llmClient);
+  return chatCompletion.runChatCompletion(messages, llmClient, { agent: 'tutor' });
 }
 
 export default { name, systemPrompt, buildPrompt, run };
